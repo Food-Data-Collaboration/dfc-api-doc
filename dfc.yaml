@@ -18,7 +18,7 @@ components:
       description: |
         OpenID Connect token from a trusted platform:
         <ul>
-          <li><a href="https://login.lescommuns.org/auth/" target="_blank">Les Communs</a></li>
+          <li><a href="https://login.lescommuns.org/auth/realm/datafoodconsortium" target="_blank">Les Communs</a></li>
         </ul>
 
 security:
@@ -49,8 +49,11 @@ paths:
                     dfc-b:hasStreet: 10 Lovely Street
                     dfc-b:hasPostalCode: '20170'
                     dfc-b:hasCity: Herndon
-                    dfc-b:hasCountry: Australia
-                    dfc-b:region: Victoria
+                    dfc-b:hasCountry: United States of America
+                    dfc-b:region: Virginia
+                    dfc-b:latitude: 38.89750
+                    dfc-b:longitude: -77.00920
+                    dfc-b:addressOf: http://test.host/api/dfc/enterprises/10000
         '404':
           description: not found
   "/api/dfc/enterprises/{enterprise_id}/catalog_items":
@@ -305,8 +308,10 @@ paths:
                       dfc-b:hasStreet: 8 Acres Drive
                       dfc-b:hasPostalCode: '20170'
                       dfc-b:hasCity: Herndon
-                      dfc-b:hasCountry: Australia
-                      dfc-b:region: Victoria
+                      dfc-b:hasCountry: USA
+                      dfc-b:region: Virginia
+                      dfc-b:latitude: 38.89750
+                      dfc-b:longitude: -77.00920
   "/api/dfc/enterprises/{id}":
     get:
       summary: Show enterprise
@@ -340,10 +345,8 @@ paths:
                       dfc-b:VATnumber: 123 456
                       dfc-b:manages: http://test.host/api/dfc/enterprises/10000/catalog_items/10001
                       dfc-b:supplies: http://test.host/api/dfc/enterprises/10000/supplied_products/10001
-                      ofn:long_description: "<p>Hello, world!</p><p>This is a paragraph.</p>"
-                      ofn:contact_name: Fred Farmer
-                      ofn:logo_url: http://test.host/rails/active_storage/url/logo.png
-                      ofn:promo_image_url: http://test.host/rails/active_storage/url/promo.png
+                      dfc-b:hasMainContact: http://test.host/api/dfc/persons/10000
+                      dfc-b:logo: http://test.host/rails/active_storage/url/logo.png
                       dfc-b:affiliates: http://test.host/api/dfc/enterprise_groups/60000
                     - "@id": http://test.host/api/dfc/addresses/40000
                       "@type": dfc-b:Address
