@@ -597,20 +597,20 @@ paths:
                     "@context": https://www.datafoodconsortium.org
                     "@id": http://test.host/api/dfc/enterprises/10000/suppliedproducts/10001
                     "@type": dfc-b:SuppliedProduct
-                    dfc-b:name: Pesto - 1g
+                    dfc-b:name: Pesto - 300g
                     dfc-b:description: Basil Pesto
                     dfc-b:hasType: dfc-pt:processed-vegetable
                     dfc-b:hasQuantity:
                       "@type": dfc-b:QuantitativeValue
                       dfc-b:hasUnit: dfc-m:Gram
-                      dfc-b:value: 1.0
+                      dfc-b:value: 300.0
                     dfc-b:alcoholPercentage: 0.0
                     dfc-b:lifetime: ''
                     dfc-b:usageOrStorageCondition: ''
-                    dfc-b:totalTheoreticalStock: 0.0
-                    dfc-b:image: http://test.host/rails/active_storage/url/logo-white.png
+                    dfc-b:totalTheoreticalStock: 12.0
+                    dfc-b:image: http://test.host/image_storage/url/basil-pesto.png
         '404':
-          description: "Any offered product or service. For example: a carrot, a box of fruits, or soap."
+          description: not found
     put:
       summary: Update SuppliedProduct
       parameters: []
@@ -686,18 +686,18 @@ paths:
                     "@type": "@id"
                   dfc-t:represent:
                     "@type": "@id"
-                "@id": https://staging.coopcircuits.fr/api/dfc-v1.7/enterprises/2731/suppliedproducts/56790
+                "@id": http://test.host/api/dfc/enterprises/10001/suppliedproducts/10001
                 "@type": dfc-b:SuppliedProduct
                 dfc-b:alcoholPercentage: 0
-                dfc-b:description: DFC-Pesto updated
+                dfc-b:description: Ali's Amazing Red Pesto - now it's red!
                 dfc-b:hasQuantity:
                   "@type": dfc-b:QuantitativeValue
-                  dfc-b:hasUnit: dfc-m:Piece
-                  dfc-b:value: 17
-                dfc-b:hasType: dfc-pt:drink
+                  dfc-b:hasUnit: dfc-m:gram
+                  dfc-b:value: 350
+                dfc-b:hasType: dfc-pt:processed-vegetable
                 dfc-b:lifetime: ''
-                dfc-b:name: Pesto novo
-                dfc-b:totalTheoreticalStock: 0
+                dfc-b:name: Ali's Amazing Red Pesto
+                dfc-b:totalTheoreticalStock: 17.0
                 dfc-b:usageOrStorageCondition: ''
                 dfc:owner: http://proto.datafoodconsortium.org:3000/ldp/user/64c1d30351ecb4367037a9f6
                 dfc-b:hasPhysicalCharacteristic: []
@@ -761,17 +761,46 @@ paths:
                       dfc-b:concerns: http://test.host/api/dfc/enterprises/10000/suppliedproducts/10001
                       dfc-b:hasQuantity:
                         "@type": dfc-b:QuantitativeValue
-                        dfc-b:hasUnit: Packets
+                        dfc-b:hasUnit: Packet
                         dfc-b:hasValue: 5.0
                       dfc-b:Price:
                         "@type": dfc-b:QuantitativeValue
                         dfc-b:hasUnit: GBP
                         dfc-b:value: 19.95
                         dfc-b:VATrate: 0.0
-                      dfc-b:discount: 0.00
+                      dfc-b:discount: []
                     dfc-b:hasPart: http://test.host/api/dfc/enterprises/{enterprise_id}/orderlines/10001-02
+    post:
+      Summary: Create an Order
+      tags:
+      - Orders
+      responses:
+        '400':
+          description: bad request
+        '200':
+          description: success
+          content:
+            application/json:
+              examples:
+                test_example:
+                  value:
+                    "@context": https://www.datafoodconsortium.org
+                    "@id": http://test.host/api/dfc/enterprises/{enterprise_id}/orderlines/10001-01
+                    "@type": dfc-b:OrderLine
+                    dfc-b:concerns: http://test.host/api/dfc/enterprises/10000/suppliedproducts/10001
+                    dfc-b:hasQuantity:
+                      "@type": dfc-b:QuantitativeValue
+                      dfc-b:hasUnit: Packet
+                      dfc-b:hasValue: 5.0
+                    dfc-b:Price:
+                      "@type": dfc-b:QuantitativeValue
+                      dfc-b:hasUnit: GBP
+                      dfc-b:value: 19.95
+                      dfc-b:VATrate: 0.0
+                    dfc-b:discount: []
+
         '404':
-          description: An order is a confirmation of a transaction (a receipt), which can contain multiple line items, each represented by an Offer that has been accepted by the customer.
+          description: not found
 
 
 servers:
