@@ -482,7 +482,7 @@ paths:
                     dfc-b:name: facebook
                     dfc-b:URL: https://facebook.com/user
         '404':
-          description: URL to connect to a Social Media account. 
+          description: URL to connect to a Social Media account.
 
   "/api/dfc/enterprises/{enterprise_id}/suppliedproducts":
     parameters:
@@ -610,7 +610,7 @@ paths:
                     dfc-b:totalTheoreticalStock: 0.0
                     dfc-b:image: http://test.host/rails/active_storage/url/logo-white.png
         '404':
-          description: Any offered product or service. For example: a carrot, a box of fruits, or soap.
+          description: "Any offered product or service. For example: a carrot, a box of fruits, or soap."
     put:
       summary: Update SuppliedProduct
       parameters: []
@@ -768,7 +768,7 @@ paths:
                         dfc-b:hasUnit: GBP
                         dfc-b:value: 19.95
                         dfc-b:VATrate: 0.0
-                      dfc-b: discount: 0.00
+                      dfc-b:discount: 0.00
                     dfc-b:hasPart: http://test.host/api/dfc/enterprises/{enterprise_id}/orderlines/10001-02
         '404':
           description: An order is a confirmation of a transaction (a receipt), which can contain multiple line items, each represented by an Offer that has been accepted by the customer.
