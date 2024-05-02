@@ -86,7 +86,7 @@ paths:
                       dfc-b:manages: http://test.host/api/dfc/enterprises/10000/catalog_items/10001
                     - "@id": http://test.host/api/dfc/enterprises/10000/catalog_items/10001
                       "@type": dfc-b:CatalogItem
-                      dfc-b:references: http://test.host/api/dfc/enterprises/10000/supplied_products/10001
+                      dfc-b:references: http://test.host/api/dfc/enterprises/10000/suppliedproducts/10001
                       dfc-b:sku: AR
                       dfc-b:stockLimitation: 0
                       dfc-b:offeredThrough: http://test.host/api/dfc/enterprises/10000/offers/10001
@@ -124,7 +124,7 @@ paths:
                     "@graph":
                     - "@id": http://test.host/api/dfc/enterprises/10000/catalog_items/10001
                       "@type": dfc-b:CatalogItem
-                      dfc-b:references: http://test.host/api/dfc/enterprises/10000/supplied_products/10001
+                      dfc-b:references: http://test.host/api/dfc/enterprises/10000/suppliedproducts/10001
                       dfc-b:sku: AR
                       dfc-b:stockLimitation: 0
                       dfc-b:offeredThrough: http://test.host/api/dfc/enterprises/10000/offers/10001
@@ -344,7 +344,7 @@ paths:
                       dfc-b:hasDescription: This is an awesome enterprise
                       dfc-b:VATnumber: 123 456
                       dfc-b:manages: http://test.host/api/dfc/enterprises/10000/catalog_items/10001
-                      dfc-b:supplies: http://test.host/api/dfc/enterprises/10000/supplied_products/10001
+                      dfc-b:supplies: http://test.host/api/dfc/enterprises/10000/suppliedproducts/10001
                       dfc-b:hasMainContact: http://test.host/api/dfc/persons/10000
                       dfc-b:logo: http://test.host/rails/active_storage/url/logo.png
                       dfc-b:affiliates: http://test.host/api/dfc/enterprise_groups/60000
@@ -355,7 +355,7 @@ paths:
                       dfc-b:hasCity: Herndon
                       dfc-b:hasCountry: Australia
                       dfc-b:region: Victoria
-                    - "@id": http://test.host/api/dfc/enterprises/10000/supplied_products/10001
+                    - "@id": http://test.host/api/dfc/enterprises/10000/suppliedproducts/10001
                       "@type": dfc-b:SuppliedProduct
                       dfc-b:name: Apple - 1g
                       dfc-b:description: Round
@@ -371,7 +371,7 @@ paths:
                       dfc-b:image: http://test.host/rails/active_storage/url/logo-white.png
                     - "@id": http://test.host/api/dfc/enterprises/10000/catalog_items/10001
                       "@type": dfc-b:CatalogItem
-                      dfc-b:references: http://test.host/api/dfc/enterprises/10000/supplied_products/10001
+                      dfc-b:references: http://test.host/api/dfc/enterprises/10000/suppliedproducts/10001
                       dfc-b:sku: APP
                       dfc-b:stockLimitation: 5
                       dfc-b:offeredThrough: http://test.host/api/dfc/enterprises/10000/offers/10001
@@ -482,8 +482,9 @@ paths:
                     dfc-b:name: facebook
                     dfc-b:URL: https://facebook.com/user
         '404':
-          description: not found
-  "/api/dfc/enterprises/{enterprise_id}/supplied_products":
+          description: URL to connect to a Social Media account. 
+
+  "/api/dfc/enterprises/{enterprise_id}/suppliedproducts":
     parameters:
     - name: enterprise_id
       in: path
@@ -503,7 +504,7 @@ paths:
                 test_example:
                   value:
                     "@context": https://www.datafoodconsortium.org
-                    "@id": http://test.host/api/dfc/enterprises/10000/supplied_products/10001
+                    "@id": http://test.host/api/dfc/enterprises/10000/suppliedproducts/10001
                     "@type": dfc-b:SuppliedProduct
                     dfc-b:name: Pesto - 1g
                     dfc-b:description: Basil Pesto
@@ -535,7 +536,7 @@ paths:
                 test_example:
                   value:
                     "@context": https://www.datafoodconsortium.org
-                    "@id": http://test.host/api/dfc/enterprises/10000/supplied_products/10001
+                    "@id": http://test.host/api/dfc/enterprises/10000/suppliedproducts/10001
                     "@type": dfc-b:SuppliedProduct
                     dfc-b:name: Pesto - Apple (6g)
                     dfc-b:description: A delicious heritage apple
@@ -555,7 +556,7 @@ paths:
             schema:
               example:
                 "@context": https://www.datafoodconsortium.org
-                "@id": http://test.host/api/dfc/enterprises/6201/supplied_products/0
+                "@id": http://test.host/api/dfc/enterprises/6201/suppliedproducts/0
                 "@type": dfc-b:SuppliedProduct
                 dfc-b:name: Apple
                 dfc-b:description: A delicious heritage apple
@@ -569,7 +570,7 @@ paths:
                 dfc-b:usageOrStorageCondition: ''
                 dfc-b:totalTheoreticalStock: 0.0
 
-  "/api/dfc/enterprises/{enterprise_id}/supplied_products/{id}":
+  "/api/dfc/enterprises/{enterprise_id}/suppliedproducts/{id}":
     parameters:
     - name: enterprise_id
       in: path
@@ -594,7 +595,7 @@ paths:
                 test_example:
                   value:
                     "@context": https://www.datafoodconsortium.org
-                    "@id": http://test.host/api/dfc/enterprises/10000/supplied_products/10001
+                    "@id": http://test.host/api/dfc/enterprises/10000/suppliedproducts/10001
                     "@type": dfc-b:SuppliedProduct
                     dfc-b:name: Pesto - 1g
                     dfc-b:description: Basil Pesto
@@ -609,7 +610,7 @@ paths:
                     dfc-b:totalTheoreticalStock: 0.0
                     dfc-b:image: http://test.host/rails/active_storage/url/logo-white.png
         '404':
-          description: not found
+          description: Any offered product or service. For example: a carrot, a box of fruits, or soap.
     put:
       summary: Update SuppliedProduct
       parameters: []
@@ -685,7 +686,7 @@ paths:
                     "@type": "@id"
                   dfc-t:represent:
                     "@type": "@id"
-                "@id": https://staging.coopcircuits.fr/api/dfc-v1.7/enterprises/2731/supplied_products/56790
+                "@id": https://staging.coopcircuits.fr/api/dfc-v1.7/enterprises/2731/suppliedproducts/56790
                 "@type": dfc-b:SuppliedProduct
                 dfc-b:alcoholPercentage: 0
                 dfc-b:description: DFC-Pesto updated
@@ -702,5 +703,76 @@ paths:
                 dfc-b:hasPhysicalCharacteristic: []
                 dfc-b:hasNutrientCharacteristic: []
                 dfc-b:hasAllergenCharacteristic: []
+
+  "/api/dfc/enterprises/{enterprise_id}/orders/{id}":
+    parameters:
+    - name: enterprise_id
+      in: path
+      required: true
+      schema:
+        type: string
+    - name: id
+      in: path
+      required: true
+      schema:
+        type: string
+    get:
+      summary: Show Orders
+      tags:
+      - Orders
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              examples:
+                test_example:
+                  value:
+                    "@context": https://www.datafoodconsortium.org
+                    "@id": http://test.host/api/dfc/enterprises/10000/orders/10001
+                    "@type": dfc-b:Order
+                    dfc-b:belongsTo: http://test.host/api/dfc/enterprises/10000/salessessions/10002
+                    dfc-b:orderNumber: "MYORDERNUM:12345"
+                    dfc-b:hasOrderStatus: dfc-v:Draft
+                    dfc-b:hasFulfilmentStatus: dfc-v:Held
+                    dfc-b:hasPaymentState: dfc-v:Unpaid
+                    dfc-b:hasPaymentMethod:
+                      "@type": dfc-b:PaymentMethod
+                      dfc-b:paymentMethodType: Example Card PaymentMethod
+                      dfc-b:paymentMethodProvider: Stripe
+                      dfc-b:hasPrice:
+                        "@type": dfc-b:QuantitativeValue
+                        dfc-b:hasUnit: GBP
+                        dfc-b:value: £0.27
+                        dfc-b:VATrate: 0.00
+                    dfc-b:discount: 1.55
+                    dfc-b:OrderedBy: http://test.host/api/dfc/persons/10000
+                    dfc-b:selects:
+                      "@type": dfc-b:ShippingOption
+                      dfc-b:optionOf: http://test.host/api/dfc/enterprises/10000/salessessions/10002
+                      dfc-b:fee: 1.50
+                    dfc-b:uses:
+                      "@type": dfc-b:PickupOption
+                      dfc-b:pickedUpAt: Our Fantastic Farm Gate
+                    dfc-b:soldBy: http://test.host/api/dfc/enterprises/10000
+                    dfc-b:hasPart:
+                    - "@id": http://test.host/api/dfc/enterprises/{enterprise_id}/orderlines/10001-01
+                      "@type": dfc-b:OrderLine
+                      dfc-b:concerns: http://test.host/api/dfc/enterprises/10000/suppliedproducts/10001
+                      dfc-b:hasQuantity:
+                        "@type": dfc-b:QuantitativeValue
+                        dfc-b:hasUnit: Packets
+                        dfc-b:hasValue: 5.0
+                      dfc-b:Price:
+                        "@type": dfc-b:QuantitativeValue
+                        dfc-b:hasUnit: GBP
+                        dfc-b:value: 19.95
+                        dfc-b:VATrate: 0.0
+                      dfc-b: discount: 0.00
+                    dfc-b:hasPart: http://test.host/api/dfc/enterprises/{enterprise_id}/orderlines/10001-02
+        '404':
+          description: An order is a confirmation of a transaction (a receipt), which can contain multiple line items, each represented by an Offer that has been accepted by the customer.
+
+
 servers:
 - url: "/"
