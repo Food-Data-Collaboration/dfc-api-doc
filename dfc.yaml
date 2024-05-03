@@ -212,17 +212,17 @@ paths:
                     "@type": "@id"
                 dfc-b:stockLimitation: '3'
                 dfc-b:sku: new-sku
-  "/api/dfc/enterprise_groups/{enterprise_group_id}/affiliated_by":
+  "/api/dfc/Enterprises/{enterprise_id}/affiliatedBy":
     post:
-      summary: Add enterprise to group
+      summary: Affilate Enterprises
       parameters:
-      - name: enterprise_group_id
+      - name: enterprise_id
         in: path
         required: true
         schema:
           type: string
       tags:
-      - EnterpriseGroups::AffiliatedBy
+      - Enterprises::affiliatedBy
       responses:
         '201':
           description: created
@@ -236,11 +236,11 @@ paths:
             schema:
               example:
                 "@id": http://test.host/api/dfc/Enterprises/10001
-  "/api/dfc/enterprise_groups/{enterprise_group_id}/affiliated_by/{id}":
+  "/api/dfc/Enterprises/{enterprise_id}/affiliatedBy/{id}":
     delete:
       summary: Remove enterprise from group
       parameters:
-      - name: enterprise_group_id
+      - name: enterprise_id
         in: path
         required: true
         schema:
@@ -251,73 +251,13 @@ paths:
         schema:
           type: string
       tags:
-      - EnterpriseGroups::AffiliatedBy
+      - Enterprises::affiliatedBy
       responses:
         '204':
           description: no content
         '401':
           description: unauthorized
-  "/api/dfc/enterprise_groups":
-    get:
-      summary: List groups
-      tags:
-      - EnterpriseGroups
-      responses:
-        '200':
-          description: successful
-          content:
-            application/json:
-              examples:
-                test_example:
-                  value:
-                    "@context": https://www.datafoodconsortium.org
-                    "@graph":
-                    - "@id": http://test.host/api/dfc/Persons/12345
-                      "@type": dfc-b:Person
-                      dfc-b:affiliates: http://test.host/api/dfc/enterprise_groups/60000
-                    - "@id": http://test.host/api/dfc/enterprise_groups/60000
-                      "@type": dfc-b:Enterprise
-                      dfc-b:name: Sustainable Farmers
-                      dfc-b:hasDescription: this is a group
-                      dfc-b:VATnumber: ''
-                      dfc-b:affiliatedBy: http://test.host/api/dfc/Enterprises/10000
-  "/api/dfc/enterprise_groups/{id}":
-    get:
-      summary: Show groups
-      parameters:
-      - name: id
-        in: path
-        required: true
-        schema:
-          type: string
-      tags:
-      - EnterpriseGroups
-      responses:
-        '200':
-          description: successful
-          content:
-            application/json:
-              examples:
-                test_example:
-                  value:
-                    "@context": https://www.datafoodconsortium.org
-                    "@graph":
-                    - "@id": http://test.host/api/dfc/enterprise_groups/60000
-                      "@type": dfc-b:Enterprise
-                      dfc-b:hasAddress: http://test.host/api/dfc/Addresses/40000
-                      dfc-b:name: Sustainable Farmers
-                      dfc-b:hasDescription: this is a group
-                      dfc-b:VATnumber: ''
-                      dfc-b:affiliatedBy: http://test.host/api/dfc/Enterprises/10000
-                    - "@id": http://test.host/api/dfc/Addresses/40000
-                      "@type": dfc-b:Address
-                      dfc-b:hasStreet: 8 Acres Drive
-                      dfc-b:hasPostalCode: '20170'
-                      dfc-b:hasCity: Herndon
-                      dfc-b:hasCountry: USA
-                      dfc-b:region: Virginia
-                      dfc-b:latitude: 38.89750
-                      dfc-b:longitude: -77.00920
+
   "/api/dfc/Enterprises/{id}":
     get:
       summary: Show enterprise
@@ -352,7 +292,7 @@ paths:
                       dfc-b:manages: http://test.host/api/dfc/Enterprises/10000/CatalogItems/10001
                       dfc-b:supplies: http://test.host/api/dfc/Enterprises/10000/SuppliedProducts/10001
                       dfc-b:hasMainContact: http://test.host/api/dfc/Persons/10000
-                      dfc-b:logo: http://test.host/active_storage/url/logo.png
+                      dfc-b:logo: http://test.host/active-storage/url/logo.png
                       dfc-b:affiliates: http://test.host/api/dfc/Enterprises/60000
                     - "@id": http://test.host/api/dfc/Addresses/40000
                       "@type": dfc-b:Address
@@ -374,7 +314,7 @@ paths:
                       dfc-b:lifetime: ''
                       dfc-b:usageOrStorageCondition: ''
                       dfc-b:totalTheoreticalStock: 0.0
-                      dfc-b:image: http://test.host/active_storage/url/logo-white.png
+                      dfc-b:image: http://test.host/active-storage/url/logo-white.png
                     - "@id": http://test.host/api/dfc/Enterprises/10000/CatalogItems/10001
                       "@type": dfc-b:CatalogItem
                       dfc-b:references: http://test.host/api/dfc/Enterprises/10000/SuppliedProducts/10001
@@ -523,7 +463,7 @@ paths:
                     dfc-b:lifetime: ''
                     dfc-b:usageOrStorageCondition: ''
                     dfc-b:totalTheoreticalStock: 0.0
-                    dfc-b:image: http://test.host/active_storage/url/logo-white.png
+                    dfc-b:image: http://test.host/active-storage/url/logo-white.png
         '404':
           description: not found
     post:
@@ -555,7 +495,7 @@ paths:
                     dfc-b:lifetime: ''
                     dfc-b:usageOrStorageCondition: ''
                     dfc-b:totalTheoreticalStock: 0.0
-                    dfc-b:image: http://test.host/active_storage/url/logo-white.png
+                    dfc-b:image: http://test.host/active-storage/url/logo-white.png
       requestBody:
         content:
           application/json:
@@ -614,7 +554,7 @@ paths:
                     dfc-b:lifetime: ''
                     dfc-b:usageOrStorageCondition: ''
                     dfc-b:totalTheoreticalStock: 12.0
-                    dfc-b:image: http://test.host/image_storage/url/basil-pesto.png
+                    dfc-b:image: http://test.host/image-storage/url/basil-pesto.png
         '404':
           description: not found
     put:
@@ -710,7 +650,7 @@ paths:
                 dfc-b:hasNutrientCharacteristic: []
                 dfc-b:hasAllergenCharacteristic: []
 
-  "/api/dfc/Enterprises/{enterprise_id}/orders":
+  "/api/dfc/Enterprises/{enterprise_id}/Orders":
     parameters:
     - name: enterprise_id
       in: path
@@ -730,9 +670,9 @@ paths:
                 test_example:
                   value:
                     "@context": https://www.datafoodconsortium.org
-                    "@id": http://test.host/api/dfc/Enterprises/10000/orders/10001
+                    "@id": http://test.host/api/dfc/Enterprises/10000/Orders/10001
                     "@type": dfc-b:Order
-                    dfc-b:belongsTo: http://test.host/api/dfc/Enterprises/10000/salessessions/10002
+                    dfc-b:belongsTo: http://test.host/api/dfc/Enterprises/10000/SalesSessions/10002
                     dfc-b:orderNumber: "MYORDERNUM:12345"
                     dfc-b:hasOrderStatus: dfc-v:Draft
                     dfc-b:hasFulfilmentStatus: dfc-v:Held
@@ -750,14 +690,14 @@ paths:
                     dfc-b:OrderedBy: http://test.host/api/dfc/Persons/10000
                     dfc-b:selects:
                       "@type": dfc-b:ShippingOption
-                      dfc-b:optionOf: http://test.host/api/dfc/Enterprises/10000/salessessions/10002
+                      dfc-b:optionOf: http://test.host/api/dfc/Enterprises/10000/SalesSessions/10002
                       dfc-b:fee: 1.50
                     dfc-b:uses:
                       "@type": dfc-b:PickupOption
                       dfc-b:pickedUpAt: Our Fantastic Farm Gate
                     dfc-b:soldBy: http://test.host/api/dfc/Enterprises/10000
                     dfc-b:hasPart:
-                    - "@id": http://test.host/api/dfc/Enterprises/10000/orders/10001/orderlines/10001-01
+                    - "@id": http://test.host/api/dfc/Enterprises/10000/Orders/10001/orderlines/10001-01
                       "@type": dfc-b:OrderLine
                       dfc-b:concerns: http://test.host/api/dfc/Enterprises/10000/SuppliedProducts/10001
                       dfc-b:hasQuantity:
@@ -786,9 +726,9 @@ paths:
                 test_example:
                   value:
                     "@context": https://www.datafoodconsortium.org
-                    "@id": http://test.host/api/dfc/Enterprises/10000/orders/10001
+                    "@id": http://test.host/api/dfc/Enterprises/10000/Orders/10001
                     "@type": dfc-b:Order
-                    dfc-b:belongsTo: http://test.host/api/dfc/Enterprises/10000/salessessions/10002
+                    dfc-b:belongsTo: http://test.host/api/dfc/Enterprises/10000/SalesSessions/10002
                     dfc-b:orderNumber: "MYORDERNUM:12345"
                     dfc-b:hasOrderStatus: dfc-v:Draft
                     dfc-b:hasFulfilmentStatus: dfc-v:Held
@@ -806,22 +746,22 @@ paths:
                     dfc-b:OrderedBy: http://test.host/api/dfc/Persons/10000
                     dfc-b:selects:
                       "@type": dfc-b:ShippingOption
-                      dfc-b:optionOf: http://test.host/api/dfc/Enterprises/10000/salessessions/10002
+                      dfc-b:optionOf: http://test.host/api/dfc/Enterprises/10000/SalesSessions/10002
                       dfc-b:fee: 1.50
                     dfc-b:uses:
                       "@type": dfc-b:PickupOption
                       dfc-b:pickedUpAt: Our Fantastic Farm Gate
                     dfc-b:soldBy: http://test.host/api/dfc/Enterprises/10000
-                    dfc-b:hasPart: http://test.host/api/dfc/Enterprises/10000/orders/10001/orderlines/10001-01
+                    dfc-b:hasPart: http://test.host/api/dfc/Enterprises/10000/Orders/10001/orderlines/10001-01
       requestBody:
         content:
           application/json:
             schema:
               example:
                 "@context": https://www.datafoodconsortium.org
-                "@id": http://test.host/api/dfc/Enterprises/10000/orders/10001
+                "@id": http://test.host/api/dfc/Enterprises/10000/Orders/10001
                 "@type": dfc-b:Order
-                dfc-b:belongsTo: http://test.host/api/dfc/Enterprises/10000/salessessions/10002
+                dfc-b:belongsTo: http://test.host/api/dfc/Enterprises/10000/SalesSessions/10002
                 dfc-b:orderNumber: "MYORDERNUM:12345"
                 dfc-b:hasOrderStatus: dfc-v:Draft
                 dfc-b:hasFulfilmentStatus: dfc-v:Held
@@ -839,15 +779,15 @@ paths:
                 dfc-b:OrderedBy: http://test.host/api/dfc/Persons/10000
                 dfc-b:selects:
                   "@type": dfc-b:ShippingOption
-                  dfc-b:optionOf: http://test.host/api/dfc/Enterprises/10000/salessessions/10002
+                  dfc-b:optionOf: http://test.host/api/dfc/Enterprises/10000/SalesSessions/10002
                   dfc-b:fee: 1.50
                 dfc-b:uses:
                   "@type": dfc-b:PickupOption
                   dfc-b:pickedUpAt: Our Fantastic Farm Gate
                 dfc-b:soldBy: http://test.host/api/dfc/Enterprises/10000
-                dfc-b:hasPart: http://test.host/api/dfc/Enterprises/10000/orders/10001/orderlines/10001-01
+                dfc-b:hasPart: http://test.host/api/dfc/Enterprises/10000/Orders/10001/orderlines/10001-01
 
-  "/api/dfc/Enterprises/{enterprise_id}/orders/{id}":
+  "/api/dfc/Enterprises/{enterprise_id}/Orders/{id}":
     parameters:
     - name: enterprise_id
       in: path
@@ -872,9 +812,9 @@ paths:
                 test_example:
                   value:
                     "@context": https://www.datafoodconsortium.org
-                    "@id": http://test.host/api/dfc/Enterprises/10000/orders/10001
+                    "@id": http://test.host/api/dfc/Enterprises/10000/Orders/10001
                     "@type": dfc-b:Order
-                    dfc-b:belongsTo: http://test.host/api/dfc/Enterprises/10000/salessessions/10002
+                    dfc-b:belongsTo: http://test.host/api/dfc/Enterprises/10000/SalesSessions/10002
                     dfc-b:orderNumber: "MYORDERNUM:12345"
                     dfc-b:hasOrderStatus: dfc-v:Draft
                     dfc-b:hasFulfilmentStatus: dfc-v:Held
@@ -892,14 +832,14 @@ paths:
                     dfc-b:OrderedBy: http://test.host/api/dfc/Persons/10000
                     dfc-b:selects:
                       "@type": dfc-b:ShippingOption
-                      dfc-b:optionOf: http://test.host/api/dfc/Enterprises/10000/salessessions/10002
+                      dfc-b:optionOf: http://test.host/api/dfc/Enterprises/10000/SalesSessions/10002
                       dfc-b:fee: 1.50
                     dfc-b:uses:
                       "@type": dfc-b:PickupOption
                       dfc-b:pickedUpAt: Our Fantastic Farm Gate
                     dfc-b:soldBy: http://test.host/api/dfc/Enterprises/10000
                     dfc-b:hasPart:
-                    - "@id": http://test.host/api/dfc/Enterprises/10000/orders/10001/orderlines/10001-01
+                    - "@id": http://test.host/api/dfc/Enterprises/10000/Orders/10001/orderlines/10001-01
                       "@type": dfc-b:OrderLine
                       dfc-b:concerns: http://test.host/api/dfc/Enterprises/10000/SuppliedProducts/10001
                       dfc-b:hasQuantity:
@@ -916,7 +856,7 @@ paths:
           description: not found
 
 
-  "/api/dfc/Enterprises/{enterprise_id}/orders/{order_id}/orderlines":
+  "/api/dfc/Enterprises/{enterprise_id}/Orders/{order_id}/orderlines":
     parameters:
     - name: enterprise_id
       in: path
@@ -941,10 +881,10 @@ paths:
                 test_example:
                   value:
                     "@context": https://www.datafoodconsortium.org
-                    "@id": http://test.host/api/dfc/Enterprises/10000/orders/10001/orderlines/10001-01
+                    "@id": http://test.host/api/dfc/Enterprises/10000/Orders/10001/orderlines/10001-01
                     "@type": dfc-b:OrderLine
                     dfc-b:concerns: http://test.host/api/dfc/Enterprises/10000/SuppliedProducts/10001
-                    dfc-b:partOf: http://test.host/api/dfc/Enterprises/10000/orders/10001
+                    dfc-b:partOf: http://test.host/api/dfc/Enterprises/10000/Orders/10001
                     dfc-b:hasQuantity:
                       "@type": dfc-b:QuantitativeValue
                       dfc-b:hasUnit: Packet
@@ -973,10 +913,10 @@ paths:
                 test_example:
                   value:
                     "@context": https://www.datafoodconsortium.org
-                    "@id": http://test.host/api/dfc/Enterprises/10000/orders/10001/orderlines/10001-01
+                    "@id": http://test.host/api/dfc/Enterprises/10000/Orders/10001/orderlines/10001-01
                     "@type": dfc-b:OrderLine
                     dfc-b:concerns: http://test.host/api/dfc/Enterprises/10000/SuppliedProducts/10001
-                    dfc-b:partOf: http://test.host/api/dfc/Enterprises/10000/orders/10001
+                    dfc-b:partOf: http://test.host/api/dfc/Enterprises/10000/Orders/10001
                     dfc-b:hasQuantity:
                       "@type": dfc-b:QuantitativeValue
                       dfc-b:hasUnit: Packet
@@ -993,10 +933,10 @@ paths:
             schema:
               example:
                 "@context": https://www.datafoodconsortium.org
-                "@id": http://test.host/api/dfc/Enterprises/10000/orders/10001/orderlines/10001-01
+                "@id": http://test.host/api/dfc/Enterprises/10000/Orders/10001/orderlines/10001-01
                 "@type": dfc-b:OrderLine
                 dfc-b:concerns: http://test.host/api/dfc/Enterprises/10000/SuppliedProducts/10001
-                dfc-b:partOf: http://test.host/api/dfc/Enterprises/10000/orders/10001
+                dfc-b:partOf: http://test.host/api/dfc/Enterprises/10000/Orders/10001
                 dfc-b:hasQuantity:
                   "@type": dfc-b:QuantitativeValue
                   dfc-b:hasUnit: Packet
@@ -1008,7 +948,7 @@ paths:
                   dfc-b:VATrate: 0.0
                 dfc-b:discount: 2.95
 
-  "/api/dfc/Enterprises/{enterprise_id}/orders/{order_id}/orderlines/{id}":
+  "/api/dfc/Enterprises/{enterprise_id}/Orders/{order_id}/orderlines/{id}":
     parameters:
     - name: enterprise_id
       in: path
@@ -1038,10 +978,10 @@ paths:
                 test_example:
                   value:
                     "@context": https://www.datafoodconsortium.org
-                    "@id": http://test.host/api/dfc/Enterprises/10000/orders/10001/orderlines/10001-01
+                    "@id": http://test.host/api/dfc/Enterprises/10000/Orders/10001/orderlines/10001-01
                     "@type": dfc-b:OrderLine
                     dfc-b:concerns: http://test.host/api/dfc/Enterprises/10000/SuppliedProducts/10001
-                    dfc-b:partOf: http://test.host/api/dfc/Enterprises/10000/orders/10001
+                    dfc-b:partOf: http://test.host/api/dfc/Enterprises/10000/Orders/10001
                     dfc-b:hasQuantity:
                       "@type": dfc-b:QuantitativeValue
                       dfc-b:hasUnit: Packet
