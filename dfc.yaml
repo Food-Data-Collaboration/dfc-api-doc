@@ -846,8 +846,6 @@ paths:
                   dfc-b:pickedUpAt: Our Fantastic Farm Gate
                 dfc-b:soldBy: http://test.host/api/dfc/Enterprises/10000
                 dfc-b:hasPart: http://test.host/api/dfc/Enterprises/10000/orders/10001/orderlines/10001-01
-        '404':
-          description: not found
 
   "/api/dfc/Enterprises/{enterprise_id}/orders/{id}":
     parameters:
@@ -1009,8 +1007,6 @@ paths:
                   dfc-b:value: 19.95
                   dfc-b:VATrate: 0.0
                 dfc-b:discount: 2.95
-        '404':
-          description: not found
 
   "/api/dfc/Enterprises/{enterprise_id}/orders/{order_id}/orderlines/{id}":
     parameters:
