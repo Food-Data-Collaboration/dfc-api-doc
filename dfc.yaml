@@ -3,7 +3,12 @@ openapi: 3.0.1
 info:
   title: DFC Sample API
   version: v1.12.1
-  contact: [ hello@datafoodconsortium.org ]
+  contact:
+    {
+      "name": "DFC General Contact" ,
+      "url": "https://www.datafoodconsortium.org/" ,
+      "email": "hello@datafoodconsortium.org"
+    }
   description: |
     <p>
     This API implements the Data Food Consortium (DFC) specifications.
