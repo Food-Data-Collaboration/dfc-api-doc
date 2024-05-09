@@ -764,7 +764,6 @@ paths:
                         dfc-b:value: 19.95
                         dfc-b:VATrate: 0.0
                       dfc-b:discount: []
-                    dfc-b:hasPart: http://test.host/api/dfc/enterprises/10000/orders/10001/orderlines/10001-012
     post:
       Summary: Create an Order
       parameters: []
@@ -876,7 +875,6 @@ paths:
                         dfc-b:value: 19.95
                         dfc-b:VATrate: 0.0
                       dfc-b:discount: []
-                    dfc-b:hasPart: http://test.host/api/dfc/enterprises/10000/orders/10001/orderlines/10001-012
         '404':
           description: not found
 
