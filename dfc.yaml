@@ -46,9 +46,9 @@ paths:
                     "@context": https://www.datafoodconsortium.org
                     "@id": http://test.host/api/dfc/addresses/40000
                     "@type": dfc-b:Address
-                    dfc-b:hasStreet: 10 Lovely Street
-                    dfc-b:hasPostalCode: '20170'
-                    dfc-b:hasCity: Herndon
+                    dfc-b:street: 10 Lovely Street
+                    dfc-b:postcode: '20170'
+                    dfc-b:city: Herndon
                     dfc-b:hasCountry: United States of America
                     dfc-b:region: Virginia
                     dfc-b:latitude: 38.89750
@@ -305,10 +305,10 @@ paths:
                       dfc-b:affiliatedBy: http://test.host/api/dfc/enterprises/10000
                     - "@id": http://test.host/api/dfc/addresses/40000
                       "@type": dfc-b:Address
-                      dfc-b:hasStreet: 8 Acres Drive
-                      dfc-b:hasPostalCode: '20170'
-                      dfc-b:hasCity: Herndon
-                      dfc-b:hasCountry: USA
+                      dfc-b:street: '8 Acres Drive'
+                      dfc-b:postcode: '20170'
+                      dfc-b:city: Herndon
+                      dfc-b:country: USA
                       dfc-b:region: Virginia
                       dfc-b:latitude: 38.89750
                       dfc-b:longitude: -77.00920
@@ -350,9 +350,9 @@ paths:
                       dfc-b:affiliates: http://test.host/api/dfc/enterprise_groups/60000
                     - "@id": http://test.host/api/dfc/addresses/40000
                       "@type": dfc-b:Address
-                      dfc-b:hasStreet: 42 Doveton Street
-                      dfc-b:hasPostalCode: '20170'
-                      dfc-b:hasCity: Herndon
+                      dfc-b:street: 42 Doveton Street
+                      dfc-b:postcode: '20170'
+                      dfc-b:city: Herndon
                       dfc-b:hasCountry: Australia
                       dfc-b:region: Victoria
                     - "@id": http://test.host/api/dfc/enterprises/10000/suppliedproducts/10001
