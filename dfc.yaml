@@ -212,6 +212,36 @@ paths:
                     "@type": "@id"
                 dfc-b:stockLimitation: '3'
                 dfc-b:sku: new-sku
+  "/api/dfc/Enterprises/{enterprise_id}/customerCategories/{id}":
+    get:
+      summary: Return a list of Customer Categories for an Enterprise
+      parameters:
+      - name: enterprise_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      tags:
+      - CustomerCategory
+      responses:
+        '200':
+          description: successful
+          content:
+            application/json:
+              examples:
+                test_example:
+                  value:
+                    "@context": https://www.datafoodconsortium.org
+                    "@graph":
+                    - "@id": http://test.host/api/dfc/Enterprises/10000/customerCategories/10005
+                      "@type": dfc-b:customerCategory
+                      dfc-b:definedBy: http://test.host/api/dfc/Enterprises/10000
+
   "/api/dfc/Enterprises/{enterprise_id}/affiliatedBy":
     post:
       summary: Affilate Enterprises
@@ -357,8 +387,8 @@ paths:
                     dfc-b:hasPrice: 19.99
                     dfc-b:stockLimitation: 5
                     dfc-b:discount: 2.95
-                    dfc-b:offersTo: https://test.host/api/dfc/enterprises/10000/customercategory/10005
-put:
+                    dfc-b:offersTo: https://test.host/api/dfc/enterprises/10000/customerCategories/10005
+    put:
       summary: Update Offer
       parameters: []
       tags:
@@ -377,7 +407,8 @@ put:
                 dfc-b:hasPrice: 9.99
                 dfc-b:stockLimitation: 7
                 dfc-b:discount: 1.50
-                dfc-b:offersTo: https://test.host/api/dfc/enterprises/10000/customercategory/10005
+                dfc-b:offersTo: https://test.host/api/dfc/enterprises/10000/customerCategories/10005
+
   "/api/dfc/persons/{id}":
     get:
       summary: Show person
