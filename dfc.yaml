@@ -52,9 +52,9 @@ paths:
                     "@context": https://www.datafoodconsortium.org
                     "@id": http://test.host/api/dfc/Addresses/40000
                     "@type": dfc-b:Address
-                    dfc-b:hasStreet: 10 Lovely Street
-                    dfc-b:hasPostalCode: '20170'
-                    dfc-b:hasCity: Herndon
+                    dfc-b:street: 10 Lovely Street
+                    dfc-b:postcode: '20170'
+                    dfc-b:city: Herndon
                     dfc-b:hasCountry: United States of America
                     dfc-b:region: Virginia
                     dfc-b:latitude: 38.89750
@@ -356,7 +356,9 @@ paths:
                     "@type": dfc-b:Offer
                     dfc-b:hasPrice: 19.99
                     dfc-b:stockLimitation: 5
-    put:
+                    dfc-b:discount: 2.95
+                    dfc-b:offersTo: https://test.host/api/dfc/enterprises/10000/customercategory/10005
+put:
       summary: Update Offer
       parameters: []
       tags:
@@ -374,7 +376,9 @@ paths:
                 "@type": dfc-b:Offer
                 dfc-b:hasPrice: 9.99
                 dfc-b:stockLimitation: 7
-  "/api/dfc/Persons/{id}":
+                dfc-b:discount: 1.50
+                dfc-b:offersTo: https://test.host/api/dfc/enterprises/10000/customercategory/10005
+  "/api/dfc/persons/{id}":
     get:
       summary: Show person
       parameters:
