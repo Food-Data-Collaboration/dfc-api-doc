@@ -212,9 +212,54 @@ paths:
                     "@type": "@id"
                 dfc-b:stockLimitation: '3'
                 dfc-b:sku: new-sku
-  "/api/dfc/Enterprises/{enterprise_id}/customerCategories/{id}":
+  "/api/dfc/Enterprises/{enterprise_id}/customerCategories":
     get:
       summary: Return a list of Customer Categories for an Enterprise
+      parameters:
+      - name: enterprise_id
+        in: path
+        required: true
+        schema:
+          type: string
+      tags:
+      - CustomerCategory
+      responses:
+        '404':
+          description: not found
+        '200':
+          description: successful
+          content:
+            application/json:
+              examples:
+                test_example:
+                  value:
+                    "@context": https://www.datafoodconsortium.org
+                    "@graph":
+                    - "@id": http://test.host/api/dfc/Enterprises/10000/customerCategories/10005
+                      "@type": dfc-b:customerCategory
+                      dfc-b:definedBy: http://test.host/api/dfc/Enterprises/10000
+          '401':
+            description: unauthorized
+    post:
+      summary: create a new Customer Category for a given Enterprise
+      parameters: []
+      responses:
+        '201':
+          description: created
+        '400':
+          description: bad request
+        '401':
+          description: unauthorized
+      requestBody:
+        content:
+          application/json:
+            schema:
+              example:
+                "@id": http://test.host/api/dfc/Enterprises/10000/customerCategories/10006
+
+  "/api/dfc/Enterprises/{enterprise_id}/customerCategories/{id}":
+    get:
+      summary: Return a specific Customer Category for an Enterprise
       parameters:
       - name: enterprise_id
         in: path
@@ -241,6 +286,23 @@ paths:
                     - "@id": http://test.host/api/dfc/Enterprises/10000/customerCategories/10005
                       "@type": dfc-b:customerCategory
                       dfc-b:definedBy: http://test.host/api/dfc/Enterprises/10000
+          '404':
+            description: not found
+    delete:
+      summary: remove a Customer Category for a given Enterprise
+      parameters: []
+      responses:
+        '204':
+          description: no content
+        '401':
+          description: unauthorized
+      requestBody:
+        content:
+          application/json:
+            schema:
+              example:
+                "@id": http://test.host/api/dfc/Enterprises/10000/customerCategories/10006
+
 
   "/api/dfc/Enterprises/{enterprise_id}/affiliatedBy":
     post:
