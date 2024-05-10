@@ -410,7 +410,9 @@ paths:
                     "@type": dfc-b:Offer
                     dfc-b:hasPrice: 19.99
                     dfc-b:stockLimitation: 5
-    put:
+                    dfc-b:discount: 2.95
+                    dfc-b:offersTo: https://test.host/api/dfc/enterprises/10000/customercategory/10005
+put:
       summary: Update Offer
       parameters: []
       tags:
@@ -428,6 +430,8 @@ paths:
                 "@type": dfc-b:Offer
                 dfc-b:hasPrice: 9.99
                 dfc-b:stockLimitation: 7
+                dfc-b:discount: 1.50
+                dfc-b:offersTo: https://test.host/api/dfc/enterprises/10000/customercategory/10005
   "/api/dfc/persons/{id}":
     get:
       summary: Show person
