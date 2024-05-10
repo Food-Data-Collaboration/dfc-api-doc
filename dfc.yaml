@@ -238,11 +238,14 @@ paths:
                     - "@id": http://test.host/api/dfc/Enterprises/10000/customerCategories/10005
                       "@type": dfc-b:customerCategory
                       dfc-b:definedBy: http://test.host/api/dfc/Enterprises/10000
-          '401':
-            description: unauthorized
     post:
       summary: create a new Customer Category for a given Enterprise
-      parameters: []
+      parameters:
+      - name: enterprise_id
+        in: path
+        required: true
+        schema:
+          type: string
       responses:
         '201':
           description: created
@@ -286,22 +289,24 @@ paths:
                     - "@id": http://test.host/api/dfc/Enterprises/10000/customerCategories/10005
                       "@type": dfc-b:customerCategory
                       dfc-b:definedBy: http://test.host/api/dfc/Enterprises/10000
-          '404':
-            description: not found
     delete:
       summary: remove a Customer Category for a given Enterprise
-      parameters: []
+      parameters:
+      - name: enterprise_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
       responses:
         '204':
           description: no content
         '401':
           description: unauthorized
-      requestBody:
-        content:
-          application/json:
-            schema:
-              example:
-                "@id": http://test.host/api/dfc/Enterprises/10000/customerCategories/10006
 
 
   "/api/dfc/Enterprises/{enterprise_id}/affiliatedBy":
