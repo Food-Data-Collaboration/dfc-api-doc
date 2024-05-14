@@ -568,6 +568,37 @@ paths:
                     "@type": dfc-b:Person
         '404':
           description: not found
+
+
+  "/api/dfc/PhoneNumbers/{id}":
+    parameters:
+    - name: id
+      in: path
+      required: true
+      schema:
+        type: string
+    get:
+      summary: Show phone number
+      parameters: []
+      tags:
+      - PhoneNumbers
+      responses:
+        '200':
+          description: successful
+          content:
+            application/json:
+              examples:
+                test_example:
+                  value:
+                    "@context": https://www.datafoodconsortium.org
+                    "@id": http://test.host/api/dfc/PhoneNumbers/444000245
+                    "@type": dfc-b:PhoneNumber
+                    dfc-b:countryCode: 44
+                    dfc-b:phoneNumber: 0121-400-0245
+                    dfc-b:phoneNumberOf: http://test.host/api/dfc/Enterprises/10000
+        '404':
+          description: not found
+
   "/api/dfc/Enterprises/{enterprise_id}/SocialMedias/{name}":
     parameters:
     - name: enterprise_id
