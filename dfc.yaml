@@ -298,53 +298,6 @@ paths:
         '401':
           description: unauthorized
 
-
-  "/api/dfc/Enterprises/{enterprise_id}/affiliatedBy":
-    post:
-      summary: Affilate Enterprises
-      parameters:
-      - name: enterprise_id
-        in: path
-        required: true
-        schema:
-          type: string
-      tags:
-      - Enterprises::affiliatedBy
-      responses:
-        '201':
-          description: created
-        '400':
-          description: bad request
-        '401':
-          description: unauthorized
-      requestBody:
-        content:
-          application/json:
-            schema:
-              example:
-                "@id": http://test.host/api/dfc/Enterprises/10001
-  "/api/dfc/Enterprises/{enterprise_id}/affiliatedBy/{id}":
-    delete:
-      summary: Remove enterprise from group
-      parameters:
-      - name: enterprise_id
-        in: path
-        required: true
-        schema:
-          type: string
-      - name: id
-        in: path
-        required: true
-        schema:
-          type: string
-      tags:
-      - Enterprises::affiliatedBy
-      responses:
-        '204':
-          description: no content
-        '401':
-          description: unauthorized
-
   "/api/dfc/Enterprises/{id}":
     parameters:
     - name: id
