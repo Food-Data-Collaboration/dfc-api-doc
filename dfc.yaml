@@ -661,20 +661,53 @@ paths:
                 test_example:
                   value:
                     "@context": https://www.datafoodconsortium.org
-                    "@id": http://test.host/api/dfc/Enterprises/10000/SuppliedProducts/10001
-                    "@type": dfc-b:SuppliedProduct
-                    dfc-b:name: Pesto - 1g
-                    dfc-b:description: Basil Pesto
-                    dfc-b:hasType: dfc-pt:processed-vegetable
-                    dfc-b:hasQuantity:
-                      "@type": dfc-b:QuantitativeValue
-                      dfc-b:hasUnit: dfc-m:Gram
-                      dfc-b:value: 1.0
-                    dfc-b:alcoholPercentage: 0.0
-                    dfc-b:lifetime: ''
-                    dfc-b:usageOrStorageCondition: ''
-                    dfc-b:totalTheoreticalStock: 0.0
-                    dfc-b:image: http://test.host/active-storage/url/logo-white.png
+                    "@graph":
+                    - "@id": http://test.host/api/dfc/Enterprises/10000/SuppliedProducts/10001
+                      "@type": dfc-b:SuppliedProduct
+                      dfc-b:name: Pesto - 100g
+                      dfc-b:description: Basil Pesto
+                      dfc-b:hasType: dfc-pt:processed-vegetable
+                      dfc-b:hasQuantity:
+                        "@type": dfc-b:QuantitativeValue
+                        dfc-b:hasUnit: dfc-m:Gram
+                        dfc-b:value: 100.0
+                      dfc-b:alcoholPercentage: 0.0
+                      dfc-b:lifetime: '12 months'
+                      dfc-b:usageOrStorageCondition: ''
+                      dfc-b:totalTheoreticalStock: 0.0
+                      dfc-b:image: http://test.host/active-storage/url/logo-white.png
+                      dfc-b:referencedBy: http:/test.host/api/dfc/Enterprises/10000/CatalogItems/10001
+                      dfc-b:asPlannedProductionFlow: http:/test.host/api/dfc/Enterprises/10000/asPlannedProductionFlow/101010
+                    - "@id": http:/test.host/api/dfc/Enterprises/10000/asPlannedProductionFlow/101010
+                      "@type": dfc-b:asPlannedProductionFlow
+                      dfc-b:quantity: 12
+                      dfc-b:AsPlannedTransformation: http:/test.host/api/dfc/Enterprises/10000/AsPlannedTransformation/101010
+                    - "@id": http:/test.host/api/dfc/Enterprises/10000/AsPlannedTransformation/101010
+                      "@type": dfc-b:AsPlannedTransformation
+                      dfc-b:hasInput: http:/test.host/api/dfc/Enterprises/10000/asPlannedProductionFlow/101010
+                      dfc-b:hasOutput: http:/test.host/api/dfc/Enterprises/10000/asPlannedConsumptionFlow/101010
+                      dfc-b:hasTransformationType: dfc-v:combine
+                    - "@id": http://test.host/api/dfc/Enterprises/10000/SuppliedProducts/10005
+                      "@type": dfc-b:SuppliedProduct
+                      dfc-b:name: Basil Pesto - Case
+                      dfc-b:description: Case of  Basil  Pesto (12 jars)
+                      dfc-b:hasType: dfc-pt:processed-vegetable
+                      dfc-b:hasQuantity:
+                        "@type": dfc-b:QuantitativeValue
+                        dfc-b:hasUnit: dfc-m:pack
+                        dfc-b:value: 12.0
+                      dfc-b:lifetime: '12 months'
+                      dfc-b:usageOrStorageCondition: ''
+                      dfc-b:totalTheoreticalStock: 10.0
+                      dfc-b:image: http://test.host/active-storage/url/logo-white.png
+                      dfc-b:referencedBy: http:/test.host/api/dfc/Enterprises/10000/CatalogItems/10002
+                      dfc-b:asPlannedConsumptionFlow: http:/test.host/api/dfc/Enterprises/10000/asPlannedConsumptionFlow/101010
+                    - "@id": http:/test.host/api/dfc/Enterprises/10000/asPlannedConsumptionFlow/101010
+                      "@type": dfc-b:asPlannedConsumptionFlow
+                      dfc-b:quantity: 1
+                      dfc-b:AsPlannedTransformation: http:/test.host/api/dfc/Enterprises/10000/AsPlannedTransformation/101010
+
+
         '404':
           description: not found
     post:
