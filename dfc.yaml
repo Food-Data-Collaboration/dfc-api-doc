@@ -64,6 +64,27 @@ paths:
         type: string
     get:
       summary: List all CatalogItems for an Enterprise
+      parameters:
+      - name: page
+        description: The page number of items to start with (see limit)
+        in: query
+        required: true
+        schema:
+          type: integer
+          minimum: 1
+          default: 1
+          example: 1
+      - name: limit
+        description: The number of items to return
+        in: query
+        required: true
+        schema:
+          type: integer
+          format: int32
+          minimum: 1
+          maximum: 225
+          default: 25
+          example: 25
       tags:
       - CatalogItems
       responses:
