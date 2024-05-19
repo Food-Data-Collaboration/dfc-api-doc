@@ -17,14 +17,8 @@ info:
 components:
   securitySchemes:
     oidc_token:
-      type: http
-      scheme: bearer
-      bearerFormat: JWT
-      description: |
-        OpenID Connect token from a trusted platform:
-        <ul>
-          <li><a href="https://login.lescommuns.org/auth/realm/datafoodconsortium" target="_blank">Les Communs</a></li>
-        </ul>
+      type: openIdConnect
+      openIdConnectUrl: https://login.lescommuns.org/auth/realm/datafoodconsortium
 
 security:
 - oidc_token: []
