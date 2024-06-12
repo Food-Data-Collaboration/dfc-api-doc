@@ -952,7 +952,7 @@ paths:
                     "@context": https://www.datafoodconsortium.org
                     "@id": http://test.host/api/dfc/Enterprises/10000/Orders/10001
                     "@type": dfc-b:Order
-                    dfc-b:belongsTo: http://test.host/api/dfc/Enterprises/10000/SalesSessions/10002
+                    dfc-b:belongsTo: http://test.host/api/dfc/Enterprises/10000/SaleSessions/10002
                     dfc-b:orderNumber: "MYORDERNUM:12345"
                     dfc-b:hasOrderStatus: dfc-v:Draft
                     dfc-b:hasFulfilmentStatus: dfc-v:Held
@@ -970,7 +970,7 @@ paths:
                     dfc-b:OrderedBy: http://test.host/api/dfc/Persons/10000
                     dfc-b:selects:
                       "@type": dfc-b:ShippingOption
-                      dfc-b:optionOf: http://test.host/api/dfc/Enterprises/10000/SalesSessions/10002
+                      dfc-b:optionOf: http://test.host/api/dfc/Enterprises/10000/SaleSessions/10002
                       dfc-b:fee: 1.50
                     dfc-b:uses:
                       "@type": dfc-b:PickupOption
@@ -1008,7 +1008,7 @@ paths:
                     "@context": https://www.datafoodconsortium.org
                     "@id": http://test.host/api/dfc/Enterprises/10000/Orders/10001
                     "@type": dfc-b:Order
-                    dfc-b:belongsTo: http://test.host/api/dfc/Enterprises/10000/SalesSessions/10002
+                    dfc-b:belongsTo: http://test.host/api/dfc/Enterprises/10000/SaleSessions/10002
                     dfc-b:orderNumber: "MYORDERNUM:12345"
                     dfc-b:hasOrderStatus: dfc-v:Draft
                     dfc-b:hasFulfilmentStatus: dfc-v:Held
@@ -1026,7 +1026,7 @@ paths:
                     dfc-b:OrderedBy: http://test.host/api/dfc/Persons/10000
                     dfc-b:selects:
                       "@type": dfc-b:ShippingOption
-                      dfc-b:optionOf: http://test.host/api/dfc/Enterprises/10000/SalesSessions/10002
+                      dfc-b:optionOf: http://test.host/api/dfc/Enterprises/10000/SaleSessions/10002
                       dfc-b:fee: 1.50
                     dfc-b:uses:
                       "@type": dfc-b:PickupOption
@@ -1041,7 +1041,7 @@ paths:
                 "@context": https://www.datafoodconsortium.org
                 "@id": http://test.host/api/dfc/Enterprises/10000/Orders/10001
                 "@type": dfc-b:Order
-                dfc-b:belongsTo: http://test.host/api/dfc/Enterprises/10000/SalesSessions/10002
+                dfc-b:belongsTo: http://test.host/api/dfc/Enterprises/10000/SaleSessions/10002
                 dfc-b:orderNumber: "MYORDERNUM:12345"
                 dfc-b:hasOrderStatus: dfc-v:Draft
                 dfc-b:hasFulfilmentStatus: dfc-v:Held
@@ -1059,7 +1059,7 @@ paths:
                 dfc-b:OrderedBy: http://test.host/api/dfc/Persons/10000
                 dfc-b:selects:
                   "@type": dfc-b:ShippingOption
-                  dfc-b:optionOf: http://test.host/api/dfc/Enterprises/10000/SalesSessions/10002
+                  dfc-b:optionOf: http://test.host/api/dfc/Enterprises/10000/SaleSessions/10002
                   dfc-b:fee: 1.50
                 dfc-b:uses:
                   "@type": dfc-b:PickupOption
@@ -1094,7 +1094,7 @@ paths:
                     "@context": https://www.datafoodconsortium.org
                     "@id": http://test.host/api/dfc/Enterprises/10000/Orders/10001
                     "@type": dfc-b:Order
-                    dfc-b:belongsTo: http://test.host/api/dfc/Enterprises/10000/SalesSessions/10002
+                    dfc-b:belongsTo: http://test.host/api/dfc/Enterprises/10000/SaleSessions/10002
                     dfc-b:orderNumber: "MYORDERNUM:12345"
                     dfc-b:hasOrderStatus: dfc-v:Draft
                     dfc-b:hasFulfilmentStatus: dfc-v:Held
@@ -1112,7 +1112,7 @@ paths:
                     dfc-b:OrderedBy: http://test.host/api/dfc/Persons/10000
                     dfc-b:selects:
                       "@type": dfc-b:ShippingOption
-                      dfc-b:optionOf: http://test.host/api/dfc/Enterprises/10000/SalesSessions/10002
+                      dfc-b:optionOf: http://test.host/api/dfc/Enterprises/10000/SaleSessions/10002
                       dfc-b:fee: 1.50
                     dfc-b:uses:
                       "@type": dfc-b:PickupOption
@@ -1272,6 +1272,50 @@ paths:
                       dfc-b:value: 19.95
                       dfc-b:VATrate: 0.0
                     dfc-b:discount: 2.95
+        '404':
+          description: not found
+
+  "/api/dfc/Enterprises/{enterprise_id}/SaleSessions/{id}":
+    parameters:
+    - name: enterprise_id
+      in: path
+      required: true
+      schema:
+        type: string
+    - name: id
+      in: path
+      required: true
+      schema:
+        type: string
+    get:
+      summary: Retrieve a single Sales Session
+      tags:
+      - SaleSessions
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              examples:
+                test_example:
+                  value:
+                    "@context": https://www.datafoodconsortium.org
+                    "@id": http://test.host/api/dfc/Enterprises/10000/SaleSessions/10002
+                    "@type": dfc-b:SaleSession
+                    dfc-b:startDate: "2024-03-14T01:00:00+01:00"
+                    dfc-b:endDate: "2024-03-21T00:59:59+01:00"
+                    dfc-b:hasOption:
+                      "@type": dfc-b:ShippingOption
+                      "@id": http://test.host/api/dfc/Enterprises/10000/ShippingOptions/004
+                      dfc-b:fee: 1.50
+                    dfc-b:hostedAt:
+                      "@type": dfc-b:VirtualPlace
+                      dfc-b:URL: http:/test.host/store/FredsFarm/
+                    dfc-b:lists: http://test.host/api/dfc/Enterprises/10000/Offers/10001
+                    dfc-b:objectOf:
+                      "@type": dfc-b:Coordination
+                      dfc-b:coordinatedBy: http://test.host/api/dfc/Enterprises/10000
+                      dfc-b:marginPercent: 5.0
         '404':
           description: not found
 
