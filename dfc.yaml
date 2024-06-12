@@ -1275,6 +1275,100 @@ paths:
         '404':
           description: not found
 
+  "/api/dfc/Enterprises/{enterprise_id}/SaleSessions":
+    parameters:
+    - name: enterprise_id
+      in: path
+      required: true
+      schema:
+        type: string
+    get:
+      summary: List all  Sales Session for an Enterprise
+      tags:
+      - SaleSessions
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              examples:
+                test_example:
+                  value:
+                    "@context": https://www.datafoodconsortium.org
+                    "@id": http://test.host/api/dfc/Enterprises/10000/SaleSessions/10002
+                    "@type": dfc-b:SaleSession
+                    dfc-b:startDate: "2024-03-14T01:00:00+01:00"
+                    dfc-b:endDate: "2024-03-21T00:59:59+01:00"
+                    dfc-b:hasOption:
+                      "@type": dfc-b:ShippingOption
+                      "@id": http://test.host/api/dfc/Enterprises/10000/ShippingOptions/004
+                      dfc-b:fee: 1.50
+                    dfc-b:hostedAt:
+                      "@type": dfc-b:VirtualPlace
+                      dfc-b:URL: http:/test.host/store/FredsFarm/
+                    dfc-b:lists: http://test.host/api/dfc/Enterprises/10000/Offers/10001
+                    dfc-b:objectOf:
+                      "@type": dfc-b:Coordination
+                      dfc-b:coordinatedBy: http://test.host/api/dfc/Enterprises/10000
+                      dfc-b:marginPercent: 5.0
+        '404':
+          description: not found
+    post:
+      summary: Create Sales Session
+      parameters: []
+      tags:
+      - SaleSessions
+      responses:
+        '400':
+          description: bad request
+        '200':
+          description: success
+          content:
+            application/json:
+              examples:
+                test_example:
+                  value:
+                    "@context": https://www.datafoodconsortium.org
+                    "@id": http://test.host/api/dfc/Enterprises/10000/SaleSessions/10002
+                    "@type": dfc-b:SaleSession
+                    dfc-b:startDate: "2024-03-14T01:00:00+01:00"
+                    dfc-b:endDate: "2024-03-21T00:59:59+01:00"
+                    dfc-b:hasOption:
+                      "@type": dfc-b:ShippingOption
+                      "@id": http://test.host/api/dfc/Enterprises/10000/ShippingOptions/004
+                      dfc-b:fee: 1.50
+                    dfc-b:hostedAt:
+                      "@type": dfc-b:VirtualPlace
+                      dfc-b:URL: http:/test.host/store/FredsFarm/
+                    dfc-b:lists: http://test.host/api/dfc/Enterprises/10000/Offers/10001
+                    dfc-b:objectOf:
+                      "@type": dfc-b:Coordination
+                      dfc-b:coordinatedBy: http://test.host/api/dfc/Enterprises/10000
+                      dfc-b:marginPercent: 5.0
+      requestBody:
+        content:
+          application/json:
+            schema:
+              example:
+                "@context": https://www.datafoodconsortium.org
+                "@id": http://test.host/api/dfc/Enterprises/10000/SaleSessions/10002
+                "@type": dfc-b:SaleSession
+                dfc-b:startDate: "2024-03-14T01:00:00+01:00"
+                dfc-b:endDate: "2024-03-21T00:59:59+01:00"
+                dfc-b:hasOption:
+                  "@type": dfc-b:ShippingOption
+                  "@id": http://test.host/api/dfc/Enterprises/10000/ShippingOptions/004
+                  dfc-b:fee: 1.50
+                dfc-b:hostedAt:
+                  "@type": dfc-b:VirtualPlace
+                  dfc-b:URL: http:/test.host/store/FredsFarm/
+                dfc-b:lists: http://test.host/api/dfc/Enterprises/10000/Offers/10001
+                dfc-b:objectOf:
+                  "@type": dfc-b:Coordination
+                  dfc-b:coordinatedBy: http://test.host/api/dfc/Enterprises/10000
+                  dfc-b:marginPercent: 5.0
+
+
   "/api/dfc/Enterprises/{enterprise_id}/SaleSessions/{id}":
     parameters:
     - name: enterprise_id
