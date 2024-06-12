@@ -226,6 +226,7 @@ paths:
                     "@type": "@id"
                 dfc-b:stockLimitation: '3'
                 dfc-b:sku: new-sku
+
   "/api/dfc/Enterprises/{enterprise_id}/customerCategories":
     parameters:
     - name: enterprise_id
@@ -1080,7 +1081,7 @@ paths:
       schema:
         type: string
     get:
-      summary: Show an Order
+      summary: Show a single Order
       tags:
       - Orders
       responses:
@@ -1134,7 +1135,61 @@ paths:
                       dfc-b:discount: []
         '404':
           description: not found
-
+    put:
+      summary: Update a single Order
+      tags:
+      - Orders
+      responses:
+        '401':
+          description: unauthorized
+        '204':
+          description: success
+      requestBody:
+        content:
+          application/json:
+            schema:
+              example:
+                "@context": https://www.datafoodconsortium.org
+                "@id": http://test.host/api/dfc/Enterprises/10000/Orders/10001
+                "@type": dfc-b:Order
+                dfc-b:belongsTo: http://test.host/api/dfc/Enterprises/10000/SaleSessions/10002
+                dfc-b:orderNumber: "MYORDERNUM:12345"
+                dfc-b:hasOrderStatus: dfc-v:Complete
+                dfc-b:hasFulfilmentStatus: dfc-v:Held
+                dfc-b:hasPaymentState: dfc-v:Unpaid
+                dfc-b:hasPaymentMethod:
+                  "@type": dfc-b:PaymentMethod
+                  dfc-b:paymentMethodType: Example Card PaymentMethod
+                  dfc-b:paymentMethodProvider: Stripe
+                  dfc-b:hasPrice:
+                    "@type": dfc-b:QuantitativeValue
+                    dfc-b:hasUnit: GBP
+                    dfc-b:value: £0.25
+                    dfc-b:VATrate: 0.00
+                dfc-b:discount: 1.25
+                dfc-b:OrderedBy: http://test.host/api/dfc/Persons/10000
+                dfc-b:selects:
+                  "@type": dfc-b:ShippingOption
+                  dfc-b:optionOf: http://test.host/api/dfc/Enterprises/10000/SaleSessions/10002
+                  dfc-b:fee: 1.50
+                dfc-b:uses:
+                  "@type": dfc-b:PickupOption
+                  dfc-b:pickedUpAt: Our Fantastic Farm Gate
+                dfc-b:soldBy: http://test.host/api/dfc/Enterprises/10000
+                dfc-b:hasPart:
+                - "@id": http://test.host/api/dfc/Enterprises/10000/Orders/10001/orderlines/10001-01
+                  "@type": dfc-b:OrderLine
+                  dfc-b:concerns: http://test.host/api/dfc/Enterprises/10000/SuppliedProducts/10001
+                  dfc-b:hasQuantity:
+                    "@type": dfc-b:QuantitativeValue
+                    dfc-b:hasUnit: Packet
+                    dfc-b:hasValue: 4.0
+                  dfc-b:Price:
+                    "@type": dfc-b:QuantitativeValue
+                    dfc-b:hasUnit: GBP
+                    dfc-b:value: 19.95
+                    dfc-b:VATrate: 0.0
+                  dfc-b:discount: []
 
   "/api/dfc/Enterprises/{enterprise_id}/Orders/{order_id}/orderlines":
     parameters:
@@ -1274,6 +1329,36 @@ paths:
                     dfc-b:discount: 2.95
         '404':
           description: not found
+    put:
+      summary: Update a single Order Line
+      tags:
+      - OrderLines
+      responses:
+        '401':
+          description: unauthorized
+        '204':
+          description: success
+      requestBody:
+        content:
+          application/json:
+            schema:
+              example:
+                "@context": https://www.datafoodconsortium.org
+                "@id": http://test.host/api/dfc/Enterprises/10000/Orders/10001/orderlines/10001-01
+                "@type": dfc-b:OrderLine
+                dfc-b:concerns: http://test.host/api/dfc/Enterprises/10000/SuppliedProducts/10001
+                dfc-b:partOf: http://test.host/api/dfc/Enterprises/10000/Orders/10001
+                dfc-b:hasQuantity:
+                  "@type": dfc-b:QuantitativeValue
+                  dfc-b:hasUnit: Packet
+                  dfc-b:hasValue: 5.0
+                dfc-b:Price:
+                  "@type": dfc-b:QuantitativeValue
+                  dfc-b:hasUnit: GBP
+                  dfc-b:value: 19.95
+                  dfc-b:VATrate: 0.0
+                dfc-b:discount: 2.95
+
 
   "/api/dfc/Enterprises/{enterprise_id}/SaleSessions":
     parameters:
@@ -1412,6 +1497,38 @@ paths:
                       dfc-b:marginPercent: 5.0
         '404':
           description: not found
+    put:
+      summary: Update a sinlge Sales Session
+      tags:
+      - SaleSessions
+      responses:
+        '401':
+          description: unauthorized
+        '204':
+          description: success
+      requestBody:
+        content:
+          application/json:
+            schema:
+              example:
+                "@context": https://www.datafoodconsortium.org
+                "@id": http://test.host/api/dfc/Enterprises/10000/SaleSessions/10002
+                "@type": dfc-b:SaleSession
+                dfc-b:startDate: "2024-03-14T01:00:00+01:00"
+                dfc-b:endDate: "2024-03-18T08:47:15+01:00"
+                dfc-b:hasOption:
+                  "@type": dfc-b:ShippingOption
+                  "@id": http://test.host/api/dfc/Enterprises/10000/ShippingOptions/004
+                  dfc-b:fee: 1.50
+                dfc-b:hostedAt:
+                  "@type": dfc-b:VirtualPlace
+                  dfc-b:URL: http:/test.host/store/FredsFarm/
+                dfc-b:lists: http://test.host/api/dfc/Enterprises/10000/Offers/10001
+                dfc-b:objectOf:
+                  "@type": dfc-b:Coordination
+                  dfc-b:coordinatedBy: http://test.host/api/dfc/Enterprises/10000
+                  dfc-b:marginPercent: 5.0
+
 
 
 servers:
