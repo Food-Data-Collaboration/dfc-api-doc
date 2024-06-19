@@ -1,0 +1,103 @@
+openapi: 3.0.0
+info:
+  version: v0.1
+  title: DFC INRAE Endpoint
+  contact:
+    {
+      "name": "DFC General Contact" ,
+      "url": "https://www.datafoodconsortium.org/" ,
+      "email": "hello@datafoodconsortium.org"
+    }
+  description: >-
+    Endpoint to expose anonymous product sales data for research purposes. Must
+    be authenticated, must be anonymized. Served at Order Line leve for
+    granularity.
+components:
+  securitySchemes:
+    oidc_token:
+      type: openIdConnect
+      openIdConnectUrl: https://login.lescommuns.org/auth/realm/datafoodconsortium
+
+security:
+- oidc_token: []
+
+paths:
+  "/api/dfc/AnonSalesData":
+    get:
+      summary: Show address
+      parameters:
+      - name: page
+        description: The page number of items to start with (see limit)
+        in: query
+        required: true
+        schema:
+          type: integer
+          minimum: 1
+          default: 1
+          example: 1
+      - name: limit
+        description: The number of items to return
+        in: query
+        required: true
+        schema:
+          type: integer
+          format: int32
+          minimum: 1
+          maximum: 225
+          default: 25
+          example: 25
+      - name: startDate
+        description: The start date from which data is requested
+        in: query
+        required: true
+        schema:
+          type: dateTime
+          format: ISO
+          minimum: 1900-01-01
+          maximum: 9999-12-31
+          default: 2024-01-01
+          example: 2024-01-01
+      - name: endDate
+        description: The end date to which data is requested
+        in: query
+        required: true
+        schema:
+          type: dateTime
+          format: ISO
+          minimum: 1900-01-01
+          maximum: 9999-12-31
+          default: 2024-12-31
+          example: 2024-12-31
+      tags:
+      - INRAE
+      responses:
+        '200':
+          description: successful
+          content:
+            application/json:
+              examples:
+                test_example:
+                  value:
+                    "@context": https://www.datafoodconsortium.org
+                    "@id": http://test.host/api/dfc/AnonSalesData
+                    "@type": dfc-b:OrderLine
+                    dfc-b:concerns: http://test.host/api/dfc/Enterprises/10000/SuppliedProducts/10001
+                    dfc-b:partOf: http://test.host/api/dfc/Enterprises/10000/Orders/10001
+                    dfc-b:hasQuantity:
+                      "@type": dfc-b:QuantitativeValue
+                      dfc-b:hasUnit: Packet
+                      dfc-b:hasValue: 5.0
+                    dfc-b:Price:
+                      "@type": dfc-b:QuantitativeValue
+                      dfc-b:hasUnit: GBP
+                      dfc-b:value: 19.95
+                      dfc-b:VATrate: 0.0
+                    dfc-b:discount: 2.95
+                    dfc-b:postcode: '20170'
+          '404'
+          description: not found
+
+servers:
+  # Added by API Auto Mocking Plugin
+  - description: SwaggerHub API Auto Mocking
+    url: https://virtserver.swaggerhub.com/RAGGEDSTAFF23/DFC-INRAE-Endpoint/v0.1
