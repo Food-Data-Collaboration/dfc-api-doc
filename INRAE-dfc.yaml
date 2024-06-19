@@ -22,10 +22,16 @@ security:
 - oidc_token: []
 
 paths:
-  "/api/dfc/AnonSalesData":
+  "/api/dfc/Persons/{id}/AffilateSalesData":
     get:
-      summary: Show address
+      summary: Returns anonymized order line data
+      description: Show anonymized sales data, for a given date range, for all Enterprises that have authorized this Person to collect their data.
       parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
       - name: page
         description: The page number of items to start with (see limit)
         in: query
@@ -51,23 +57,17 @@ paths:
         in: query
         required: true
         schema:
-          type: dateTime
-          format: ISO
-          minimum: 1900-01-01
-          maximum: 9999-12-31
-          default: 2024-01-01
-          example: 2024-01-01
+          type: string
+          default: "2024-01-01"
+          example: "2024-01-01"
       - name: endDate
         description: The end date to which data is requested
         in: query
         required: true
         schema:
-          type: dateTime
-          format: ISO
-          minimum: 1900-01-01
-          maximum: 9999-12-31
-          default: 2024-12-31
-          example: 2024-12-31
+          type: string
+          default: "2024-12-31"
+          example: "2024-12-31"
       tags:
       - INRAE
       responses:
@@ -79,25 +79,30 @@ paths:
                 test_example:
                   value:
                     "@context": https://www.datafoodconsortium.org
-                    "@id": http://test.host/api/dfc/AnonSalesData
-                    "@type": dfc-b:OrderLine
-                    dfc-b:concerns: http://test.host/api/dfc/Enterprises/10000/SuppliedProducts/10001
-                    dfc-b:partOf: http://test.host/api/dfc/Enterprises/10000/Orders/10001
-                    dfc-b:hasQuantity:
-                      "@type": dfc-b:QuantitativeValue
-                      dfc-b:hasUnit: Packet
-                      dfc-b:hasValue: 5.0
-                    dfc-b:Price:
-                      "@type": dfc-b:QuantitativeValue
-                      dfc-b:hasUnit: GBP
-                      dfc-b:value: 19.95
-                      dfc-b:VATrate: 0.0
-                    dfc-b:discount: 2.95
-                    dfc-b:postcode: '20170'
-          '404'
+                    "@id": http://test.host/api/dfc/Persons/1001/AffilateSalesData
+                    "@type": dfc-b:Person
+                    dfc-b:affiliates:
+                      "@type": dfc-Enterprise
+                      dfc-b:hasAddress:
+                        "@type": dfc-b:Address
+                        dfc-b:postcode: 20170
+                      dfc-b:supplies:
+                        "@type": dfc-b:SuppliedProduct
+                        dfc-b:concernedBy:
+                          "@type": dfc-b:OrderLine
+                          dfc-b:hasQuantity:
+                            "@type": dfc-b:QuantitativeValue
+                            dfc-b:hasUnit: packet
+                            dfc-b:hasValue: 3
+                          dfc-b:Price:
+                            "@type": dfc-b:QuantitativeValue
+                            dfc-b:hasUnit: GBP
+                            dfc-b:value: 19.95
+                            dfc-b:VATrate: 0.0
+        '404':
           description: not found
 
 servers:
   # Added by API Auto Mocking Plugin
-  - description: SwaggerHub API Auto Mocking
-    url: https://virtserver.swaggerhub.com/RAGGEDSTAFF23/DFC-INRAE-Endpoint/v0.1
+- description: SwaggerHub API Auto Mocking
+  url: https://virtserver.swaggerhub.com/RAGGEDSTAFF23/DFC-INRAE-Endpoint/v0.1
