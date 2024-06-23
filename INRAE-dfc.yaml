@@ -85,11 +85,11 @@ paths:
                       "@type": dfc-Enterprise
                       dfc-b:hasAddress:
                         "@type": dfc-b:Address
-                        dfc-b:postcode: 20170
+                        dfc-b:postcode: 20170   # Producer Postcode
                       dfc-b:supplies:
                         "@type": dfc-b:SuppliedProduct
                         dfc-b:Name: Basil Pesto 250g Jar
-                        dfc-b:hasType: dfc-pt:processed-vegetable
+                        dfc-b:hasType: dfc-pt:processed-vegetable # Not required
                         dfc-b:concernedBy:
                           "@type": dfc-b:OrderLine
                           dfc-b:hasQuantity:
@@ -103,7 +103,16 @@ paths:
                             dfc-b:VATrate: 0.0
                           dfc-b:partOf:
                             "@type": dfc-b:Order
-                            dfc-b:date: "2024-06-25"
+                            dfc-b:date: "2024-06-25"  # Order Date
+                            dfc-b:belongsTo:
+                              "@type": dfc-b:SaleSession
+                              dfc-b:objectOf:
+                                "@type": dfc-b:Coordination
+                                dfc-b:coordinatedBy:
+                                  "@type": dfc-b:Enterprise
+                                  dfc-b:hasAddress:
+                                    "@type": dfc-b:Address
+                                    dfc-b:postcode: 20170   # Shop/Distrobutor Postcode
         '404':
           description: not found
 
