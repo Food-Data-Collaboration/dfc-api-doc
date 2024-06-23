@@ -88,17 +88,22 @@ paths:
                         dfc-b:postcode: 20170
                       dfc-b:supplies:
                         "@type": dfc-b:SuppliedProduct
+                        dfc-b:Name: Basil Pesto 250g Jar
+                        dfc-b:hasType: dfc-pt:processed-vegetable
                         dfc-b:concernedBy:
                           "@type": dfc-b:OrderLine
                           dfc-b:hasQuantity:
                             "@type": dfc-b:QuantitativeValue
-                            dfc-b:hasUnit: packet
+                            dfc-b:hasUnit: jar
                             dfc-b:hasValue: 3
                           dfc-b:Price:
                             "@type": dfc-b:QuantitativeValue
                             dfc-b:hasUnit: GBP
                             dfc-b:value: 19.95
                             dfc-b:VATrate: 0.0
+                          dfc-b:partOf:
+                            "@type": dfc-b:Order
+                            dfc-b:date: "2024-06-25"
         '404':
           description: not found
 
