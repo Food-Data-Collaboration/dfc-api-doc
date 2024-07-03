@@ -1097,6 +1097,7 @@ paths:
                     "@type": dfc-b:Order
                     dfc-b:belongsTo: http://test.host/api/dfc/Enterprises/10000/SaleSessions/10002
                     dfc-b:orderNumber: "MYORDERNUM:12345"
+                    dfc-b:date: "2024-05-23" # Order date
                     dfc-b:hasOrderStatus: dfc-v:Draft
                     dfc-b:hasFulfilmentStatus: dfc-v:Held
                     dfc-b:hasPaymentState: dfc-v:Unpaid
