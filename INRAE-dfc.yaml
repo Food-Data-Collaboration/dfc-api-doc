@@ -1,0 +1,128 @@
+openapi: 3.0.0
+info:
+  version: v0.1
+  title: DFC INRAE Endpoint
+  contact:
+    {
+      "name": "DFC General Contact" ,
+      "url": "https://www.datafoodconsortium.org/" ,
+      "email": "hello@datafoodconsortium.org"
+    }
+  description: >-
+    Endpoint to expose anonymous product sales data for research purposes. Must
+    be authenticated, must be anonymized. Served at Order Line leve for
+    granularity.
+components:
+  securitySchemes:
+    oidc_token:
+      type: openIdConnect
+      openIdConnectUrl: https://login.lescommuns.org/auth/realm/datafoodconsortium
+
+security:
+- oidc_token: []
+
+paths:
+  "/api/dfc/Persons/{id}/AffilateSalesData":
+    get:
+      summary: Returns anonymized order line data
+      description: Show anonymized sales data, for a given date range, for all Enterprises that have authorized this Person to collect their data.
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: page
+        description: The page number of items to start with (see limit)
+        in: query
+        required: true
+        schema:
+          type: integer
+          minimum: 1
+          default: 1
+          example: 1
+      - name: limit
+        description: The number of items to return
+        in: query
+        required: true
+        schema:
+          type: integer
+          format: int32
+          minimum: 1
+          maximum: 225
+          default: 25
+          example: 25
+      - name: startDate
+        description: The start date from which data is requested
+        in: query
+        required: true
+        schema:
+          type: string
+          default: "2024-01-01"
+          example: "2024-01-01"
+      - name: endDate
+        description: The end date to which data is requested
+        in: query
+        required: true
+        schema:
+          type: string
+          default: "2024-12-31"
+          example: "2024-12-31"
+      tags:
+      - INRAE
+      responses:
+        '200':
+          description: successful
+          content:
+            application/json:
+              examples:
+                test_example:
+                  value:
+                    "@context": https://www.datafoodconsortium.org
+                    "@id": http://test.host/api/dfc/Persons/1001/AffilateSalesData
+                    "@type": dfc-b:Person
+                    dfc-b:affiliates:
+                      "@type": dfc-Enterprise
+                      dfc-b:hasAddress:
+                        "@type": dfc-b:Address
+                        dfc-b:postcode: 20170   # Producer Postcode
+                        dfc-b:city: Carbini
+                      dfc-b:supplies:
+                        "@type": dfc-b:SuppliedProduct
+                        dfc-b:Name: Basil Pesto 250g Jar
+                        dfc-b:hasType: dfc-pt:processed-vegetable # Not required
+                        dfc-b:hasQuantity:                  # the quantity related
+                          "@type": dfc-b:QuantitativeValue  # to the Supplied
+                          dfc-b:hasUnit: dfc-m:Gram         # Product (in this
+                          dfc-b:value: 250.0                # case 250g)
+                        dfc-b:concernedBy:
+                          "@type": dfc-b:OrderLine
+                          dfc-b:hasQuantity:
+                            "@type": dfc-b:QuantitativeValue  # the quantity related to
+                            dfc-b:hasUnit: jar                # the actual Sale (in
+                            dfc-b:hasValue: 3                 # this case 3 jars, at 250g each)
+                          dfc-b:Price:
+                            "@type": dfc-b:QuantitativeValue  # the price charged for the item
+                            dfc-b:hasUnit: EUR                # before any discount
+                            dfc-b:value: 19.95
+                            dfc-b:VATrate: 0.0
+                          dfc-b:partOf:
+                            "@type": dfc-b:Order
+                            dfc-b:date: "2024-06-25"  # Order Date
+                            dfc-b:belongsTo:
+                              "@type": dfc-b:SaleSession
+                              dfc-b:objectOf:
+                                "@type": dfc-b:Coordination
+                                dfc-b:coordinatedBy:
+                                  "@type": dfc-b:Enterprise
+                                  dfc-b:hasAddress:
+                                    "@type": dfc-b:Address
+                                    dfc-b:postcode: 20170   # Shop/Distrobutor Postcode
+                                    dfc-b:city: Carbini
+        '404':
+          description: not found
+
+servers:
+  # Added by API Auto Mocking Plugin
+- description: SwaggerHub API Auto Mocking
+  url: https://virtserver.swaggerhub.com/RAGGEDSTAFF23/DFC-INRAE-Endpoint/v0.1
