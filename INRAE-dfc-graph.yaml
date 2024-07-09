@@ -181,17 +181,9 @@ paths:
                       "@id": https://test.host/api/dfc/Enterprises/10000/Orders/10001 ,
                       "@type": dfc-b:Order ,
                       dfc-b:date: "2024-06-25" ,  # Order Date
-                      dfc-b:belongsTo: https://test.host/api/dfc/Enterprises/10000/SaleSessions/10002 ,
+                      dfc-b:soldBy: https://test.host/api/dfc/Enterprises/10050 ,
                       dfc-b:hasPart: https://test.host/api/dfc/Enterprises/10000/Orders/10001/OrderLines/10001-01 ,
                       dfc-b:hasPart: https://test.host/api/dfc/Enterprises/10000/Orders/10001/OrderLines/10001-02
-                    },
-                    {
-                      "@id": https://test.host/api/dfc/Enterprises/10050/SaleSessions/10002 ,
-                      "@type": dfc-b:SaleSession ,
-                      dfc-b:objectOf: {
-                        "@type": dfc-b:Coordination ,
-                        dfc-b:coordinatedBy: http://test.host/api/dfc/Enterprises/10050 # Distributor Enterprise
-                      }
                     }
                     ]
         '404':
