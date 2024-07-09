@@ -63,25 +63,45 @@ paths:
         explode: false
         schema:
           type: string
-      - name: page
+      - name: before
         in: query
-        description: The page number of items to start with (see limit)
-        required: true
+        description: "The cursor returned from a previous request, requesting the\
+          \ API return elements before that id."
+        required: false
         style: form
         explode: true
         schema:
+          type: string
+      - name: after
+        in: query
+        description: "The cursor returned from a previous request, requesting the\
+          \ API return elements after that id."
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: first
+        in: query
+        description: Return up to the first x elements in the list
+        required: false
+        style: form
+        explode: true
+        schema:
+          maximum: 255
           minimum: 1
           type: integer
-          example: 1
-          default: 1
-      - name: limit
+          format: int32
+          example: 25
+          default: 25
+      - name: last
         in: query
-        description: The number of items to return
-        required: true
+        description: Return up to the last x elements in the list
+        required: false
         style: form
         explode: true
         schema:
-          maximum: 225
+          maximum: 255
           minimum: 1
           type: integer
           format: int32
