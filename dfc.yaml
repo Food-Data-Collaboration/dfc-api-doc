@@ -290,6 +290,7 @@ paths:
           application/json:
             schema:
               example:
+                "@id": "#"
                 dfc-b:definedBy: http://test.host/api/dfc/Enterprises/10000
 
   "/api/dfc/Enterprises/{enterprise_id}/customerCategories/{id}":
@@ -440,17 +441,18 @@ paths:
                 test_example:
                   value:
                     "@context": https://www.datafoodconsortium.org
+                    "@id": "#"
                     "@type": dfc-b:Enterprise
                     dfc-b:hasAddress: http://test.host/api/dfc/Addresses/40000
                     dfc-b:hasPhoneNumber: http://test.host/api/dfc/PhoneNumbers/444000200
                     dfc-b:email: hello@example.org
                     dfc-b:websitePage: https://test.host/
-                    dfc-b:hasSocialMedia: http://test.host/api/dfc/Enterprises/10000/SocialMedias/facebook
+                    dfc-b:hasSocialMedia: "#SocialMedias/facebook"
                     dfc-b:name: Fred's Farm
                     dfc-b:hasDescription: This is an awesome enterprise
                     dfc-b:VATnumber: 123 456
-                    dfc-b:manages: http://test.host/api/dfc/Enterprises/10000/CatalogItems/10001
-                    dfc-b:supplies: http://test.host/api/dfc/Enterprises/10000/SuppliedProducts/10001
+                    dfc-b:manages: "#/CatalogItems/10001"
+                    dfc-b:supplies: "#/SuppliedProducts/10001"
                     dfc-b:hasMainContact: http://test.host/api/dfc/Persons/10000
                     dfc-b:logo: http://test.host/active-storage/url/logo.png
                     dfc-b:affiliates: http://test.host/api/dfc/Enterprises/60000
@@ -834,7 +836,7 @@ paths:
             schema:
               example:
                 "@context": https://www.datafoodconsortium.org
-                "@id": http://test.host/api/dfc/Enterprises/6201/SuppliedProducts/0
+                "@id": "#"
                 "@type": dfc-b:SuppliedProduct
                 dfc-b:name: Apple
                 dfc-b:description: A delicious heritage apple
@@ -1101,7 +1103,7 @@ paths:
                 "@context": https://www.datafoodconsortium.org
                 "@graph": [
                 {
-                  "@id": null ,
+                  "@id": "#" ,
                   "@type": dfc-b:Order ,
                   dfc-b:belongsTo: http://test.host/api/dfc/Enterprises/10000/SaleSessions/10002,
                   dfc-b:orderNumber: "MYORDERNUM:12345" ,
@@ -1132,7 +1134,7 @@ paths:
                     dfc-b:pickedUpAt: Our Fantastic Farm Gate
                   },
                   dfc-b:hasPart: {
-                    "@id": http://test.host/api/dfc/Enterprises/10000/Orders/10001/orderlines/10001-01 ,
+                    "@id": "#/orderlines/10001-01" ,
                     "@type": dfc-b:OrderLine ,
                     dfc-b:concerns: http://test.host/api/dfc/Enterprises/10000/SuppliedProducts/10001 ,
                     dfc-b:hasQuantity: {
@@ -1390,7 +1392,7 @@ paths:
             schema:
               example:
                 "@context": https://www.datafoodconsortium.org
-                "@id": http://test.host/api/dfc/Enterprises/10000/Orders/10001/orderlines/10001-01
+                "@id": "#"
                 "@type": dfc-b:OrderLine
                 dfc-b:concerns: http://test.host/api/dfc/Enterprises/10000/SuppliedProducts/10001
                 dfc-b:partOf: http://test.host/api/dfc/Enterprises/10000/Orders/10001
@@ -1558,7 +1560,7 @@ paths:
             schema:
               example:
                 "@context": https://www.datafoodconsortium.org
-                "@id": http://test.host/api/dfc/Enterprises/10000/SaleSessions/10002
+                "@id": "#"
                 "@type": dfc-b:SaleSession
                 dfc-b:startDate: "2024-03-14T01:00:00+01:00"
                 dfc-b:endDate: "2024-03-21T00:59:59+01:00"
