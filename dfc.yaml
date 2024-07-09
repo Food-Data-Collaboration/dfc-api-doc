@@ -667,24 +667,38 @@ paths:
     get:
       summary: List SuppliedProducts for an Enterprise
       parameters:
-      - name: page
-        description: The page number of items to start with (see limit)
+      - name: before
+        description: The cursor returned from a previous request, requesting the API return elements before that id.
         in: query
-        required: true
+        required: false
         schema:
-          type: integer
-          minimum: 1
-          default: 1
-          example: 1
-      - name: limit
-        description: The number of items to return
+          type: string
+      - name: after
+        description: The cursor returned from a previous request, requesting the API return elements after that id.
         in: query
-        required: true
+        required: false
+        schema:
+          type: string
+      - name: first
+        description: Return up to the first x elements in the list
+        in: query
+        required: false
         schema:
           type: integer
           format: int32
           minimum: 1
-          maximum: 225
+          maximum: 255
+          default: 25
+          example: 25
+      - name: last
+        description: Return up to the last x elements in the list
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+          minimum: 1
+          maximum: 255
           default: 25
           example: 25
       tags:
