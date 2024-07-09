@@ -276,6 +276,11 @@ paths:
       responses:
         '201':
           description: created
+          content:
+            application/json:
+              schema:
+                example:
+                  "@id": http://test.host/api/dfc/Enterprises/10000/customerCategories/10006
         '400':
           description: bad request
         '401':
@@ -285,7 +290,7 @@ paths:
           application/json:
             schema:
               example:
-                "@id": http://test.host/api/dfc/Enterprises/10000/customerCategories/10006
+                dfc-b:definedBy: http://test.host/api/dfc/Enterprises/10000
 
   "/api/dfc/Enterprises/{enterprise_id}/customerCategories/{id}":
     parameters:
@@ -322,6 +327,12 @@ paths:
       parameters: []
       tags:
       - CustomerCategory
+      requestBody:
+        content:
+          application/json:
+            schema:
+              example:
+                "@id": http://test.host/api/dfc/Enterprises/10000/customerCategories/10006
       responses:
         '204':
           description: no content
@@ -349,53 +360,65 @@ paths:
                 test_example:
                   value:
                     "@context": https://www.datafoodconsortium.org
-                    "@graph":
-                    - "@id": http://test.host/api/dfc/Enterprises/10000
-                      "@type": dfc-b:Enterprise
-                      dfc-b:hasAddress: http://test.host/api/dfc/Addresses/40000
-                      dfc-b:hasPhoneNumber: http://test.host/api/dfc/PhoneNumbers/444000200
-                      dfc-b:email: hello@example.org
-                      dfc-b:websitePage: https://test.host/
-                      dfc-b:hasSocialMedia: http://test.host/api/dfc/Enterprises/10000/SocialMedias/facebook
-                      dfc-b:name: Fred's Farm
-                      dfc-b:hasDescription: This is an awesome enterprise
-                      dfc-b:VATnumber: 123 456
-                      dfc-b:manages: http://test.host/api/dfc/Enterprises/10000/CatalogItems/10001
-                      dfc-b:supplies: http://test.host/api/dfc/Enterprises/10000/SuppliedProducts/10001
-                      dfc-b:hasMainContact: http://test.host/api/dfc/Persons/10000
-                      dfc-b:logo: http://test.host/active-storage/url/logo.png
-                      dfc-b:affiliates: http://test.host/api/dfc/Enterprises/60000
-                    - "@id": http://test.host/api/dfc/Addresses/40000
-                      "@type": dfc-b:Address
-                      dfc-b:hasStreet: 42 Doveton Street
-                      dfc-b:hasPostalCode: '20170'
-                      dfc-b:hasCity: Herndon
-                      dfc-b:hasCountry: USA
-                      dfc-b:region: Virginia
-                    - "@id": http://test.host/api/dfc/Enterprises/10000/SuppliedProducts/10001
-                      "@type": dfc-b:SuppliedProduct
-                      dfc-b:name: Apple - 1g
-                      dfc-b:description: Round
-                      dfc-b:hasType: dfc-pt:non-local-vegetable
-                      dfc-b:hasQuantity:
-                        "@type": dfc-b:QuantitativeValue
-                        dfc-b:hasUnit: dfc-m:Gram
+                    "@graph": [
+                    {
+                      "@id": http://test.host/api/dfc/Enterprises/10000 ,
+                      "@type": dfc-b:Enterprise ,
+                      dfc-b:hasAddress: http://test.host/api/dfc/Addresses/40000 ,
+                      dfc-b:hasPhoneNumber: http://test.host/api/dfc/PhoneNumbers/444000200 ,
+                      dfc-b:email: hello@example.org ,
+                      dfc-b:websitePage: https://test.host/ ,
+                      dfc-b:hasSocialMedia: http://test.host/api/dfc/Enterprises/10000/SocialMedias/facebook ,
+                      dfc-b:name: Fred's Farm ,
+                      dfc-b:hasDescription: This is an awesome enterprise ,
+                      dfc-b:VATnumber: 123 456 ,
+                      dfc-b:manages: http://test.host/api/dfc/Enterprises/10000/CatalogItems/10001 ,
+                      dfc-b:supplies: http://test.host/api/dfc/Enterprises/10000/SuppliedProducts/10001 ,
+                      dfc-b:hasMainContact: http://test.host/api/dfc/Persons/10000 ,
+                      dfc-b:logo: http://test.host/active-storage/url/logo.png ,
+                      dfc-b:affiliates: http://test.host/api/dfc/Enterprises/60000 ,
+                    },
+                    {
+                      "@id": http://test.host/api/dfc/Addresses/40000 ,
+                      "@type": dfc-b:Address ,
+                      dfc-b:hasStreet: 42 Doveton Street ,
+                      dfc-b:hasPostalCode: '20170' ,
+                      dfc-b:hasCity: Herndon ,
+                      dfc-b:hasCountry: USA ,
+                      dfc-b:region: Virginia ,
+                    },
+                    {
+                      "@id": http://test.host/api/dfc/Enterprises/10000/SuppliedProducts/10001 ,
+                      "@type": dfc-b:SuppliedProduct ,
+                      dfc-b:name: Apple - 1g ,
+                      dfc-b:description: Round ,
+                      dfc-b:hasType: dfc-pt:non-local-vegetable ,
+                      dfc-b:hasQuantity: {
+                        "@type": dfc-b:QuantitativeValue ,
+                        dfc-b:hasUnit: dfc-m:Gram ,
                         dfc-b:value: 1.0
-                      dfc-b:alcoholPercentage: 0.0
-                      dfc-b:lifetime: ''
-                      dfc-b:usageOrStorageCondition: ''
-                      dfc-b:totalTheoreticalStock: 0.0
+                      },
+                      dfc-b:alcoholPercentage: 0.0 ,
+                      dfc-b:lifetime: '' ,
+                      dfc-b:usageOrStorageCondition: '' ,
+                      dfc-b:totalTheoreticalStock: 0.0 ,
                       dfc-b:image: http://test.host/active-storage/url/logo-white.png
-                    - "@id": http://test.host/api/dfc/Enterprises/10000/CatalogItems/10001
-                      "@type": dfc-b:CatalogItem
-                      dfc-b:references: http://test.host/api/dfc/Enterprises/10000/SuppliedProducts/10001
-                      dfc-b:sku: APP
-                      dfc-b:stockLimitation: 5
+                    },
+                    {
+                      "@id": http://test.host/api/dfc/Enterprises/10000/CatalogItems/10001 ,
+                      "@type": dfc-b:CatalogItem ,
+                      dfc-b:references: http://test.host/api/dfc/Enterprises/10000/SuppliedProducts/10001 ,
+                      dfc-b:sku: APP ,
+                      dfc-b:stockLimitation: 5 ,
                       dfc-b:offeredThrough: http://test.host/api/dfc/Enterprises/10000/Offers/10001
-                    - "@id": http://test.host/api/dfc/Enterprises/10000/SocialMedias/facebook
-                      "@type": dfc-b:SocialMedia
-                      dfc-b:name: facebook
+                    },
+                    {
+                     "@id": http://test.host/api/dfc/Enterprises/10000/SocialMedias/facebook  ,
+                      "@type": dfc-b:SocialMedia ,
+                      dfc-b:name: facebook ,
                       dfc-b:URL: https://facebook.com/user
+                    }
+                    ]
         '404':
           description: not found
     'post':
@@ -968,6 +991,41 @@ paths:
         type: string
     get:
       summary: Show all Orders for an Enterprise
+      parameters:
+      - name: before
+        description: The cursor returned from a previous request, requesting the API return elements before that id.
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: after
+        description: The cursor returned from a previous request, requesting the API return elements after that id.
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: first
+        description: Return up to the first x elements in the list
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+          minimum: 1
+          maximum: 255
+          default: 25
+          example: 25
+      - name: last
+        description: Return up to the last x elements in the list
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+          minimum: 1
+          maximum: 255
+          default: 25
+          example: 25
       tags:
       - Orders
       responses:
@@ -979,51 +1037,120 @@ paths:
                 test_example:
                   value:
                     "@context": https://www.datafoodconsortium.org
-                    "@id": http://test.host/api/dfc/Enterprises/10000/Orders/10001
-                    "@type": dfc-b:Order
-                    dfc-b:belongsTo: http://test.host/api/dfc/Enterprises/10000/SaleSessions/10002
-                    dfc-b:orderNumber: "MYORDERNUM:12345"
-                    dfc-b:hasOrderStatus: dfc-v:Draft
-                    dfc-b:hasFulfilmentStatus: dfc-v:Held
-                    dfc-b:hasPaymentState: dfc-v:Unpaid
-                    dfc-b:hasPaymentMethod:
-                      "@type": dfc-b:PaymentMethod
-                      dfc-b:paymentMethodType: Example Card PaymentMethod
-                      dfc-b:paymentMethodProvider: Stripe
-                      dfc-b:hasPrice:
-                        "@type": dfc-b:QuantitativeValue
-                        dfc-b:hasUnit: GBP
-                        dfc-b:value: £0.27
-                        dfc-b:VATrate: 0.00
-                    dfc-b:discount: 1.55
-                    dfc-b:OrderedBy: http://test.host/api/dfc/Persons/10000
-                    dfc-b:selects:
-                      "@type": dfc-b:ShippingOption
-                      dfc-b:optionOf: http://test.host/api/dfc/Enterprises/10000/SaleSessions/10002
-                      dfc-b:fee: 1.50
-                    dfc-b:uses:
-                      "@type": dfc-b:PickupOption
-                      dfc-b:pickedUpAt: Our Fantastic Farm Gate
-                    dfc-b:soldBy: http://test.host/api/dfc/Enterprises/10000
-                    dfc-b:hasPart:
-                    - "@id": http://test.host/api/dfc/Enterprises/10000/Orders/10001/orderlines/10001-01
-                      "@type": dfc-b:OrderLine
-                      dfc-b:concerns: http://test.host/api/dfc/Enterprises/10000/SuppliedProducts/10001
-                      dfc-b:hasQuantity:
-                        "@type": dfc-b:QuantitativeValue
-                        dfc-b:hasUnit: Packet
-                        dfc-b:hasValue: 5.0
-                      dfc-b:Price:
-                        "@type": dfc-b:QuantitativeValue
-                        dfc-b:hasUnit: GBP
-                        dfc-b:value: 19.95
-                        dfc-b:VATrate: 0.0
-                      dfc-b:discount: []
+                    "@graph": [
+                    {
+                      "@id": http://test.host/api/dfc/Enterprises/10000/Orders/10001 ,
+                      "@type": dfc-b:Order ,
+                      dfc-b:belongsTo: http://test.host/api/dfc/Enterprises/10000/SaleSessions/10002,
+                      dfc-b:orderNumber: "MYORDERNUM:12345" ,
+                      dfc-b:hasOrderStatus: dfc-v:Draft ,
+                      dfc-b:hasFulfilmentStatus: dfc-v:Held ,
+                      dfc-b:hasPaymentState: dfc-v:Unpaid ,
+                      dfc-b:hasPaymentMethod: {
+                        "@type": dfc-b:PaymentMethod ,
+                        dfc-b:paymentMethodType: Example Card PaymentMethod ,
+                        dfc-b:paymentMethodProvider: Stripe ,
+                        dfc-b:hasPrice: {
+                          "@type": dfc-b:QuantitativeValue ,
+                          dfc-b:hasUnit: GBP ,
+                          dfc-b:value: £0.27 ,
+                          dfc-b:VATrate: 0.00
+                        },
+                      },
+                      dfc-b:discount: 1.55 ,
+                      dfc-b:OrderedBy: http://test.host/api/dfc/Persons/10000 ,
+                      dfc-b:soldBy: http://test.host/api/dfc/Enterprises/10050 ,
+                      dfc-b:selects: {
+                        "@type": dfc-b:ShippingOption ,
+                        dfc-b:optionOf: http://test.host/api/dfc/Enterprises/10000/SaleSessions/10002 ,
+                        dfc-b:fee: 1.50 ,
+                      },
+                      dfc-b:uses: {
+                        "@type": dfc-b:PickupOption ,
+                        dfc-b:pickedUpAt: Our Fantastic Farm Gate
+                      },
+                      dfc-b:hasPart: {
+                        "@id": http://test.host/api/dfc/Enterprises/10000/Orders/10001/orderlines/10001-01 ,
+                        "@type": dfc-b:OrderLine ,
+                        dfc-b:concerns: http://test.host/api/dfc/Enterprises/10000/SuppliedProducts/10001 ,
+                        dfc-b:hasQuantity: {
+                          "@type": dfc-b:QuantitativeValue ,
+                          dfc-b:hasUnit: Packet ,
+                          dfc-b:hasValue: 5.0
+                        },
+                        dfc-b:Price: {
+                          "@type": dfc-b:QuantitativeValue ,
+                          dfc-b:hasUnit: GBP ,
+                          dfc-b:value: 19.95 ,
+                          dfc-b:VATrate: 0.0 ,
+                        },
+                        dfc-b:discount: []
+                      }
+                    }
+                    ]
     post:
       summary: Create an Order
       parameters: []
       tags:
       - Orders
+      requestBody:
+        content:
+          application/json:
+            schema:
+              example:
+                "@context": https://www.datafoodconsortium.org
+                "@graph": [
+                {
+                  "@id": null ,
+                  "@type": dfc-b:Order ,
+                  dfc-b:belongsTo: http://test.host/api/dfc/Enterprises/10000/SaleSessions/10002,
+                  dfc-b:orderNumber: "MYORDERNUM:12345" ,
+                  dfc-b:hasOrderStatus: dfc-v:Draft ,
+                  dfc-b:hasFulfilmentStatus: dfc-v:Held ,
+                  dfc-b:hasPaymentState: dfc-v:Unpaid ,
+                  dfc-b:hasPaymentMethod: {
+                    "@type": dfc-b:PaymentMethod ,
+                    dfc-b:paymentMethodType: Example Card PaymentMethod ,
+                    dfc-b:paymentMethodProvider: Stripe ,
+                    dfc-b:hasPrice: {
+                      "@type": dfc-b:QuantitativeValue ,
+                      dfc-b:hasUnit: GBP ,
+                      dfc-b:value: £0.27 ,
+                      dfc-b:VATrate: 0.00
+                    },
+                  },
+                  dfc-b:discount: 1.55 ,
+                  dfc-b:OrderedBy: http://test.host/api/dfc/Persons/10000 ,
+                  dfc-b:soldBy: http://test.host/api/dfc/Enterprises/10050 ,
+                  dfc-b:selects: {
+                    "@type": dfc-b:ShippingOption ,
+                    dfc-b:optionOf: http://test.host/api/dfc/Enterprises/10000/SaleSessions/10002 ,
+                    dfc-b:fee: 1.50 ,
+                  },
+                  dfc-b:uses: {
+                    "@type": dfc-b:PickupOption ,
+                    dfc-b:pickedUpAt: Our Fantastic Farm Gate
+                  },
+                  dfc-b:hasPart: {
+                    "@id": http://test.host/api/dfc/Enterprises/10000/Orders/10001/orderlines/10001-01 ,
+                    "@type": dfc-b:OrderLine ,
+                    dfc-b:concerns: http://test.host/api/dfc/Enterprises/10000/SuppliedProducts/10001 ,
+                    dfc-b:hasQuantity: {
+                      "@type": dfc-b:QuantitativeValue ,
+                      dfc-b:hasUnit: Packet ,
+                      dfc-b:hasValue: 5.0
+                    },
+                    dfc-b:Price: {
+                      "@type": dfc-b:QuantitativeValue ,
+                      dfc-b:hasUnit: GBP ,
+                      dfc-b:value: 19.95 ,
+                      dfc-b:VATrate: 0.0 ,
+                    },
+                    dfc-b:discount: []
+                  }
+                }
+                ]
+
       responses:
         '400':
           description: bad request
@@ -1062,39 +1189,6 @@ paths:
                       dfc-b:pickedUpAt: Our Fantastic Farm Gate
                     dfc-b:soldBy: http://test.host/api/dfc/Enterprises/10000
                     dfc-b:hasPart: http://test.host/api/dfc/Enterprises/10000/Orders/10001/orderlines/10001-01
-      requestBody:
-        content:
-          application/json:
-            schema:
-              example:
-                "@context": https://www.datafoodconsortium.org
-                "@id": http://test.host/api/dfc/Enterprises/10000/Orders/10001
-                "@type": dfc-b:Order
-                dfc-b:belongsTo: http://test.host/api/dfc/Enterprises/10000/SaleSessions/10002
-                dfc-b:orderNumber: "MYORDERNUM:12345"
-                dfc-b:hasOrderStatus: dfc-v:Draft
-                dfc-b:hasFulfilmentStatus: dfc-v:Held
-                dfc-b:hasPaymentState: dfc-v:Unpaid
-                dfc-b:hasPaymentMethod:
-                  "@type": dfc-b:PaymentMethod
-                  dfc-b:paymentMethodType: Example Card PaymentMethod
-                  dfc-b:paymentMethodProvider: Stripe
-                  dfc-b:hasPrice:
-                    "@type": dfc-b:QuantitativeValue
-                    dfc-b:hasUnit: GBP
-                    dfc-b:value: £0.27
-                    dfc-b:VATrate: 0.00
-                dfc-b:discount: 1.55
-                dfc-b:OrderedBy: http://test.host/api/dfc/Persons/10000
-                dfc-b:selects:
-                  "@type": dfc-b:ShippingOption
-                  dfc-b:optionOf: http://test.host/api/dfc/Enterprises/10000/SaleSessions/10002
-                  dfc-b:fee: 1.50
-                dfc-b:uses:
-                  "@type": dfc-b:PickupOption
-                  dfc-b:pickedUpAt: Our Fantastic Farm Gate
-                dfc-b:soldBy: http://test.host/api/dfc/Enterprises/10000
-                dfc-b:hasPart: http://test.host/api/dfc/Enterprises/10000/Orders/10001/orderlines/10001-01
 
   "/api/dfc/Enterprises/{enterprise_id}/Orders/{id}":
     parameters:
@@ -1125,7 +1219,6 @@ paths:
                     "@type": dfc-b:Order
                     dfc-b:belongsTo: http://test.host/api/dfc/Enterprises/10000/SaleSessions/10002
                     dfc-b:orderNumber: "MYORDERNUM:12345"
-                    dfc-b:date: "2024-05-23" # Order date
                     dfc-b:hasOrderStatus: dfc-v:Draft
                     dfc-b:hasFulfilmentStatus: dfc-v:Held
                     dfc-b:hasPaymentState: dfc-v:Unpaid
