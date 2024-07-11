@@ -168,6 +168,49 @@ paths:
                       dfc-b:stockLimitation: 0
         '404':
           description: not found
+    post:
+      summary: create a new CatalogItem for a given Enterprise
+      parameters: []
+      tags:
+      - CatalogItems
+      requestBody:
+        content:
+          application/json:
+            schema:
+              example:
+                "@context": https://www.datafoodconsortium.org
+                "@graph": [
+                {
+                  "@id": "#" ,
+                  "@type": dfc-b:CatalogItem ,
+                  dfc-b:references: http://test.host/api/dfc/Enterprises/10000/SuppliedProducts/10001 ,
+                  dfc-b:sku: AR ,
+                  dfc-b:stockLimitation: 0 ,
+                  dfc-b:offeredThrough: {
+                    "@id": "#1" ,
+                    "@type": dfc-b:Offer ,
+                    dfc-b:hasPrice: {
+                      "@id": "#2" ,
+                      "@type": dfc-b:Price ,
+                      dfc-b:hasUnit: GBP ,
+                      dfc-b:value: 4.95 ,
+                      dfc-b:VATrate: 0.0
+                    }
+                  }
+                }
+                ]
+      responses:
+        '201':
+          description: created
+          content:
+            application/json:
+              schema:
+                example:
+                  "@id": http://test.host/api/dfc/Enterprises/10000/CatalogItems/10001
+        '400':
+          description: bad request
+        '401':
+          description: unauthorized
     put:
       summary: Update CatalogItem
       parameters: []
