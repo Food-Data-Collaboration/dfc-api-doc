@@ -1117,7 +1117,7 @@ paths:
                       dfc-b:hasPart: {
                         "@id": http://test.host/api/dfc/Enterprises/10000/Orders/10001/orderlines/10001-01 ,
                         "@type": dfc-b:OrderLine ,
-                        dfc-b:concerns: http://test.host/api/dfc/Enterprises/10000/SuppliedProducts/10001 ,
+                        dfc-b:concerns: http://test.host/api/dfc/Enterprises/10000/Offers/10001 ,
                         dfc-b:hasQuantity: {
                           "@type": dfc-b:QuantitativeValue ,
                           dfc-b:hasUnit: Packet ,
@@ -1179,7 +1179,7 @@ paths:
                   dfc-b:hasPart: {
                     "@id": "#/orderlines/10001-01" ,
                     "@type": dfc-b:OrderLine ,
-                    dfc-b:concerns: http://test.host/api/dfc/Enterprises/10000/SuppliedProducts/10001 ,
+                    dfc-b:concerns: http://test.host/api/dfc/Enterprises/10000/Offers/10001 ,
                     dfc-b:hasQuantity: {
                       "@type": dfc-b:QuantitativeValue ,
                       dfc-b:hasUnit: Packet ,
@@ -1289,7 +1289,7 @@ paths:
                     dfc-b:hasPart:
                     - "@id": http://test.host/api/dfc/Enterprises/10000/Orders/10001/orderlines/10001-01
                       "@type": dfc-b:OrderLine
-                      dfc-b:concerns: http://test.host/api/dfc/Enterprises/10000/SuppliedProducts/10001
+                      dfc-b:concerns: http://test.host/api/dfc/Enterprises/10000/Offers/10001
                       dfc-b:hasQuantity:
                         "@type": dfc-b:QuantitativeValue
                         dfc-b:hasUnit: Packet
@@ -1346,7 +1346,7 @@ paths:
                 dfc-b:hasPart:
                 - "@id": http://test.host/api/dfc/Enterprises/10000/Orders/10001/orderlines/10001-01
                   "@type": dfc-b:OrderLine
-                  dfc-b:concerns: http://test.host/api/dfc/Enterprises/10000/SuppliedProducts/10001
+                  dfc-b:concerns: http://test.host/api/dfc/Enterprises/10000/Offers/10001
                   dfc-b:hasQuantity:
                     "@type": dfc-b:QuantitativeValue
                     dfc-b:hasUnit: Packet
@@ -1385,7 +1385,7 @@ paths:
                     "@context": https://www.datafoodconsortium.org
                     "@id": http://test.host/api/dfc/Enterprises/10000/Orders/10001/orderlines/10001-01
                     "@type": dfc-b:OrderLine
-                    dfc-b:concerns: http://test.host/api/dfc/Enterprises/10000/SuppliedProducts/10001
+                    dfc-b:concerns: http://test.host/api/dfc/Enterprises/10000/Offers/10001
                     dfc-b:partOf: http://test.host/api/dfc/Enterprises/10000/Orders/10001
                     dfc-b:hasQuantity:
                       "@type": dfc-b:QuantitativeValue
@@ -1417,7 +1417,7 @@ paths:
                     "@context": https://www.datafoodconsortium.org
                     "@id": http://test.host/api/dfc/Enterprises/10000/Orders/10001/orderlines/10001-01
                     "@type": dfc-b:OrderLine
-                    dfc-b:concerns: http://test.host/api/dfc/Enterprises/10000/SuppliedProducts/10001
+                    dfc-b:concerns: http://test.host/api/dfc/Enterprises/10000/Offers/10001
                     dfc-b:partOf: http://test.host/api/dfc/Enterprises/10000/Orders/10001
                     dfc-b:hasQuantity:
                       "@type": dfc-b:QuantitativeValue
@@ -1437,7 +1437,7 @@ paths:
                 "@context": https://www.datafoodconsortium.org
                 "@id": "#"
                 "@type": dfc-b:OrderLine
-                dfc-b:concerns: http://test.host/api/dfc/Enterprises/10000/SuppliedProducts/10001
+                dfc-b:concerns: http://test.host/api/dfc/Enterprises/10000/Offers/10001
                 dfc-b:partOf: http://test.host/api/dfc/Enterprises/10000/Orders/10001
                 dfc-b:hasQuantity:
                   "@type": dfc-b:QuantitativeValue
@@ -1482,7 +1482,7 @@ paths:
                     "@context": https://www.datafoodconsortium.org
                     "@id": http://test.host/api/dfc/Enterprises/10000/Orders/10001/orderlines/10001-01
                     "@type": dfc-b:OrderLine
-                    dfc-b:concerns: http://test.host/api/dfc/Enterprises/10000/SuppliedProducts/10001
+                    dfc-b:concerns: http://test.host/api/dfc/Enterprises/10000/Offers/10001
                     dfc-b:partOf: http://test.host/api/dfc/Enterprises/10000/Orders/10001
                     dfc-b:hasQuantity:
                       "@type": dfc-b:QuantitativeValue
@@ -1513,7 +1513,7 @@ paths:
                 "@context": https://www.datafoodconsortium.org
                 "@id": http://test.host/api/dfc/Enterprises/10000/Orders/10001/orderlines/10001-01
                 "@type": dfc-b:OrderLine
-                dfc-b:concerns: http://test.host/api/dfc/Enterprises/10000/SuppliedProducts/10001
+                dfc-b:concerns: http://test.host/api/dfc/Enterprises/10000/Offers/10001
                 dfc-b:partOf: http://test.host/api/dfc/Enterprises/10000/Orders/10001
                 dfc-b:hasQuantity:
                   "@type": dfc-b:QuantitativeValue
