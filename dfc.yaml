@@ -1071,6 +1071,38 @@ paths:
           maximum: 255
           default: 25
           example: 25
+      - name: orderState
+        description: fitler on an Order State
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+            - Draft
+            - Held
+            - Complete
+            - Cancelled
+      - name: fulfilmentState
+        description: fitler on an Order's Fulfilment State
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+            - Held
+            - Unfulfilled
+            - Fulfilled
+            - Cancelled
+      - name: paymentState
+        description: fitler on an Order's Payment State
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+            - Unpaid
+            - Paid
+            - Cancelled
       tags:
       - Orders
       responses:
