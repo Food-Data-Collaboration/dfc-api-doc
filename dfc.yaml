@@ -1200,6 +1200,44 @@ paths:
           format: int32
           example: 25
           default: 25
+      - name: orderState
+        in: query
+        description: fitler on an Order State
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+          enum:
+          - Draft
+          - Held
+          - Complete
+          - Cancelled
+      - name: fulfilmentState
+        in: query
+        description: fitler on an Order's Fulfilment State
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+          enum:
+          - Held
+          - Unfulfilled
+          - Fulfilled
+          - Cancelled
+      - name: paymentState
+        in: query
+        description: fitler on an Order's Payment State
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+          enum:
+          - Unpaid
+          - Paid
+          - Cancelled
       responses:
         "200":
           description: success
