@@ -116,7 +116,7 @@ paths:
             PageInfo:
               description: Provides cursor information for pagination.
               style: simple
-              explode: false
+              explode: true
               schema:
                 type: object
                 properties:
