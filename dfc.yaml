@@ -112,6 +112,22 @@ paths:
           description: not found
         "200":
           description: success
+          headers:
+            PageInfo:
+              description: Provides cursor information for pagination.
+              style: simple
+              explode: false
+              schema:
+                type: object
+                properties:
+                  hasPreviousPage:
+                    type: boolean
+                  hasNextPage:
+                    type: boolean
+                  startCursor:
+                    type: string
+                  endCursor:
+                    type: string
           content:
             application/json:
               examples:
