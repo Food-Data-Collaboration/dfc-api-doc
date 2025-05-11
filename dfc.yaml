@@ -454,6 +454,75 @@ paths:
           description: no content
         "401":
           description: unauthorized
+  /api/dfc/Enterprises/:
+    get:
+      tags:
+      - Enterprises
+      summary: Show all Enterprises (with pagination)
+      parameters:
+      - name: before
+        in: query
+        description: "The cursor returned from a previous request, requesting the\
+          \ API return elements before that id."
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: after
+        in: query
+        description: "The cursor returned from a previous request, requesting the\
+          \ API return elements after that id."
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: first
+        in: query
+        description: Return up to the first x elements in the list
+        required: false
+        style: form
+        explode: true
+        schema:
+          maximum: 255
+          minimum: 1
+          type: integer
+          format: int32
+          example: 25
+          default: 25
+      - name: last
+        in: query
+        description: Return up to the last x elements in the list
+        required: false
+        style: form
+        explode: true
+        schema:
+          maximum: 255
+          minimum: 1
+          type: integer
+          format: int32
+          example: 25
+          default: 25
+      responses:
+        "200":
+          description: successful
+          content:
+            application/json:
+              examples:
+                test_example:
+                  value:
+                    '@context': https://www.datafoodconsortium.org
+                    '@graph':
+                    - '@id': http://test.host/api/dfc/Enterprises/10000
+                      '@type': dfc-b:Enterprise
+                    - '@id': http://test.host/api/dfc/Enterprises/20000
+                      '@type': dfc-b:Enterprise
+                    - '@id': http://test.host/api/dfc/Enterprises/30000
+                      '@type': dfc-b:Enterprise
+                      
+        "404":
+          description: not found
   /api/dfc/Enterprises/{id}:
     get:
       tags:
