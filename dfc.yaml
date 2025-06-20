@@ -1,70 +1,69 @@
----
 openapi: 3.0.1
 info:
   title: DFC Sample API
-  version: v1.12.1
-  contact:
-    {
-      "name": "DFC General Contact" ,
-      "url": "https://www.datafoodconsortium.org/" ,
-      "email": "hello@datafoodconsortium.org"
-    }
   description: |
     <p>
     This API implements the Data Food Consortium (DFC) specifications.
     It serves and reads semantic data encoded in JSON-LD.
     <p>
-components:
-  securitySchemes:
-    oidc_token:
-      type: openIdConnect
-      openIdConnectUrl: https://login.lescommuns.org/auth/realm/datafoodconsortium
-
+  contact:
+    name: DFC General Contact
+    url: https://www.datafoodconsortium.org/
+    email: hello@datafoodconsortium.org
+  version: v1.12.1
+servers:
+- url: /
 security:
 - oidc_token: []
 paths:
-  "/api/dfc/Addresses/{id}":
+  /api/dfc/Addresses/{id}:
     get:
+      tags:
+      - Addresses
       summary: Show address
       parameters:
       - name: id
         in: path
         required: true
+        style: simple
+        explode: false
         schema:
           type: string
-      tags:
-      - Addresses
       responses:
-        '200':
+        "200":
           description: successful
           content:
             application/json:
               examples:
                 test_example:
                   value:
-                    "@context": https://www.datafoodconsortium.org
-                    "@id": http://test.host/api/dfc/Addresses/40000
-                    "@type": dfc-b:Address
+                    '@context': https://www.datafoodconsortium.org
+                    '@id': http://test.host/api/dfc/Addresses/40000
+                    '@type': dfc-b:Address
                     dfc-b:street: 10 Lovely Street
-                    dfc-b:postcode: '20170'
+                    dfc-b:postcode: "20170"
                     dfc-b:city: Herndon
                     dfc-b:hasCountry: United States of America
                     dfc-b:region: Virginia
-                    dfc-b:latitude: 38.89750
-                    dfc-b:longitude: -77.00920
+                    dfc-b:latitude: 38.8975
+                    dfc-b:longitude: -77.0092
                     dfc-b:addressOf: http://test.host/api/dfc/Enterprises/10000
-        '404':
+        "404":
           description: not found
-  "/api/dfc/Enterprises/{enterprise_id}/CatalogItems":
-    parameters:
-    - name: enterprise_id
-      in: path
-      required: true
-      schema:
-        type: string
+  /api/dfc/Enterprises/{enterprise_id}/CatalogItems:
     get:
+      tags:
+      - CatalogItems
       summary: List all CatalogItems for an Enterprise
       parameters:
+
+      - name: enterprise_id
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
       - name: before
         description: The cursor returned from a previous request, requesting the API return elements before that id.
         in: query
@@ -93,80 +92,98 @@ paths:
         in: query
         required: false
         schema:
+          maximum: 255
+          minimum: 1
           type: integer
           format: int32
-          minimum: 1
-          maximum: 255
-          default: 25
           example: 25
-      tags:
-      - CatalogItems
+          default: 25
       responses:
-        '404':
+        "404":
           description: not found
-        '200':
+        "200":
           description: success
+          headers:
+            PageInfo:
+              description: Provides cursor information for pagination.
+              style: simple
+              explode: true
+              schema:
+                type: object
+                properties:
+                  hasPreviousPage:
+                    type: boolean
+                  hasNextPage:
+                    type: boolean
+                  startCursor:
+                    type: string
+                  endCursor:
+                    type: string
           content:
             application/json:
               examples:
                 test_example:
                   value:
-                    "@context": https://www.datafoodconsortium.org
-                    "@graph":
-                    - "@id": http://test.host/api/dfc/Enterprises/10000
-                      "@type": dfc-b:Enterprise
+                    '@context': https://www.datafoodconsortium.org
+                    '@graph':
+                    - '@id': http://test.host/api/dfc/Enterprises/10000
+                      '@type': dfc-b:Enterprise
                       dfc-b:name: Fred's Farm
                       dfc-b:hasDescription: Beautiful
                       dfc-b:manages: http://test.host/api/dfc/Enterprises/10000/CatalogItems/10001
-                    - "@id": http://test.host/api/dfc/Enterprises/10000/CatalogItems/10001
-                      "@type": dfc-b:CatalogItem
+                    - '@id': http://test.host/api/dfc/Enterprises/10000/CatalogItems/10001
+                      '@type': dfc-b:CatalogItem
                       dfc-b:references: http://test.host/api/dfc/Enterprises/10000/SuppliedProducts/10001
                       dfc-b:sku: AR
                       dfc-b:stockLimitation: 0
                       dfc-b:offeredThrough: http://test.host/api/dfc/Enterprises/10000/Offers/10001
-                    - "@id": http://test.host/api/dfc/Enterprises/10000/Offers/10001
-                      "@type": dfc-b:Offer
+                    - '@id': http://test.host/api/dfc/Enterprises/10000/Offers/10001
+                      '@type': dfc-b:Offer
                       dfc-b:hasPrice: 19.99
                       dfc-b:stockLimitation: 0
-        '401':
+        "401":
           description: unauthorized
-  "/api/dfc/Enterprises/{enterprise_id}/CatalogItems/{id}":
-    parameters:
-    - name: enterprise_id
-      in: path
-      required: true
-      schema:
-        type: string
-    - name: id
-      in: path
-      required: true
-      schema:
-        type: string
+  /api/dfc/Enterprises/{enterprise_id}/CatalogItems/{id}:
     get:
-      summary: Show CatalogItem
       tags:
       - CatalogItems
+      summary: Show CatalogItem
+      parameters:
+      - name: enterprise_id
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: id
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
       responses:
-        '200':
+        "200":
           description: success
           content:
             application/json:
               examples:
                 test_example:
                   value:
-                    "@context": https://www.datafoodconsortium.org
-                    "@graph":
-                    - "@id": http://test.host/api/dfc/Enterprises/10000/CatalogItems/10001
-                      "@type": dfc-b:CatalogItem
+                    '@context': https://www.datafoodconsortium.org
+                    '@graph':
+                    - '@id': http://test.host/api/dfc/Enterprises/10000/CatalogItems/10001
+                      '@type': dfc-b:CatalogItem
                       dfc-b:references: http://test.host/api/dfc/Enterprises/10000/SuppliedProducts/10001
                       dfc-b:sku: AR
                       dfc-b:stockLimitation: 0
                       dfc-b:offeredThrough: http://test.host/api/dfc/Enterprises/10000/Offers/10001
-                    - "@id": http://test.host/api/dfc/Enterprises/10000/Offers/10001
-                      "@type": dfc-b:Offer
+                    - '@id': http://test.host/api/dfc/Enterprises/10000/Offers/10001
+                      '@type': dfc-b:Offer
                       dfc-b:hasPrice: 19.99
                       dfc-b:stockLimitation: 0
-        '404':
+        "404":
           description: not found
     post:
       summary: create a new CatalogItem for a given Enterprise
@@ -212,19 +229,30 @@ paths:
         '401':
           description: unauthorized
     put:
-      summary: Update CatalogItem
-      parameters: []
       tags:
       - CatalogItems
-      responses:
-        '204':
-          description: no content
+      summary: Update CatalogItem
+      parameters:
+      - name: enterprise_id
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: id
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
       requestBody:
         content:
           application/json:
             schema:
               example:
-                "@context":
+                '@context':
                   rdfs: http://www.w3.org/2000/01/rdf-schema#
                   skos: http://www.w3.org/2004/02/skos/core#
                   dfc: http://static.datafoodconsortium.org/ontologies/DFC_FullModel.owl#
@@ -236,105 +264,167 @@ paths:
                   dfc-pt: http://static.datafoodconsortium.org/data/productTypes.rdf#
                   dfc-f: http://static.datafoodconsortium.org/data/facets.rdf#
                   dfc-p:hasUnit:
-                    "@type": "@id"
+                    '@type': '@id'
                   dfc-b:hasUnit:
-                    "@type": "@id"
+                    '@type': '@id'
                   dfc-b:hasQuantity:
-                    "@type": "@id"
+                    '@type': '@id'
                   dfc-p:hasType:
-                    "@type": "@id"
+                    '@type': '@id'
                   dfc-b:hasType:
-                    "@type": "@id"
+                    '@type': '@id'
                   dfc-b:references:
-                    "@type": "@id"
+                    '@type': '@id'
                   dfc-b:referencedBy:
-                    "@type": "@id"
+                    '@type': '@id'
                   dfc-b:offeres:
-                    "@type": "@id"
+                    '@type': '@id'
                   dfc-b:supplies:
-                    "@type": "@id"
+                    '@type': '@id'
                   dfc-b:defines:
-                    "@type": "@id"
+                    '@type': '@id'
                   dfc-b:affiliates:
-                    "@type": "@id"
+                    '@type': '@id'
                   dfc-b:manages:
-                    "@type": "@id"
+                    '@type': '@id'
                   dfc-b:offeredThrough:
-                    "@type": "@id"
+                    '@type': '@id'
                   dfc-b:hasBrand:
-                    "@type": "@id"
+                    '@type': '@id'
                   dfc-b:hasGeographicalOrigin:
-                    "@type": "@id"
+                    '@type': '@id'
                   dfc-b:hasClaim:
-                    "@type": "@id"
+                    '@type': '@id'
                   dfc-b:hasAllergenDimension:
-                    "@type": "@id"
+                    '@type': '@id'
                   dfc-b:hasNutrimentDimension:
-                    "@type": "@id"
+                    '@type': '@id'
                   dfc-b:hasPhysicalDimension:
-                    "@type": "@id"
+                    '@type': '@id'
                   dfc:owner:
-                    "@type": "@id"
+                    '@type': '@id'
                   dfc-t:hostedBy:
-                    "@type": "@id"
+                    '@type': '@id'
                   dfc-t:hasPivot:
-                    "@type": "@id"
+                    '@type': '@id'
                   dfc-t:represent:
-                    "@type": "@id"
-                dfc-b:stockLimitation: '3'
+                    '@type': '@id'
+                dfc-b:stockLimitation: "3"
                 dfc-b:sku: new-sku
-
-  "/api/dfc/Enterprises/{enterprise_id}/customerCategories":
-    parameters:
-    - name: enterprise_id
-      in: path
-      required: true
-      schema:
-        type: string
+      responses:
+        "204":
+          description: no content
+    post:
+      tags:
+      - CatalogItems
+      summary: create a new CatalogItem for a given Enterprise
+      parameters:
+      - name: enterprise_id
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: id
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              example:
+                '@context': https://www.datafoodconsortium.org
+                '@graph':
+                - '@id': '#'
+                  '@type': dfc-b:CatalogItem
+                  dfc-b:references: http://test.host/api/dfc/Enterprises/10000/SuppliedProducts/10001
+                  dfc-b:sku: AR
+                  dfc-b:stockLimitation: 0
+                  dfc-b:offeredThrough:
+                    '@id': '#1'
+                    '@type': dfc-b:Offer
+                    dfc-b:hasPrice:
+                      '@id': '#2'
+                      '@type': dfc-b:Price
+                      dfc-b:hasUnit: GBP
+                      dfc-b:value: 4.95
+                      dfc-b:VATrate: 0.0
+      responses:
+        "201":
+          description: created
+          content:
+            application/json:
+              schema:
+                example:
+                  '@id': http://test.host/api/dfc/Enterprises/10000/CatalogItems/10001
+        "400":
+          description: bad request
+        "401":
+          description: unauthorized
+  /api/dfc/Enterprises/{enterprise_id}/customerCategories:
     get:
-      summary: Return a list of Customer Categories for an Enterprise
-      parameters: []
       tags:
       - CustomerCategory
+      summary: Return a list of Customer Categories for an Enterprise
+      parameters:
+      - name: enterprise_id
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
       responses:
-        '404':
+        "404":
           description: not found
-        '200':
+        "200":
           description: successful
           content:
             application/json:
               examples:
                 test_example:
                   value:
-                    "@context": https://www.datafoodconsortium.org
-                    "@graph":
-                    - "@id": http://test.host/api/dfc/Enterprises/10000/customerCategories/10005
-                      "@type": dfc-b:customerCategory
+                    '@context': https://www.datafoodconsortium.org
+                    '@graph':
+                    - '@id': http://test.host/api/dfc/Enterprises/10000/customerCategories/10005
+                      '@type': dfc-b:customerCategory
                       dfc-b:definedBy: http://test.host/api/dfc/Enterprises/10000
     post:
-      summary: create a new Customer Category for a given Enterprise
-      parameters: []
       tags:
       - CustomerCategory
-      responses:
-        '201':
-          description: created
-          content:
-            application/json:
-              schema:
-                example:
-                  "@id": http://test.host/api/dfc/Enterprises/10000/customerCategories/10006
-        '400':
-          description: bad request
-        '401':
-          description: unauthorized
+      summary: create a new Customer Category for a given Enterprise
+      parameters:
+      - name: enterprise_id
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
       requestBody:
         content:
           application/json:
             schema:
               example:
-                "@id": "#"
+                '@id': '#'
                 dfc-b:definedBy: http://test.host/api/dfc/Enterprises/10000
+      responses:
+        "201":
+          description: created
+          content:
+            application/json:
+              schema:
+                example:
+                  '@id': http://test.host/api/dfc/Enterprises/10000/customerCategories/10006
+        "400":
+          description: bad request
+        "401":
+          description: unauthorized
 
   "/api/dfc/Enterprises/{enterprise_id}/customerCategories/{id}":
     parameters:
@@ -349,28 +439,56 @@ paths:
       schema:
         type: string
     get:
-      summary: Return a specific Customer Category for an Enterprise
-      parameters: []
       tags:
       - CustomerCategory
+      summary: Return a specific Customer Category for an Enterprise
+      parameters:
+      - name: enterprise_id
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: id
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
       responses:
-        '200':
+        "200":
           description: successful
           content:
             application/json:
               examples:
                 test_example:
                   value:
-                    "@context": https://www.datafoodconsortium.org
-                    "@graph":
-                    - "@id": http://test.host/api/dfc/Enterprises/10000/customerCategories/10005
-                      "@type": dfc-b:customerCategory
+                    '@context': https://www.datafoodconsortium.org
+                    '@graph':
+                    - '@id': http://test.host/api/dfc/Enterprises/10000/customerCategories/10005
+                      '@type': dfc-b:customerCategory
                       dfc-b:definedBy: http://test.host/api/dfc/Enterprises/10000
     delete:
-      summary: remove a Customer Category for a given Enterprise
-      parameters: []
       tags:
       - CustomerCategory
+      summary: remove a Customer Category for a given Enterprise
+      parameters:
+      - name: enterprise_id
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: id
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
       requestBody:
         content:
           application/json:
@@ -378,25 +496,94 @@ paths:
               example:
                 "@id": http://test.host/api/dfc/Enterprises/10000/customerCategories/10006
       responses:
-        '204':
+        "204":
           description: no content
-        '401':
+        "401":
           description: unauthorized
-
-  "/api/dfc/Enterprises/{id}":
-    parameters:
-    - name: id
-      in: path
-      required: true
-      schema:
-        type: string
+  /api/dfc/Enterprises/:
     get:
-      summary: Show enterprise
-      parameters: []
       tags:
       - Enterprises
+      summary: Show all Enterprises (with pagination)
+      parameters:
+      - name: before
+        in: query
+        description: "The cursor returned from a previous request, requesting the\
+          \ API return elements before that id."
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: after
+        in: query
+        description: "The cursor returned from a previous request, requesting the\
+          \ API return elements after that id."
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: first
+        in: query
+        description: Return up to the first x elements in the list
+        required: false
+        style: form
+        explode: true
+        schema:
+          maximum: 255
+          minimum: 1
+          type: integer
+          format: int32
+          example: 25
+          default: 25
+      - name: last
+        in: query
+        description: Return up to the last x elements in the list
+        required: false
+        style: form
+        explode: true
+        schema:
+          maximum: 255
+          minimum: 1
+          type: integer
+          format: int32
+          example: 25
+          default: 25
       responses:
-        '200':
+        "200":
+          description: successful
+          content:
+            application/json:
+              examples:
+                test_example:
+                  value:
+                    '@context': https://www.datafoodconsortium.org
+                    '@graph':
+                    - '@id': http://test.host/api/dfc/Enterprises/10000
+                      '@type': dfc-b:Enterprise
+                    - '@id': http://test.host/api/dfc/Enterprises/20000
+                      '@type': dfc-b:Enterprise
+                    - '@id': http://test.host/api/dfc/Enterprises/30000
+                      '@type': dfc-b:Enterprise
+                      
+        "404":
+          description: not found
+  /api/dfc/Enterprises/{id}:
+    get:
+      tags:
+      - Enterprises
+      summary: Show enterprise
+      parameters:
+      - name: id
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
           description: successful
           content:
             application/json:
@@ -465,56 +652,26 @@ paths:
                     ]
         '404':
           description: not found
-    'post':
-      summary: Create an Enterprise
+    put:
       tags:
       - Enterprises
-      responses:
-        '201':
-          description: created
-        '400':
-          description: bad request
-        '401':
-          description: unauthorized
-      requestBody:
-        content:
-          application/json:
-            schema:
-              example:
-                test_example:
-                  value:
-                    "@context": https://www.datafoodconsortium.org
-                    "@id": "#"
-                    "@type": dfc-b:Enterprise
-                    dfc-b:hasAddress: http://test.host/api/dfc/Addresses/40000
-                    dfc-b:hasPhoneNumber: http://test.host/api/dfc/PhoneNumbers/444000200
-                    dfc-b:email: hello@example.org
-                    dfc-b:websitePage: https://test.host/
-                    dfc-b:hasSocialMedia: "#SocialMedias/facebook"
-                    dfc-b:name: Fred's Farm
-                    dfc-b:hasDescription: This is an awesome enterprise
-                    dfc-b:VATnumber: 123 456
-                    dfc-b:manages: "#/CatalogItems/10001"
-                    dfc-b:supplies: "#/SuppliedProducts/10001"
-                    dfc-b:hasMainContact: http://test.host/api/dfc/Persons/10000
-                    dfc-b:logo: http://test.host/active-storage/url/logo.png
-                    dfc-b:affiliates: http://test.host/api/dfc/Enterprises/60000
-    'put':
       summary: Update an Enterprise
-      parameters: []
-      tags:
-      - Enterprises
-      responses:
-        '204':
-          description: no content
+      parameters:
+      - name: id
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
       requestBody:
         content:
           application/json:
             schema:
               example:
-                "@context": https://www.datafoodconsortium.org
-                "@id":  http://test.host/api/dfc/Enterprises/10000
-                "@type": dfc-b:Enterprise
+                '@context': https://www.datafoodconsortium.org
+                '@id': http://test.host/api/dfc/Enterprises/10000
+                '@type': dfc-b:Enterprise
                 dfc-b:hasAddress: http://test.host/api/dfc/Addresses/40000
                 dfc-b:hasPhoneNumber: http://test.host/api/dfc/PhoneNumbers/4401214000245
                 dfc-b:email: support@example.org
@@ -528,29 +685,6 @@ paths:
                 dfc-b:hasMainContact: http://test.host/api/dfc/Persons/10000
                 dfc-b:logo: http://test.host/active-storage/url/logo.png
                 dfc-b:affiliates: http://test.host/api/dfc/Enterprises/60000
-    delete:
-      summary: remove an Enterprise
-      parameters: []
-      tags:
-      - Enterprises
-      responses:
-        '204':
-          description: no content
-        '401':
-          description: unauthorized
-
-
-  "/api/dfc/Enterprises/{enterprise_id}/affiliatedTo":
-    post:
-      summary: Affilate 2 Enterprises (1 in path, 1 in requestBody)
-      parameters:
-      - name: enterprise_id
-        in: path
-        required: true
-        schema:
-          type: string
-      tags:
-      - Enterprises::affiliatedTo
       responses:
         '201':
           description: created
@@ -558,398 +692,523 @@ paths:
           description: bad request
         '401':
           description: unauthorized
+    post:
+      tags:
+      - Enterprises
+      summary: Create an Enterprise
+      parameters:
+      - name: id
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
       requestBody:
         content:
           application/json:
             schema:
               example:
-                "@id": http://test.host/api/dfc/Enterprises/10001
-
-  "/api/dfc/Enterprises/{enterprise_id}/affiliatedTo/{id}":
+                test_example:
+                  value:
+                    '@context': https://www.datafoodconsortium.org
+                    '@id': '#'
+                    '@type': dfc-b:Enterprise
+                    dfc-b:hasAddress: http://test.host/api/dfc/Addresses/40000
+                    dfc-b:hasPhoneNumber: http://test.host/api/dfc/PhoneNumbers/444000200
+                    dfc-b:email: hello@example.org
+                    dfc-b:websitePage: https://test.host/
+                    dfc-b:hasSocialMedia: '#SocialMedias/facebook'
+                    dfc-b:name: Fred's Farm
+                    dfc-b:hasDescription: This is an awesome enterprise
+                    dfc-b:VATnumber: 123 456
+                    dfc-b:manages: '#/CatalogItems/10001'
+                    dfc-b:supplies: '#/SuppliedProducts/10001'
+                    dfc-b:hasMainContact: http://test.host/api/dfc/Persons/10000
+                    dfc-b:logo: http://test.host/active-storage/url/logo.png
+                    dfc-b:affiliates: http://test.host/api/dfc/Enterprises/60000
+      responses:
+        "201":
+          description: created
+        "400":
+          description: bad request
+        "401":
+          description: unauthorized
     delete:
+      tags:
+      - Enterprises
+      summary: remove an Enterprise
+      parameters:
+      - name: id
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "204":
+          description: no content
+        "401":
+          description: unauthorized
+  /api/dfc/Enterprises/{enterprise_id}/affiliatedTo:
+    post:
+      tags:
+      - Enterprises::affiliatedTo
+      summary: "Affilate 2 Enterprises (1 in path, 1 in requestBody)"
+      parameters:
+      - name: enterprise_id
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              example:
+                '@id': http://test.host/api/dfc/Enterprises/10001
+      responses:
+        "201":
+          description: created
+        "400":
+          description: bad request
+        "401":
+          description: unauthorized
+  /api/dfc/Enterprises/{enterprise_id}/affiliatedTo/{id}:
+    delete:
+      tags:
+      - Enterprises::affiliatedTo
       summary: Remove an Enterprise affiliatedTo link
       parameters:
       - name: enterprise_id
         in: path
         required: true
+        style: simple
+        explode: false
         schema:
           type: string
       - name: id
         in: path
         required: true
+        style: simple
+        explode: false
         schema:
           type: string
-      tags:
-      - Enterprises::affiliatedTo
       responses:
-        '204':
+        "204":
           description: no content
-        '401':
+        "401":
           description: unauthorized
-
-
-
-  "/api/dfc/Enterprises/{enterprise_id}/Offers/{id}":
-    parameters:
-    - name: enterprise_id
-      in: path
-      required: true
-      schema:
-        type: string
-    - name: id
-      in: path
-      required: true
-      schema:
-        type: string
+  /api/dfc/Enterprises/{enterprise_id}/Offers/{id}:
     get:
-      summary: Show Offer
       tags:
       - Offers
+      summary: Show Offer
+      parameters:
+      - name: enterprise_id
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: id
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
       responses:
-        '200':
+        "200":
           description: success
           content:
             application/json:
               examples:
                 test_example:
                   value:
-                    "@context": https://www.datafoodconsortium.org
-                    "@id": http://test.host/api/dfc/Enterprises/10000/Offers/10001
-                    "@type": dfc-b:Offer
+                    '@context': https://www.datafoodconsortium.org
+                    '@id': http://test.host/api/dfc/Enterprises/10000/Offers/10001
+                    '@type': dfc-b:Offer
                     dfc-b:hasPrice: 19.99
                     dfc-b:stockLimitation: 5
                     dfc-b:discount: 2.95
                     dfc-b:offersTo: https://test.host/api/dfc/enterprises/10000/customerCategories/10005
     put:
-      summary: Update Offer
-      parameters: []
       tags:
       - Offers
-      responses:
-        '204':
-          description: success
+      summary: Update Offer
+      parameters:
+      - name: enterprise_id
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: id
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
       requestBody:
         content:
           application/json:
             schema:
               example:
-                "@context": https://www.datafoodconsortium.org
-                "@id": http://test.host/api/dfc/Enterprises/10000/Offers/10001
-                "@type": dfc-b:Offer
+                '@context': https://www.datafoodconsortium.org
+                '@id': http://test.host/api/dfc/Enterprises/10000/Offers/10001
+                '@type': dfc-b:Offer
                 dfc-b:hasPrice: 9.99
                 dfc-b:stockLimitation: 7
-                dfc-b:discount: 1.50
+                dfc-b:discount: 1.5
                 dfc-b:offersTo: https://test.host/api/dfc/enterprises/10000/customerCategories/10005
-
-  "/api/dfc/persons/{id}":
-    parameters:
-    - name: id
-      in: path
-      required: true
-      schema:
-        type: string
+      responses:
+        "204":
+          description: success
+  /api/dfc/persons/{id}:
     get:
-      summary: Show person
-      parameters: []
       tags:
       - Persons
+      summary: Show person
+      parameters:
+      - name: id
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
       responses:
-        '200':
+        "200":
           description: successful
           content:
             application/json:
               examples:
                 test_example:
                   value:
-                    "@context": https://www.datafoodconsortium.org
-                    "@id": http://test.host/api/dfc/Persons/10000
-                    "@type": dfc-b:Person
+                    '@context': https://www.datafoodconsortium.org
+                    '@id': http://test.host/api/dfc/Persons/10000
+                    '@type': dfc-b:Person
                     dfc-b:familyName: Khan
                     dfc-b:firstName: Ali
                     dfc-b:hasAddress: http://test.host/api/dfc/Addresses/40000
                     dfc-b:hasPhoneNumber: http://test.host/api/dfc/PhoneNumbers/4401214000245
                     dfc-b:hasEmail: ali.khan@test.host
                     dfc-b:hasSocialMedia:
-                      "@type": dfc-b:SocialMedia
+                      '@type': dfc-b:SocialMedia
                       dfc-b:name: twitter
                       dfc-b:URL: https://x.com/user
-        '404':
+        "404":
           description: not found
-
-
-  "/api/dfc/PhoneNumbers/{id}":
-    parameters:
-    - name: id
-      in: path
-      required: true
-      schema:
-        type: string
+  /api/dfc/PhoneNumbers/{id}:
     get:
-      summary: Show phone number
-      parameters: []
       tags:
       - PhoneNumbers
+      summary: Show phone number
+      parameters:
+      - name: id
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
       responses:
-        '200':
+        "200":
           description: successful
           content:
             application/json:
               examples:
                 test_example:
                   value:
-                    "@context": https://www.datafoodconsortium.org
-                    "@id": http://test.host/api/dfc/PhoneNumbers/4401214000245
-                    "@type": dfc-b:PhoneNumber
+                    '@context': https://www.datafoodconsortium.org
+                    '@id': http://test.host/api/dfc/PhoneNumbers/4401214000245
+                    '@type': dfc-b:PhoneNumber
                     dfc-b:countryCode: 44
                     dfc-b:phoneNumber: 0121-400-0245
                     dfc-b:phoneNumberOf: http://test.host/api/dfc/Enterprises/10000
-        '404':
+        "404":
           description: not found
-
-  "/api/dfc/Enterprises/{enterprise_id}/SocialMedias/{name}":
-    parameters:
-    - name: enterprise_id
-      in: path
-      required: true
-      schema:
-        type: string
-    - name: name
-      in: path
-      required: true
-      schema:
-        type: string
+  /api/dfc/Enterprises/{enterprise_id}/SocialMedias/{name}:
     get:
-      summary: Show social media
-      parameters: []
       tags:
       - SocialMedias
+      summary: Show social media
+      parameters:
+      - name: enterprise_id
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: name
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
       responses:
-        '200':
+        "200":
           description: successful
           content:
             application/json:
               examples:
                 test_example:
                   value:
-                    "@context": https://www.datafoodconsortium.org
-                    "@id": http://test.host/api/dfc/Enterprises/10000/SocialMedias/facebook
-                    "@type": dfc-b:SocialMedia
+                    '@context': https://www.datafoodconsortium.org
+                    '@id': http://test.host/api/dfc/Enterprises/10000/SocialMedias/facebook
+                    '@type': dfc-b:SocialMedia
                     dfc-b:name: facebook
                     dfc-b:URL: https://facebook.com/user
-        '404':
+        "404":
           description: not found
-
-  "/api/dfc/Enterprises/{enterprise_id}/SuppliedProducts":
-    parameters:
-    - name: enterprise_id
-      in: path
-      required: true
-      schema:
-        type: string
+  /api/dfc/Enterprises/{enterprise_id}/SuppliedProducts:
     get:
+      tags:
+      - SuppliedProducts
       summary: List SuppliedProducts for an Enterprise
       parameters:
+      - name: enterprise_id
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
       - name: before
-        description: The cursor returned from a previous request, requesting the API return elements before that id.
         in: query
+        description: "The cursor returned from a previous request, requesting the\
+          \ API return elements before that id."
         required: false
+        style: form
+        explode: true
         schema:
           type: string
       - name: after
-        description: The cursor returned from a previous request, requesting the API return elements after that id.
         in: query
+        description: "The cursor returned from a previous request, requesting the\
+          \ API return elements after that id."
         required: false
+        style: form
+        explode: true
         schema:
           type: string
       - name: first
+        in: query
         description: Return up to the first x elements in the list
-        in: query
         required: false
+        style: form
+        explode: true
         schema:
+          maximum: 255
+          minimum: 1
           type: integer
           format: int32
-          minimum: 1
-          maximum: 255
-          default: 25
           example: 25
+          default: 25
       - name: last
-        description: Return up to the last x elements in the list
         in: query
+        description: Return up to the last x elements in the list
         required: false
+        style: form
+        explode: true
         schema:
+          maximum: 255
+          minimum: 1
           type: integer
           format: int32
-          minimum: 1
-          maximum: 255
-          default: 25
           example: 25
-      tags:
-      - SuppliedProducts
+          default: 25
       responses:
-        '200':
+        "200":
           description: success
           content:
             application/json:
               examples:
                 test_example:
                   value:
-                    "@context": https://www.datafoodconsortium.org
-                    "@graph":
-                    - "@id": http://test.host/api/dfc/Enterprises/10000/SuppliedProducts/10001
-                      "@type": dfc-b:SuppliedProduct
+                    '@context': https://www.datafoodconsortium.org
+                    '@graph':
+                    - '@id': http://test.host/api/dfc/Enterprises/10000/SuppliedProducts/10001
+                      '@type': dfc-b:SuppliedProduct
                       dfc-b:name: Pesto - 100g
                       dfc-b:description: Basil Pesto
                       dfc-b:hasType: dfc-pt:processed-vegetable
                       dfc-b:hasQuantity:
-                        "@type": dfc-b:QuantitativeValue
+                        '@type': dfc-b:QuantitativeValue
                         dfc-b:hasUnit: dfc-m:Gram
                         dfc-b:value: 100.0
                       dfc-b:alcoholPercentage: 0.0
-                      dfc-b:lifetime: '12 months'
-                      dfc-b:usageOrStorageCondition: ''
+                      dfc-b:lifetime: 12 months
+                      dfc-b:usageOrStorageCondition: ""
                       dfc-b:totalTheoreticalStock: 0.0
                       dfc-b:image: http://test.host/active-storage/url/logo-white.png
                       dfc-b:referencedBy: http:/test.host/api/dfc/Enterprises/10000/CatalogItems/10001
                       dfc-b:asPlannedProductionFlow: http:/test.host/api/dfc/Enterprises/10000/asPlannedProductionFlow/101010
-                    - "@id": http:/test.host/api/dfc/Enterprises/10000/asPlannedProductionFlow/101010
-                      "@type": dfc-b:asPlannedProductionFlow
+                    - '@id': http:/test.host/api/dfc/Enterprises/10000/asPlannedProductionFlow/101010
+                      '@type': dfc-b:asPlannedProductionFlow
                       dfc-b:quantity: 12
                       dfc-b:AsPlannedTransformation: http:/test.host/api/dfc/Enterprises/10000/AsPlannedTransformation/101010
-                    - "@id": http:/test.host/api/dfc/Enterprises/10000/AsPlannedTransformation/101010
-                      "@type": dfc-b:AsPlannedTransformation
+                    - '@id': http:/test.host/api/dfc/Enterprises/10000/AsPlannedTransformation/101010
+                      '@type': dfc-b:AsPlannedTransformation
                       dfc-b:hasInput: http:/test.host/api/dfc/Enterprises/10000/asPlannedProductionFlow/101010
                       dfc-b:hasOutput: http:/test.host/api/dfc/Enterprises/10000/asPlannedConsumptionFlow/101010
                       dfc-b:hasTransformationType: dfc-v:combine
-                    - "@id": http://test.host/api/dfc/Enterprises/10000/SuppliedProducts/10005
-                      "@type": dfc-b:SuppliedProduct
+                    - '@id': http://test.host/api/dfc/Enterprises/10000/SuppliedProducts/10005
+                      '@type': dfc-b:SuppliedProduct
                       dfc-b:name: Basil Pesto - Case
                       dfc-b:description: Case of  Basil  Pesto (12 jars)
                       dfc-b:hasType: dfc-pt:processed-vegetable
                       dfc-b:hasQuantity:
-                        "@type": dfc-b:QuantitativeValue
+                        '@type': dfc-b:QuantitativeValue
                         dfc-b:hasUnit: dfc-m:pack
                         dfc-b:value: 12.0
-                      dfc-b:lifetime: '12 months'
-                      dfc-b:usageOrStorageCondition: ''
+                      dfc-b:lifetime: 12 months
+                      dfc-b:usageOrStorageCondition: ""
                       dfc-b:totalTheoreticalStock: 10.0
                       dfc-b:image: http://test.host/active-storage/url/logo-white.png
                       dfc-b:referencedBy: http:/test.host/api/dfc/Enterprises/10000/CatalogItems/10002
                       dfc-b:asPlannedConsumptionFlow: http:/test.host/api/dfc/Enterprises/10000/asPlannedConsumptionFlow/101010
-                    - "@id": http:/test.host/api/dfc/Enterprises/10000/asPlannedConsumptionFlow/101010
-                      "@type": dfc-b:asPlannedConsumptionFlow
+                    - '@id': http:/test.host/api/dfc/Enterprises/10000/asPlannedConsumptionFlow/101010
+                      '@type': dfc-b:asPlannedConsumptionFlow
                       dfc-b:quantity: 1
                       dfc-b:AsPlannedTransformation: http:/test.host/api/dfc/Enterprises/10000/AsPlannedTransformation/101010
-
-
-        '404':
+        "404":
           description: not found
     post:
-      summary: Create SuppliedProduct
-      parameters: []
       tags:
       - SuppliedProducts
-      responses:
-        '400':
-          description: bad request
-        '200':
-          description: success
-          content:
-            application/json:
-              examples:
-                test_example:
-                  value:
-                    "@context": https://www.datafoodconsortium.org
-                    "@id": http://test.host/api/dfc/Enterprises/10000/SuppliedProducts/10001
-                    "@type": dfc-b:SuppliedProduct
-                    dfc-b:name: Pesto - Apple (6g)
-                    dfc-b:description: A delicious heritage apple
-                    dfc-b:hasType: dfc-pt:non-local-vegetable
-                    dfc-b:hasQuantity:
-                      "@type": dfc-b:QuantitativeValue
-                      dfc-b:hasUnit: dfc-m:Gram
-                      dfc-b:value: 6.0
-                    dfc-b:alcoholPercentage: 0.0
-                    dfc-b:lifetime: ''
-                    dfc-b:usageOrStorageCondition: ''
-                    dfc-b:totalTheoreticalStock: 0.0
-                    dfc-b:image: http://test.host/active-storage/url/logo-white.png
+      summary: Create SuppliedProduct
+      parameters:
+      - name: enterprise_id
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
       requestBody:
         content:
           application/json:
             schema:
               example:
-                "@context": https://www.datafoodconsortium.org
-                "@id": "#"
-                "@type": dfc-b:SuppliedProduct
+                '@context': https://www.datafoodconsortium.org
+                '@id': '#'
+                '@type': dfc-b:SuppliedProduct
                 dfc-b:name: Apple
                 dfc-b:description: A delicious heritage apple
                 dfc-b:hasType: dfc-pt:non-local-vegetable
                 dfc-b:hasQuantity:
-                  "@type": dfc-b:QuantitativeValue
+                  '@type': dfc-b:QuantitativeValue
                   dfc-b:hasUnit: dfc-m:Gram
                   dfc-b:value: 6
                 dfc-b:alcoholPercentage: 0.0
-                dfc-b:lifetime: ''
-                dfc-b:usageOrStorageCondition: ''
+                dfc-b:lifetime: ""
+                dfc-b:usageOrStorageCondition: ""
                 dfc-b:totalTheoreticalStock: 0.0
-
-  "/api/dfc/Enterprises/{enterprise_id}/SuppliedProducts/{id}":
-    parameters:
-    - name: enterprise_id
-      in: path
-      required: true
-      schema:
-        type: string
-    - name: id
-      in: path
-      required: true
-      schema:
-        type: string
-    get:
-      summary: Show a single Supplied Product
-      tags:
-      - SuppliedProducts
       responses:
-        '200':
+        "400":
+          description: bad request
+        "200":
           description: success
           content:
             application/json:
               examples:
                 test_example:
                   value:
-                    "@context": https://www.datafoodconsortium.org
-                    "@id": http://test.host/api/dfc/Enterprises/10000/SuppliedProducts/10001
-                    "@type": dfc-b:SuppliedProduct
+                    '@context': https://www.datafoodconsortium.org
+                    '@id': http://test.host/api/dfc/Enterprises/10000/SuppliedProducts/10001
+                    '@type': dfc-b:SuppliedProduct
+                    dfc-b:name: Pesto - Apple (6g)
+                    dfc-b:description: A delicious heritage apple
+                    dfc-b:hasType: dfc-pt:non-local-vegetable
+                    dfc-b:hasQuantity:
+                      '@type': dfc-b:QuantitativeValue
+                      dfc-b:hasUnit: dfc-m:Gram
+                      dfc-b:value: 6.0
+                    dfc-b:alcoholPercentage: 0.0
+                    dfc-b:lifetime: ""
+                    dfc-b:usageOrStorageCondition: ""
+                    dfc-b:totalTheoreticalStock: 0.0
+                    dfc-b:image: http://test.host/active-storage/url/logo-white.png
+  /api/dfc/Enterprises/{enterprise_id}/SuppliedProducts/{id}:
+    get:
+      tags:
+      - SuppliedProducts
+      summary: Show a single Supplied Product
+      parameters:
+      - name: enterprise_id
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: id
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: success
+          content:
+            application/json:
+              examples:
+                test_example:
+                  value:
+                    '@context': https://www.datafoodconsortium.org
+                    '@id': http://test.host/api/dfc/Enterprises/10000/SuppliedProducts/10001
+                    '@type': dfc-b:SuppliedProduct
                     dfc-b:name: Pesto - 300g
                     dfc-b:description: Basil Pesto
                     dfc-b:hasType: dfc-pt:processed-vegetable
                     dfc-b:hasQuantity:
-                      "@type": dfc-b:QuantitativeValue
+                      '@type': dfc-b:QuantitativeValue
                       dfc-b:hasUnit: dfc-m:Gram
                       dfc-b:value: 300.0
                     dfc-b:alcoholPercentage: 0.0
-                    dfc-b:lifetime: ''
-                    dfc-b:usageOrStorageCondition: ''
+                    dfc-b:lifetime: ""
+                    dfc-b:usageOrStorageCondition: ""
                     dfc-b:totalTheoreticalStock: 12.0
                     dfc-b:image: http://test.host/image-storage/url/basil-pesto.png
-        '404':
+        "404":
           description: not found
     put:
-      summary: Update SuppliedProduct
-      parameters: []
       tags:
       - SuppliedProducts
-      responses:
-        '401':
-          description: unauthorized
-        '204':
-          description: success
+      summary: Update SuppliedProduct
+      parameters:
+      - name: enterprise_id
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: id
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
       requestBody:
         content:
           application/json:
             schema:
               example:
-                "@context":
+                '@context':
                   rdfs: http://www.w3.org/2000/01/rdf-schema#
                   skos: http://www.w3.org/2004/02/skos/core#
                   dfc: https://github.com/datafoodconsortium/ontology/releases/latest/download/DFC_FullModel.owl#
@@ -962,157 +1221,179 @@ paths:
                   dfc-f: https://github.com/datafoodconsortium/taxonomies/releases/latest/download/facets.rdf#
                   ontosec: http://www.semanticweb.org/ontologies/2008/11/OntologySecurity.owl#
                   dfc-p:hasUnit:
-                    "@type": "@id"
+                    '@type': '@id'
                   dfc-b:hasUnit:
-                    "@type": "@id"
+                    '@type': '@id'
                   dfc-b:hasQuantity:
-                    "@type": "@id"
+                    '@type': '@id'
                   dfc-p:hasType:
-                    "@type": "@id"
+                    '@type': '@id'
                   dfc-b:hasType:
-                    "@type": "@id"
+                    '@type': '@id'
                   dfc-b:references:
-                    "@type": "@id"
+                    '@type': '@id'
                   dfc-b:referencedBy:
-                    "@type": "@id"
+                    '@type': '@id'
                   dfc-b:offeres:
-                    "@type": "@id"
+                    '@type': '@id'
                   dfc-b:supplies:
-                    "@type": "@id"
+                    '@type': '@id'
                   dfc-b:defines:
-                    "@type": "@id"
+                    '@type': '@id'
                   dfc-b:affiliates:
-                    "@type": "@id"
+                    '@type': '@id'
                   dfc-b:hasCertification:
-                    "@type": "@id"
+                    '@type': '@id'
                   dfc-b:manages:
-                    "@type": "@id"
+                    '@type': '@id'
                   dfc-b:offeredThrough:
-                    "@type": "@id"
+                    '@type': '@id'
                   dfc-b:hasBrand:
-                    "@type": "@id"
+                    '@type': '@id'
                   dfc-b:hasGeographicalOrigin:
-                    "@type": "@id"
+                    '@type': '@id'
                   dfc-b:hasClaim:
-                    "@type": "@id"
+                    '@type': '@id'
                   dfc-b:hasAllergenDimension:
-                    "@type": "@id"
+                    '@type': '@id'
                   dfc-b:hasNutrientDimension:
-                    "@type": "@id"
+                    '@type': '@id'
                   dfc-b:hasPhysicalDimension:
-                    "@type": "@id"
+                    '@type': '@id'
                   dfc:owner:
-                    "@type": "@id"
+                    '@type': '@id'
                   dfc-t:hostedBy:
-                    "@type": "@id"
+                    '@type': '@id'
                   dfc-t:hasPivot:
-                    "@type": "@id"
+                    '@type': '@id'
                   dfc-t:represent:
-                    "@type": "@id"
-                "@id": http://test.host/api/dfc/Enterprises/10001/SuppliedProducts/10001
-                "@type": dfc-b:SuppliedProduct
+                    '@type': '@id'
+                '@id': http://test.host/api/dfc/Enterprises/10001/SuppliedProducts/10001
+                '@type': dfc-b:SuppliedProduct
                 dfc-b:alcoholPercentage: 0
                 dfc-b:description: Ali's Amazing Red Pesto - now it's red!
                 dfc-b:hasQuantity:
-                  "@type": dfc-b:QuantitativeValue
+                  '@type': dfc-b:QuantitativeValue
                   dfc-b:hasUnit: dfc-m:gram
                   dfc-b:value: 350
                 dfc-b:hasType: dfc-pt:processed-vegetable
-                dfc-b:lifetime: ''
+                dfc-b:lifetime: ""
                 dfc-b:name: Ali's Amazing Red Pesto
                 dfc-b:totalTheoreticalStock: 17.0
-                dfc-b:usageOrStorageCondition: ''
+                dfc-b:usageOrStorageCondition: ""
                 dfc:owner: http://proto.datafoodconsortium.org:3000/ldp/user/64c1d30351ecb4367037a9f6
                 dfc-b:hasPhysicalCharacteristic: []
                 dfc-b:hasNutrientCharacteristic: []
                 dfc-b:hasAllergenCharacteristic: []
-
-  "/api/dfc/Enterprises/{enterprise_id}/Orders":
-    parameters:
-    - name: enterprise_id
-      in: path
-      required: true
-      schema:
-        type: string
+      responses:
+        "401":
+          description: unauthorized
+        "204":
+          description: success
+  /api/dfc/Enterprises/{enterprise_id}/Orders:
     get:
+      tags:
+      - Orders
       summary: Show all Orders for an Enterprise
       parameters:
+      - name: enterprise_id
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
       - name: before
-        description: The cursor returned from a previous request, requesting the API return elements before that id.
         in: query
+        description: "The cursor returned from a previous request, requesting the\
+          \ API return elements before that id."
         required: false
+        style: form
+        explode: true
         schema:
           type: string
       - name: after
-        description: The cursor returned from a previous request, requesting the API return elements after that id.
         in: query
+        description: "The cursor returned from a previous request, requesting the\
+          \ API return elements after that id."
         required: false
+        style: form
+        explode: true
         schema:
           type: string
       - name: first
+        in: query
         description: Return up to the first x elements in the list
-        in: query
         required: false
+        style: form
+        explode: true
         schema:
+          maximum: 255
+          minimum: 1
           type: integer
           format: int32
-          minimum: 1
-          maximum: 255
-          default: 25
           example: 25
+          default: 25
       - name: last
-        description: Return up to the last x elements in the list
         in: query
+        description: Return up to the last x elements in the list
         required: false
+        style: form
+        explode: true
         schema:
+          maximum: 255
+          minimum: 1
           type: integer
           format: int32
-          minimum: 1
-          maximum: 255
-          default: 25
           example: 25
+          default: 25
       - name: orderState
+        in: query
         description: fitler on an Order State
-        in: query
         required: false
+        style: form
+        explode: true
         schema:
           type: string
           enum:
-            - Draft
-            - Held
-            - Complete
-            - Cancelled
+          - Draft
+          - Held
+          - Complete
+          - Cancelled
       - name: fulfilmentState
+        in: query
         description: fitler on an Order's Fulfilment State
-        in: query
         required: false
+        style: form
+        explode: true
         schema:
           type: string
           enum:
-            - Held
-            - Unfulfilled
-            - Fulfilled
-            - Cancelled
+          - Held
+          - Unfulfilled
+          - Fulfilled
+          - Cancelled
       - name: paymentState
-        description: fitler on an Order's Payment State
         in: query
+        description: fitler on an Order's Payment State
         required: false
+        style: form
+        explode: true
         schema:
           type: string
           enum:
-            - Unpaid
-            - Paid
-            - Cancelled
-      tags:
-      - Orders
+          - Unpaid
+          - Paid
+          - Cancelled
       responses:
-        '200':
+        "200":
           description: success
           content:
             application/json:
               examples:
                 test_example:
                   value:
+
                     "@context": https://www.datafoodconsortium.org
                     "@graph": [
                     {
@@ -1166,10 +1447,17 @@ paths:
                     }
                     ]
     post:
-      summary: Create an Order
-      parameters: []
       tags:
       - Orders
+      summary: Create an Order
+      parameters:
+      - name: enterprise_id
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
       requestBody:
         content:
           application/json:
@@ -1229,40 +1517,40 @@ paths:
                 ]
 
       responses:
-        '400':
+        "400":
           description: bad request
-        '200':
+        "200":
           description: success
           content:
             application/json:
               examples:
                 test_example:
                   value:
-                    "@context": https://www.datafoodconsortium.org
-                    "@id": http://test.host/api/dfc/Enterprises/10000/Orders/10001
-                    "@type": dfc-b:Order
+                    '@context': https://www.datafoodconsortium.org
+                    '@id': http://test.host/api/dfc/Enterprises/10000/Orders/10001
+                    '@type': dfc-b:Order
                     dfc-b:belongsTo: http://test.host/api/dfc/Enterprises/10000/SaleSessions/10002
-                    dfc-b:orderNumber: "MYORDERNUM:12345"
+                    dfc-b:orderNumber: MYORDERNUM:12345
                     dfc-b:hasOrderStatus: dfc-v:Draft
                     dfc-b:hasFulfilmentStatus: dfc-v:Held
                     dfc-b:hasPaymentState: dfc-v:Unpaid
                     dfc-b:hasPaymentMethod:
-                      "@type": dfc-b:PaymentMethod
+                      '@type': dfc-b:PaymentMethod
                       dfc-b:paymentMethodType: Example Card PaymentMethod
                       dfc-b:paymentMethodProvider: Stripe
                       dfc-b:hasPrice:
-                        "@type": dfc-b:QuantitativeValue
+                        '@type': dfc-b:QuantitativeValue
                         dfc-b:hasUnit: GBP
                         dfc-b:value: £0.27
-                        dfc-b:VATrate: 0.00
+                        dfc-b:VATrate: 0.0
                     dfc-b:discount: 1.55
                     dfc-b:OrderedBy: http://test.host/api/dfc/Persons/10000
                     dfc-b:selects:
-                      "@type": dfc-b:ShippingOption
+                      '@type': dfc-b:ShippingOption
                       dfc-b:optionOf: http://test.host/api/dfc/Enterprises/10000/SaleSessions/10002
-                      dfc-b:fee: 1.50
+                      dfc-b:fee: 1.5
                     dfc-b:uses:
-                      "@type": dfc-b:PickupOption
+                      '@type': dfc-b:PickupOption
                       dfc-b:pickedUpAt: Our Fantastic Farm Gate
                     dfc-b:soldBy: http://test.host/api/dfc/Enterprises/10000
                     dfc-b:hasPart: http://test.host/api/dfc/Enterprises/10000/Orders/10001/orderlines/10001-01
@@ -1280,99 +1568,124 @@ paths:
       schema:
         type: string
     get:
-      summary: Show a single Order
       tags:
       - Orders
+      summary: Show a single Order
+      parameters:
+      - name: enterprise_id
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: id
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
       responses:
-        '200':
+        "200":
           description: success
           content:
             application/json:
               examples:
                 test_example:
                   value:
-                    "@context": https://www.datafoodconsortium.org
-                    "@id": http://test.host/api/dfc/Enterprises/10000/Orders/10001
-                    "@type": dfc-b:Order
+                    '@context': https://www.datafoodconsortium.org
+                    '@id': http://test.host/api/dfc/Enterprises/10000/Orders/10001
+                    '@type': dfc-b:Order
                     dfc-b:belongsTo: http://test.host/api/dfc/Enterprises/10000/SaleSessions/10002
-                    dfc-b:orderNumber: "MYORDERNUM:12345"
+                    dfc-b:orderNumber: MYORDERNUM:12345
                     dfc-b:hasOrderStatus: dfc-v:Draft
                     dfc-b:hasFulfilmentStatus: dfc-v:Held
                     dfc-b:hasPaymentState: dfc-v:Unpaid
                     dfc-b:hasPaymentMethod:
-                      "@type": dfc-b:PaymentMethod
+                      '@type': dfc-b:PaymentMethod
                       dfc-b:paymentMethodType: Example Card PaymentMethod
                       dfc-b:paymentMethodProvider: Stripe
                       dfc-b:hasPrice:
-                        "@type": dfc-b:QuantitativeValue
+                        '@type': dfc-b:QuantitativeValue
                         dfc-b:hasUnit: GBP
                         dfc-b:value: £0.27
-                        dfc-b:VATrate: 0.00
+                        dfc-b:VATrate: 0.0
                     dfc-b:discount: 1.55
                     dfc-b:OrderedBy: http://test.host/api/dfc/Persons/10000
                     dfc-b:selects:
-                      "@type": dfc-b:ShippingOption
+                      '@type': dfc-b:ShippingOption
                       dfc-b:optionOf: http://test.host/api/dfc/Enterprises/10000/SaleSessions/10002
-                      dfc-b:fee: 1.50
+                      dfc-b:fee: 1.5
                     dfc-b:uses:
-                      "@type": dfc-b:PickupOption
+                      '@type': dfc-b:PickupOption
                       dfc-b:pickedUpAt: Our Fantastic Farm Gate
                     dfc-b:soldBy: http://test.host/api/dfc/Enterprises/10000
                     dfc-b:hasPart:
-                    - "@id": http://test.host/api/dfc/Enterprises/10000/Orders/10001/orderlines/10001-01
-                      "@type": dfc-b:OrderLine
+                    - '@id': http://test.host/api/dfc/Enterprises/10000/Orders/10001/orderlines/10001-01
+                      '@type': dfc-b:OrderLine
                       dfc-b:concerns: http://test.host/api/dfc/Enterprises/10000/Offers/10001
                       dfc-b:hasQuantity:
-                        "@type": dfc-b:QuantitativeValue
+                        '@type': dfc-b:QuantitativeValue
                         dfc-b:hasUnit: Packet
                         dfc-b:hasValue: 5.0
                       dfc-b:Price:
-                        "@type": dfc-b:QuantitativeValue
+                        '@type': dfc-b:QuantitativeValue
                         dfc-b:hasUnit: GBP
                         dfc-b:value: 19.95
                         dfc-b:VATrate: 0.0
                       dfc-b:discount: []
-        '404':
+        "404":
           description: not found
     put:
-      summary: Update a single Order
       tags:
       - Orders
-      responses:
-        '401':
-          description: unauthorized
-        '204':
-          description: success
+      summary: Update a single Order
+      parameters:
+      - name: enterprise_id
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: id
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
       requestBody:
         content:
           application/json:
             schema:
               example:
-                "@context": https://www.datafoodconsortium.org
-                "@id": http://test.host/api/dfc/Enterprises/10000/Orders/10001
-                "@type": dfc-b:Order
+                '@context': https://www.datafoodconsortium.org
+                '@id': http://test.host/api/dfc/Enterprises/10000/Orders/10001
+                '@type': dfc-b:Order
                 dfc-b:belongsTo: http://test.host/api/dfc/Enterprises/10000/SaleSessions/10002
-                dfc-b:orderNumber: "MYORDERNUM:12345"
+                dfc-b:orderNumber: MYORDERNUM:12345
                 dfc-b:hasOrderStatus: dfc-v:Complete
                 dfc-b:hasFulfilmentStatus: dfc-v:Held
                 dfc-b:hasPaymentState: dfc-v:Unpaid
                 dfc-b:hasPaymentMethod:
-                  "@type": dfc-b:PaymentMethod
+                  '@type': dfc-b:PaymentMethod
                   dfc-b:paymentMethodType: Example Card PaymentMethod
                   dfc-b:paymentMethodProvider: Stripe
                   dfc-b:hasPrice:
-                    "@type": dfc-b:QuantitativeValue
+                    '@type': dfc-b:QuantitativeValue
                     dfc-b:hasUnit: GBP
                     dfc-b:value: £0.25
-                    dfc-b:VATrate: 0.00
+                    dfc-b:VATrate: 0.0
                 dfc-b:discount: 1.25
                 dfc-b:OrderedBy: http://test.host/api/dfc/Persons/10000
                 dfc-b:selects:
-                  "@type": dfc-b:ShippingOption
+                  '@type': dfc-b:ShippingOption
                   dfc-b:optionOf: http://test.host/api/dfc/Enterprises/10000/SaleSessions/10002
-                  dfc-b:fee: 1.50
+                  dfc-b:fee: 1.5
                 dfc-b:uses:
-                  "@type": dfc-b:PickupOption
+                  '@type': dfc-b:PickupOption
                   dfc-b:pickedUpAt: Our Fantastic Farm Gate
                 dfc-b:soldBy: http://test.host/api/dfc/Enterprises/10000
                 dfc-b:hasPart:
@@ -1380,34 +1693,42 @@ paths:
                   "@type": dfc-b:OrderLine
                   dfc-b:concerns: http://test.host/api/dfc/Enterprises/10000/Offers/10001
                   dfc-b:hasQuantity:
-                    "@type": dfc-b:QuantitativeValue
+                    '@type': dfc-b:QuantitativeValue
                     dfc-b:hasUnit: Packet
                     dfc-b:hasValue: 4.0
                   dfc-b:Price:
-                    "@type": dfc-b:QuantitativeValue
+                    '@type': dfc-b:QuantitativeValue
                     dfc-b:hasUnit: GBP
                     dfc-b:value: 19.95
                     dfc-b:VATrate: 0.0
                   dfc-b:discount: []
-
-  "/api/dfc/Enterprises/{enterprise_id}/Orders/{order_id}/orderlines":
-    parameters:
-    - name: enterprise_id
-      in: path
-      required: true
-      schema:
-        type: string
-    - name: order_id
-      in: path
-      required: true
-      schema:
-        type: string
+      responses:
+        "401":
+          description: unauthorized
+        "204":
+          description: success
+  /api/dfc/Enterprises/{enterprise_id}/Orders/{order_id}/orderlines:
     get:
-      summary: Show all Order Lines for an Order
       tags:
       - OrderLines
+      summary: Show all Order Lines for an Order
+      parameters:
+      - name: enterprise_id
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: order_id
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
       responses:
-        '200':
+        "200":
           description: success
           content:
             application/json:
@@ -1420,68 +1741,82 @@ paths:
                     dfc-b:concerns: http://test.host/api/dfc/Enterprises/10000/Offers/10001
                     dfc-b:partOf: http://test.host/api/dfc/Enterprises/10000/Orders/10001
                     dfc-b:hasQuantity:
-                      "@type": dfc-b:QuantitativeValue
+                      '@type': dfc-b:QuantitativeValue
                       dfc-b:hasUnit: Packet
                       dfc-b:hasValue: 5.0
                     dfc-b:Price:
-                      "@type": dfc-b:QuantitativeValue
+                      '@type': dfc-b:QuantitativeValue
                       dfc-b:hasUnit: GBP
                       dfc-b:value: 19.95
                       dfc-b:VATrate: 0.0
                     dfc-b:discount: 2.95
-        '404':
+        "404":
           description: not found
     post:
-      summary: Create Order Line
-      parameters: []
       tags:
       - OrderLines
-      responses:
-        '400':
-          description: bad request
-        '200':
-          description: success
-          content:
-            application/json:
-              examples:
-                test_example:
-                  value:
-                    "@context": https://www.datafoodconsortium.org
-                    "@id": http://test.host/api/dfc/Enterprises/10000/Orders/10001/orderlines/10001-01
-                    "@type": dfc-b:OrderLine
-                    dfc-b:concerns: http://test.host/api/dfc/Enterprises/10000/Offers/10001
-                    dfc-b:partOf: http://test.host/api/dfc/Enterprises/10000/Orders/10001
-                    dfc-b:hasQuantity:
-                      "@type": dfc-b:QuantitativeValue
-                      dfc-b:hasUnit: Packet
-                      dfc-b:hasValue: 5.0
-                    dfc-b:Price:
-                      "@type": dfc-b:QuantitativeValue
-                      dfc-b:hasUnit: GBP
-                      dfc-b:value: 19.95
-                      dfc-b:VATrate: 0.0
-                    dfc-b:discount: 2.95
+      summary: Create Order Line
+      parameters:
+      - name: enterprise_id
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: order_id
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
       requestBody:
         content:
           application/json:
             schema:
               example:
-                "@context": https://www.datafoodconsortium.org
-                "@id": "#"
-                "@type": dfc-b:OrderLine
+                '@context': https://www.datafoodconsortium.org
+                '@id': '#'
+                '@type': dfc-b:OrderLine
                 dfc-b:concerns: http://test.host/api/dfc/Enterprises/10000/Offers/10001
                 dfc-b:partOf: http://test.host/api/dfc/Enterprises/10000/Orders/10001
                 dfc-b:hasQuantity:
-                  "@type": dfc-b:QuantitativeValue
+                  '@type': dfc-b:QuantitativeValue
                   dfc-b:hasUnit: Packet
                   dfc-b:hasValue: 5.0
                 dfc-b:Price:
-                  "@type": dfc-b:QuantitativeValue
+                  '@type': dfc-b:QuantitativeValue
                   dfc-b:hasUnit: GBP
                   dfc-b:value: 19.95
                   dfc-b:VATrate: 0.0
                 dfc-b:discount: 2.95
-
+      responses:
+        "400":
+          description: bad request
+        "200":
+          description: success
+          content:
+            application/json:
+              examples:
+                test_example:
+                  value:
+                    "@context": https://www.datafoodconsortium.org
+                    "@id": http://test.host/api/dfc/Enterprises/10000/Orders/10001/orderlines/10001-01
+                    "@type": dfc-b:OrderLine
+                    dfc-b:concerns: http://test.host/api/dfc/Enterprises/10000/Offers/10001
+                    dfc-b:partOf: http://test.host/api/dfc/Enterprises/10000/Orders/10001
+                    dfc-b:hasQuantity:
+                      '@type': dfc-b:QuantitativeValue
+                      dfc-b:hasUnit: Packet
+                      dfc-b:hasValue: 5.0
+                    dfc-b:Price:
+                      '@type': dfc-b:QuantitativeValue
+                      dfc-b:hasUnit: GBP
+                      dfc-b:value: 19.95
+                      dfc-b:VATrate: 0.0
+                    dfc-b:discount: 2.95
+                    
   "/api/dfc/Enterprises/{enterprise_id}/Orders/{order_id}/orderlines/{id}":
     parameters:
     - name: enterprise_id
@@ -1500,11 +1835,33 @@ paths:
       schema:
         type: string
     get:
-      summary: Retrieve a single Order Line
       tags:
       - OrderLines
+      summary: Retrieve a single Order Line
+      parameters:
+      - name: enterprise_id
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: order_id
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: id
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
       responses:
-        '200':
+        "200":
           description: success
           content:
             application/json:
@@ -1517,26 +1874,43 @@ paths:
                     dfc-b:concerns: http://test.host/api/dfc/Enterprises/10000/Offers/10001
                     dfc-b:partOf: http://test.host/api/dfc/Enterprises/10000/Orders/10001
                     dfc-b:hasQuantity:
-                      "@type": dfc-b:QuantitativeValue
+                      '@type': dfc-b:QuantitativeValue
                       dfc-b:hasUnit: Packet
                       dfc-b:hasValue: 5.0
                     dfc-b:Price:
-                      "@type": dfc-b:QuantitativeValue
+                      '@type': dfc-b:QuantitativeValue
                       dfc-b:hasUnit: GBP
                       dfc-b:value: 19.95
                       dfc-b:VATrate: 0.0
                     dfc-b:discount: 2.95
-        '404':
+        "404":
           description: not found
     put:
-      summary: Update a single Order Line
       tags:
       - OrderLines
-      responses:
-        '401':
-          description: unauthorized
-        '204':
-          description: success
+      summary: Update a single Order Line
+      parameters:
+      - name: enterprise_id
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: order_id
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: id
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
       requestBody:
         content:
           application/json:
@@ -1548,112 +1922,123 @@ paths:
                 dfc-b:concerns: http://test.host/api/dfc/Enterprises/10000/Offers/10001
                 dfc-b:partOf: http://test.host/api/dfc/Enterprises/10000/Orders/10001
                 dfc-b:hasQuantity:
-                  "@type": dfc-b:QuantitativeValue
+                  '@type': dfc-b:QuantitativeValue
                   dfc-b:hasUnit: Packet
                   dfc-b:hasValue: 5.0
                 dfc-b:Price:
-                  "@type": dfc-b:QuantitativeValue
+                  '@type': dfc-b:QuantitativeValue
                   dfc-b:hasUnit: GBP
                   dfc-b:value: 19.95
                   dfc-b:VATrate: 0.0
                 dfc-b:discount: 2.95
-
-
-  "/api/dfc/Enterprises/{enterprise_id}/SaleSessions":
-    parameters:
-    - name: enterprise_id
-      in: path
-      required: true
-      schema:
-        type: string
+      responses:
+        "401":
+          description: unauthorized
+        "204":
+          description: success
+  /api/dfc/Enterprises/{enterprise_id}/SaleSessions:
     get:
-      summary: List all  Sales Session for an Enterprise
       tags:
       - SaleSessions
+      summary: List all  Sales Session for an Enterprise
+      parameters:
+      - name: enterprise_id
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
       responses:
-        '200':
+        "200":
           description: success
           content:
             application/json:
               examples:
                 test_example:
                   value:
-                    "@context": https://www.datafoodconsortium.org
-                    "@id": http://test.host/api/dfc/Enterprises/10000/SaleSessions/10002
-                    "@type": dfc-b:SaleSession
-                    dfc-b:startDate: "2024-03-14T01:00:00+01:00"
-                    dfc-b:endDate: "2024-03-21T00:59:59+01:00"
+                    '@context': https://www.datafoodconsortium.org
+                    '@id': http://test.host/api/dfc/Enterprises/10000/SaleSessions/10002
+                    '@type': dfc-b:SaleSession
+                    dfc-b:startDate: 2024-03-14T01:00:00+01:00
+                    dfc-b:endDate: 2024-03-21T00:59:59+01:00
                     dfc-b:hasOption:
-                      "@type": dfc-b:ShippingOption
-                      "@id": http://test.host/api/dfc/Enterprises/10000/ShippingOptions/004
-                      dfc-b:fee: 1.50
+                      '@type': dfc-b:ShippingOption
+                      '@id': http://test.host/api/dfc/Enterprises/10000/ShippingOptions/004
+                      dfc-b:fee: 1.5
                     dfc-b:hostedAt:
-                      "@type": dfc-b:VirtualPlace
+                      '@type': dfc-b:VirtualPlace
                       dfc-b:URL: http:/test.host/store/FredsFarm/
                     dfc-b:lists: http://test.host/api/dfc/Enterprises/10000/Offers/10001
                     dfc-b:objectOf:
-                      "@type": dfc-b:Coordination
+                      '@type': dfc-b:Coordination
                       dfc-b:coordinatedBy: http://test.host/api/dfc/Enterprises/10000
                       dfc-b:marginPercent: 5.0
-        '404':
+        "404":
           description: not found
     post:
-      summary: Create Sales Session
-      parameters: []
       tags:
       - SaleSessions
-      responses:
-        '400':
-          description: bad request
-        '200':
-          description: success
-          content:
-            application/json:
-              examples:
-                test_example:
-                  value:
-                    "@context": https://www.datafoodconsortium.org
-                    "@id": http://test.host/api/dfc/Enterprises/10000/SaleSessions/10002
-                    "@type": dfc-b:SaleSession
-                    dfc-b:startDate: "2024-03-14T01:00:00+01:00"
-                    dfc-b:endDate: "2024-03-21T00:59:59+01:00"
-                    dfc-b:hasOption:
-                      "@type": dfc-b:ShippingOption
-                      "@id": http://test.host/api/dfc/Enterprises/10000/ShippingOptions/004
-                      dfc-b:fee: 1.50
-                    dfc-b:hostedAt:
-                      "@type": dfc-b:VirtualPlace
-                      dfc-b:URL: http:/test.host/store/FredsFarm/
-                    dfc-b:lists: http://test.host/api/dfc/Enterprises/10000/Offers/10001
-                    dfc-b:objectOf:
-                      "@type": dfc-b:Coordination
-                      dfc-b:coordinatedBy: http://test.host/api/dfc/Enterprises/10000
-                      dfc-b:marginPercent: 5.0
+      summary: Create Sales Session
+      parameters:
+      - name: enterprise_id
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
       requestBody:
         content:
           application/json:
             schema:
               example:
-                "@context": https://www.datafoodconsortium.org
-                "@id": "#"
-                "@type": dfc-b:SaleSession
-                dfc-b:startDate: "2024-03-14T01:00:00+01:00"
-                dfc-b:endDate: "2024-03-21T00:59:59+01:00"
+                '@context': https://www.datafoodconsortium.org
+                '@id': '#'
+                '@type': dfc-b:SaleSession
+                dfc-b:startDate: 2024-03-14T01:00:00+01:00
+                dfc-b:endDate: 2024-03-21T00:59:59+01:00
                 dfc-b:hasOption:
-                  "@type": dfc-b:ShippingOption
-                  "@id": http://test.host/api/dfc/Enterprises/10000/ShippingOptions/004
-                  dfc-b:fee: 1.50
+                  '@type': dfc-b:ShippingOption
+                  '@id': http://test.host/api/dfc/Enterprises/10000/ShippingOptions/004
+                  dfc-b:fee: 1.5
                 dfc-b:hostedAt:
-                  "@type": dfc-b:VirtualPlace
+                  '@type': dfc-b:VirtualPlace
                   dfc-b:URL: http:/test.host/store/FredsFarm/
                 dfc-b:lists: http://test.host/api/dfc/Enterprises/10000/Offers/10001
                 dfc-b:objectOf:
-                  "@type": dfc-b:Coordination
+                  '@type': dfc-b:Coordination
                   dfc-b:coordinatedBy: http://test.host/api/dfc/Enterprises/10000
                   dfc-b:marginPercent: 5.0
+      responses:
+        "400":
+          description: bad request
+        "200":
+          description: success
+          content:
+            application/json:
+              examples:
+                test_example:
+                  value:
+                    '@context': https://www.datafoodconsortium.org
+                    '@id': http://test.host/api/dfc/Enterprises/10000/SaleSessions/10002
+                    '@type': dfc-b:SaleSession
+                    dfc-b:startDate: 2024-03-14T01:00:00+01:00
+                    dfc-b:endDate: 2024-03-21T00:59:59+01:00
+                    dfc-b:hasOption:
+                      '@type': dfc-b:ShippingOption
+                      '@id': http://test.host/api/dfc/Enterprises/10000/ShippingOptions/004
+                      dfc-b:fee: 1.5
+                    dfc-b:hostedAt:
+                      '@type': dfc-b:VirtualPlace
+                      dfc-b:URL: http:/test.host/store/FredsFarm/
+                    dfc-b:lists: http://test.host/api/dfc/Enterprises/10000/Offers/10001
+                    dfc-b:objectOf:
+                      '@type': dfc-b:Coordination
+                      dfc-b:coordinatedBy: http://test.host/api/dfc/Enterprises/10000
+                      dfc-b:marginPercent: 5.0
 
-
-  "/api/dfc/Enterprises/{enterprise_id}/SaleSessions/{id}":
+"/api/dfc/Enterprises/{enterprise_id}/SaleSessions/{id}":
     parameters:
     - name: enterprise_id
       in: path
@@ -1666,69 +2051,100 @@ paths:
       schema:
         type: string
     get:
-      summary: Retrieve a single Sales Session
       tags:
       - SaleSessions
+      summary: Retrieve a single Sales Session
+      parameters:
+      - name: enterprise_id
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: id
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
       responses:
-        '200':
+        "200":
           description: success
           content:
             application/json:
               examples:
                 test_example:
                   value:
-                    "@context": https://www.datafoodconsortium.org
-                    "@id": http://test.host/api/dfc/Enterprises/10000/SaleSessions/10002
-                    "@type": dfc-b:SaleSession
-                    dfc-b:startDate: "2024-03-14T01:00:00+01:00"
-                    dfc-b:endDate: "2024-03-21T00:59:59+01:00"
+                    '@context': https://www.datafoodconsortium.org
+                    '@id': http://test.host/api/dfc/Enterprises/10000/SaleSessions/10002
+                    '@type': dfc-b:SaleSession
+                    dfc-b:startDate: 2024-03-14T01:00:00+01:00
+                    dfc-b:endDate: 2024-03-21T00:59:59+01:00
                     dfc-b:hasOption:
-                      "@type": dfc-b:ShippingOption
-                      "@id": http://test.host/api/dfc/Enterprises/10000/ShippingOptions/004
-                      dfc-b:fee: 1.50
+                      '@type': dfc-b:ShippingOption
+                      '@id': http://test.host/api/dfc/Enterprises/10000/ShippingOptions/004
+                      dfc-b:fee: 1.5
                     dfc-b:hostedAt:
-                      "@type": dfc-b:VirtualPlace
+                      '@type': dfc-b:VirtualPlace
                       dfc-b:URL: http:/test.host/store/FredsFarm/
                     dfc-b:lists: http://test.host/api/dfc/Enterprises/10000/Offers/10001
                     dfc-b:objectOf:
-                      "@type": dfc-b:Coordination
+                      '@type': dfc-b:Coordination
                       dfc-b:coordinatedBy: http://test.host/api/dfc/Enterprises/10000
                       dfc-b:marginPercent: 5.0
-        '404':
+        "404":
           description: not found
     put:
-      summary: Update a sinlge Sales Session
       tags:
       - SaleSessions
-      responses:
-        '401':
-          description: unauthorized
-        '204':
-          description: success
+      summary: Update a sinlge Sales Session
+      parameters:
+      - name: enterprise_id
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: id
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
       requestBody:
         content:
           application/json:
             schema:
               example:
-                "@context": https://www.datafoodconsortium.org
-                "@id": http://test.host/api/dfc/Enterprises/10000/SaleSessions/10002
-                "@type": dfc-b:SaleSession
-                dfc-b:startDate: "2024-03-14T01:00:00+01:00"
-                dfc-b:endDate: "2024-03-18T08:47:15+01:00"
+                '@context': https://www.datafoodconsortium.org
+                '@id': http://test.host/api/dfc/Enterprises/10000/SaleSessions/10002
+                '@type': dfc-b:SaleSession
+                dfc-b:startDate: 2024-03-14T01:00:00+01:00
+                dfc-b:endDate: 2024-03-18T08:47:15+01:00
                 dfc-b:hasOption:
-                  "@type": dfc-b:ShippingOption
-                  "@id": http://test.host/api/dfc/Enterprises/10000/ShippingOptions/004
-                  dfc-b:fee: 1.50
+                  '@type': dfc-b:ShippingOption
+                  '@id': http://test.host/api/dfc/Enterprises/10000/ShippingOptions/004
+                  dfc-b:fee: 1.5
                 dfc-b:hostedAt:
-                  "@type": dfc-b:VirtualPlace
+                  '@type': dfc-b:VirtualPlace
                   dfc-b:URL: http:/test.host/store/FredsFarm/
                 dfc-b:lists: http://test.host/api/dfc/Enterprises/10000/Offers/10001
                 dfc-b:objectOf:
-                  "@type": dfc-b:Coordination
+                  '@type': dfc-b:Coordination
                   dfc-b:coordinatedBy: http://test.host/api/dfc/Enterprises/10000
                   dfc-b:marginPercent: 5.0
-
-
-
-servers:
-- url: "/"
+      responses:
+        "401":
+          description: unauthorized
+        "204":
+          description: success
+components:
+  schemas: {}
+  securitySchemes:
+    oidc_token:
+      type: openIdConnect
+      openIdConnectUrl: https://login.lescommuns.org/auth/realm/datafoodconsortium
