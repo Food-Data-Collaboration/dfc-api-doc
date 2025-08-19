@@ -48,7 +48,7 @@ paths:
                     dfc-b:street: 10 Lovely Street
                     dfc-b:postcode: '20170'
                     dfc-b:city: Herndon
-                    dfc-b:hasCountry: United States of America
+                    dfc-b:hasCountry: USA
                     dfc-b:region: Virginia
                     dfc-b:latitude: 38.89750
                     dfc-b:longitude: -77.00920
@@ -136,7 +136,7 @@ paths:
                       dfc-b:manages: http://test.host/api/dfc/Enterprises/10000/CatalogItems/10001
                     - "@id": http://test.host/api/dfc/Enterprises/10000/CatalogItems/10001
                       "@type": dfc-b:CatalogItem
-                      dfc-b:references: http://test.host/api/dfc/Enterprises/10000/SuppliedProducts/10001
+                      dfc-b:references: http://test.host/api/dfc/Enterprises/10000/SuppliedProducts/10002
                       dfc-b:sku: AR
                       dfc-b:stockLimitation: 0
                       dfc-b:offeredThrough: http://test.host/api/dfc/Enterprises/10000/customerCategories/10005/Offers/10001
@@ -174,7 +174,7 @@ paths:
                     "@graph":
                     - "@id": http://test.host/api/dfc/Enterprises/10000/CatalogItems/10001
                       "@type": dfc-b:CatalogItem
-                      dfc-b:references: http://test.host/api/dfc/Enterprises/10000/SuppliedProducts/10001
+                      dfc-b:references: http://test.host/api/dfc/Enterprises/10000/SuppliedProducts/10002
                       dfc-b:sku: AR
                       dfc-b:stockLimitation: 0
                       dfc-b:offeredThrough: http://test.host/api/dfc/Enterprises/10000/customerCategories/10005/Offers/10001
@@ -199,7 +199,7 @@ paths:
                 {
                   "@id": "#" ,
                   "@type": dfc-b:CatalogItem ,
-                  dfc-b:references: http://test.host/api/dfc/Enterprises/10000/SuppliedProducts/10001 ,
+                  dfc-b:references: http://test.host/api/dfc/Enterprises/10000/SuppliedProducts/10002 ,
                   dfc-b:sku: AR ,
                   dfc-b:stockLimitation: 0 ,
                   dfc-b:offeredThrough: {
@@ -501,8 +501,10 @@ paths:
                       dfc-b:name: Fred's Farm ,
                       dfc-b:hasDescription: This is an awesome enterprise ,
                       dfc-b:VATnumber: 123 456 ,
-                      dfc-b:manages: http://test.host/api/dfc/Enterprises/10000/CatalogItems/10001 ,
-                      dfc-b:supplies: http://test.host/api/dfc/Enterprises/10000/SuppliedProducts/10001 ,
+                      dfc-b:manages: http://test.host/api/dfc/Enterprises/10000/CatalogItems/10021 ,
+                      dfc-b:supplies: http://test.host/api/dfc/Enterprises/10000/SuppliedProduct5/10001 ,
+                      dfc-b:supplies: http://test.host/api/dfc/Enterprises/10000/SuppliedProducts/10002 ,
+                      dfc-b:supplies: http://test.host/api/dfc/Enterprises/10000/SuppliedProducts/10005 ,
                       dfc-b:hasMainContact: http://test.host/api/dfc/Persons/10000 ,
                       dfc-b:logo: http://test.host/active-storage/url/logo.png ,
                       dfc-b:affiliates: http://test.host/api/dfc/Enterprises/60000 ,
@@ -887,7 +889,23 @@ paths:
                     "@graph":
                     - "@id": http://test.host/api/dfc/Enterprises/10000/SuppliedProducts/10001
                       "@type": dfc-b:SuppliedProduct
-                      dfc-b:name: Pesto - 100g
+                      dfc-b:name: Basil Pesto
+                      dfc-b:description: Basil Pesto
+                      dfc-b:hasType: dfc-pt:processed-vegetable
+                      dfc-b:hasQuantity:
+                        "@type": dfc-b:QuantitativeValue
+                        dfc-b:hasUnit: dfc-m:Gram
+                        dfc-b:value: 100.0
+                      dfc-b:alcoholPercentage: 0.0
+                      dfc-b:lifetime: '12 months'
+                      dfc-b:usageOrStorageCondition: ''
+                      dfc-b:totalTheoreticalStock: 0.0
+                      dfc-b:hasVariant: http://test.host/api/dfc/Enterprises/10000/SuppliedProducts/10002
+                      dfc-b:hasVariant: http://test.host/api/dfc/Enterprises/10000/SuppliedProducts/10005
+                      dfc-b:image: http://test.host/active-storage/url/logo-white.png
+                    - "@id": http://test.host/api/dfc/Enterprises/10000/SuppliedProducts/10001
+                      "@type": dfc-b:SuppliedProduct
+                      dfc-b:name: Basil Pesto - 100g
                       dfc-b:description: Basil Pesto
                       dfc-b:hasType: dfc-pt:processed-vegetable
                       dfc-b:hasQuantity:
@@ -900,6 +918,7 @@ paths:
                       dfc-b:totalTheoreticalStock: 0.0
                       dfc-b:image: http://test.host/active-storage/url/logo-white.png
                       dfc-b:referencedBy: http:/test.host/api/dfc/Enterprises/10000/CatalogItems/10001
+                      dfc-b:isVariantOf: http://test.host/api/dfc/Enterprises/10000/SuppliedProducts/10001
                       dfc-b:asPlannedProductionFlow: http:/test.host/api/dfc/Enterprises/10000/asPlannedProductionFlow/101010
                     - "@id": http:/test.host/api/dfc/Enterprises/10000/asPlannedProductionFlow/101010
                       "@type": dfc-b:asPlannedProductionFlow
@@ -923,6 +942,7 @@ paths:
                       dfc-b:usageOrStorageCondition: ''
                       dfc-b:totalTheoreticalStock: 10.0
                       dfc-b:image: http://test.host/active-storage/url/logo-white.png
+                      dfc-b:isVariantOf: http://test.host/api/dfc/Enterprises/10000/SuppliedProducts/10001 ,
                       dfc-b:referencedBy: http:/test.host/api/dfc/Enterprises/10000/CatalogItems/10002
                       dfc-b:asPlannedConsumptionFlow: http:/test.host/api/dfc/Enterprises/10000/asPlannedConsumptionFlow/101010
                     - "@id": http:/test.host/api/dfc/Enterprises/10000/asPlannedConsumptionFlow/101010
@@ -949,7 +969,7 @@ paths:
                 test_example:
                   value:
                     "@context": https://w3id.org/dfc/ontology/context/context_1.16.0.json
-                    "@id": http://test.host/api/dfc/Enterprises/10000/SuppliedProducts/10001
+                    "@id": http://test.host/api/dfc/Enterprises/10000/SuppliedProducts/10002
                     "@type": dfc-b:SuppliedProduct
                     dfc-b:name: Pesto - Apple (6g)
                     dfc-b:description: A delicious heritage apple
@@ -1008,7 +1028,7 @@ paths:
                 test_example:
                   value:
                     "@context": https://w3id.org/dfc/ontology/context/context_1.16.0.json
-                    "@id": http://test.host/api/dfc/Enterprises/10000/SuppliedProducts/10001
+                    "@id": http://test.host/api/dfc/Enterprises/10000/SuppliedProducts/10002
                     "@type": dfc-b:SuppliedProduct
                     dfc-b:name: Pesto - 300g
                     dfc-b:description: Basil Pesto
