@@ -235,6 +235,7 @@ paths:
                     "@type": dfc-b:Organization
                     dfc-b:name: John's Farm
                     dfc-b:hasTemplateSaleSession: https://platform.ex/organizations/john-s-organization/template-sale-sessions/
+                    dfc-b:hasCertification: https://platform.ex/organizations/john-s-organization/certifications/
                     dfc-b:hasAddress: https://platform.ex/organizations/john-s-organization/addresses/
                     dfc-b:supplies: https://platform.ex/organizations/john-s-organization/supplied-products/
                     dfc-b:manages: https://platform.ex/organizations/john-s-organization/catalogs/
@@ -279,6 +280,96 @@ paths:
                     - https://platform.ex/organizations/john-s-organization/catalogs/main-catalog/
         '404':
           description: organization not found
+
+  "/organizations/{organizationId}/certifications":
+    get:
+      summary: Get Organization Certifications Container
+      description: |
+        Returns the certifications LDP container for an organization.
+        Certifications represent organic, fair-trade, or other certifications held by the organization.
+        Each certification includes operatorId, certiferReference, and optional certificationScore.
+      tags:
+      - Certifications
+      parameters:
+      - name: organizationId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful
+          headers:
+            Link:
+              description: LDP BasicContainer link relation
+              schema:
+                type: string
+          content:
+            application/ld+json:
+              schema:
+                example:
+                  "@context":
+                    ldp: http://www.w3.org/ns/ldp#
+                  "@graph":
+                  - "@id": https://platform.ex/organizations/john-s-organization/certifications/
+                    "@type":
+                    - ldp:Container
+                    - ldp:BasicContainer
+                    ldp:contains:
+                    - https://platform.ex/organizations/john-s-organization/certifications/organic-eu/
+                    - https://platform.ex/organizations/john-s-organization/certifications/demeter/
+        '404':
+          description: organization not found
+
+  "/organizations/{organizationId}/certifications/{certificationId}/index":
+    get:
+      summary: Get Certification Index
+      description: |
+        Returns the certification index document containing certification details.
+        Includes operatorId (organic licence number), certiferReference (certifying body ID),
+        and optional certificationScore for applicable standards.
+      tags:
+      - Certifications
+      parameters:
+      - name: organizationId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: certificationId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful
+          content:
+            application/ld+json:
+              schema:
+                example:
+                  "@context":
+                    dfc-b: https://w3id.org/dfc/ontology/src/DFC_BusinessOntology.owl#
+                    dfc-f: https://w3id.org/dfc/taxonomies/facets.rdf#
+                  "@graph":
+                  - "@id": organic-eu/index
+                    "@type": dfc-b:Certification
+                    dfc-b:name: EU Organic Certification
+                    dfc-b:isCertifiedBy: https://platform.ex/organizations/john-s-organization/index
+                    dfc-b:hasCertification: dfc-f:Organic-EU
+                    dfc-b:operatorId: "FR-BIO-01"
+                    dfc-b:certiferReference: "UK-ORG-05"
+                    dfc-b:certificationScore: ""
+                  - "@id": demeter/index
+                    "@type": dfc-b:Certification
+                    dfc-b:name: Demeter Biodynamic Certification
+                    dfc-b:isCertifiedBy: https://platform.ex/organizations/john-s-organization/index
+                    dfc-b:hasCertification: dfc-f:Demeter
+                    dfc-b:operatorId: "FR-DEM-12345"
+                    dfc-b:certiferReference: "DEM-INT-001"
+                    dfc-b:certificationScore: "RegenScore-A"
+        '404':
+          description: certification not found
 
   "/organizations/{organizationId}/catalogs/{catalogId}/index":
     get:
