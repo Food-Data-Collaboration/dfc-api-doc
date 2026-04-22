@@ -1067,9 +1067,9 @@ paths:
                   dfc-b: https://w3id.org/dfc/ontology/src/DFC_BusinessOntology.owl#
                   dfc-p: https://w3id.org/dfc/ontology/src/DFC_ProductGlossary.owl#
                   dfc-t: https://w3id.org/dfc/ontology/src/DFC_TechnicalOntology.owl#
-                  dfc-m: https://w3id.org/dfc/taxonomy/measures.rdf#
-                  dfc-pt: https://w3id.org/dfc/taxonomy/productTypes.rdf#
-                  dfc-f: https://w3id.org/dfc/taxonomy/facets.rdf#
+                  dfc-m: https://w3id.org/dfc/taxonomies/measures.rdf#
+                  dfc-pt: https://w3id.org/dfc/taxonomies/productTypes.rdf#
+                  dfc-f: https://w3id.org/dfc/taxonomies/facets.rdf#
                   ontosec: http://www.semanticweb.org/ontologies/2008/11/OntologySecurity.owl#
                   dfc-p:hasUnit:
                     "@type": "@id"

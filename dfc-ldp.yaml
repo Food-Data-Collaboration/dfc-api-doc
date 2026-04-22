@@ -389,8 +389,8 @@ paths:
                 example:
                   "@context":
                     dfc-b: https://w3id.org/dfc/ontology/src/DFC_BusinessOntology.owl#
-                    dfc-pt: https://w3id.org/dfc/taxonomy/productTypes.rdf#
-                    dfc-m: https://w3id.org/dfc/taxonomy/measures.rdf#
+                    dfc-pt: https://w3id.org/dfc/taxonomies/productTypes.rdf#
+                    dfc-m: https://w3id.org/dfc/taxonomies/measures.rdf#
                   "@graph":
                   - "@id": tomato/index
                     "@type": dfc-b:SuppliedProduct
