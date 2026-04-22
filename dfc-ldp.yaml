@@ -234,6 +234,7 @@ paths:
                   - "@id": https://platform.ex/organizations/john-s-organization/index
                     "@type": dfc-b:Organization
                     dfc-b:name: John's Farm
+                    dfc-b:hasTemplateSaleSession: https://platform.ex/organizations/john-s-organization/template-sale-sessions/
                     dfc-b:hasAddress: https://platform.ex/organizations/john-s-organization/addresses/
                     dfc-b:supplies: https://platform.ex/organizations/john-s-organization/supplied-products/
                     dfc-b:manages: https://platform.ex/organizations/john-s-organization/catalogs/
@@ -442,3 +443,389 @@ paths:
 
 servers:
 - url: "/"
+
+paths:
+  "/organizations/{organizationId}/template-sale-sessions":
+    get:
+      summary: Get Organization Template Sale Sessions Container
+      description: |
+        Returns the template sale sessions LDP container for an organization.
+        TemplateSaleSessions hold distribution patterns including:
+        - Recurring schedules (using iCal rrule)
+        - GeoJSON features for pickup points and delivery areas
+      tags:
+      - Template Sale Sessions
+      parameters:
+      - name: organizationId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful
+          headers:
+            Link:
+              description: LDP BasicContainer link relation
+              schema:
+                type: string
+          content:
+            application/ld+json:
+              schema:
+                example:
+                  "@context":
+                    ldp: http://www.w3.org/ns/ldp#
+                  "@graph":
+                  - "@id": https://platform.ex/organizations/john-s-organization/template-sale-sessions/
+                    "@type":
+                    - ldp:Container
+                    - ldp:BasicContainer
+                    ldp:contains:
+                    - https://platform.ex/organizations/john-s-organization/template-sale-sessions/weekly-delivery/
+        '404':
+          description: organization not found
+
+  "/organizations/{organizationId}/template-sale-sessions/{sessionId}/index":
+    get:
+      summary: Get Template Sale Session Index
+      description: |
+        Returns the template sale session index document.
+        Contains scheduling information (iCal recurrence rules) and GeoJSON features
+        for pickup points (Point) and delivery areas (Polygon).
+      tags:
+      - Template Sale Sessions
+      parameters:
+      - name: organizationId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: sessionId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful
+          content:
+            application/ld+json:
+              schema:
+                example:
+                  "@context":
+                    dfc-b: https://w3id.org/dfc/ontology/src/DFC_BusinessOntology.owl#
+                    dfc-t: https://w3id.org/dfc/ontology/src/DFC_TechnicalOntology.owl#
+                    cal: http://www.w3.org/2002/12/cal/icaltzd#
+                    geojson: https://purl.org/geojson/vocab#
+                    rdfcal: http://www.w3.org/2002/12/cal/icaltzd#
+                    xsd: http://www.w3.org/2001/XMLSchema#
+                  "@graph":
+                  - "@id": weekly-delivery/index
+                    "@type": dfc-b:TemplateSaleSession
+                    dfc-b:name: Weekly Delivery Route
+                    dfc-b:coordinatedBy: https://platform.ex/organizations/john-s-organization/index
+                    dfc-b:hasGeoJsonFeature: weekly-delivery/index#deliveryArea
+                    dfc-b:occursAt: weekly-delivery/index#schedule
+                  - "@id": weekly-delivery/index#schedule
+                    "@type": cal:Vevent
+                    cal:dtstart:
+                      "@type": xsd:dateTime
+                      "@value": "2026-01-07T00:00:00Z"
+                    cal:dtend:
+                      "@type": xsd:dateTime
+                      "@value": "2026-12-31T23:59:59Z"
+                    rdfcal:rrule:
+                      "@type": cal:Value_RECUR
+                      cal:freq: WEEKLY
+                      cal:byday: TU
+                    cal:interval: 1
+                  - "@id": weekly-delivery/index#deliveryArea
+                    "@type": geojson:Feature
+                    geojson:geometry:
+                      "@type": geojson:Polygon
+                      geojson:coordinates:
+                        - - - -2.5
+                          - 48.8
+                        - - -2.3
+                          - 48.8
+                        - - -2.3
+                          - 48.9
+                        - - -2.5
+                          - 48.9
+                        - - -2.5
+                          - 48.8
+                    geojson:properties:
+                      "@type": geojson:Properties
+                      name: Rennes Delivery Area
+                      description: Weekly delivery to Rennes area
+                  - "@id": weekly-delivery/index#pickupPoint1
+                    "@type": geojson:Feature
+                    geojson:geometry:
+                      "@type": geojson:Point
+                      geojson:coordinates:
+                        - -2.4
+                          - 48.85
+                    geojson:properties:
+                      "@type": geojson:Properties
+                      name: Farm Gate Pickup
+                      description: Collect from farm on Tuesdays 4-6pm
+        '404':
+          description: template sale session not found
+
+  "/organizations/{organizationId}/physical-places":
+    get:
+      summary: Get Organization Physical Places Container
+      description: |
+        Returns the physical places LDP container for an organization.
+        Physical places represent locations such as pickup points and delivery areas,
+        and contain GeoJSON features (Point or Polygon geometries).
+      tags:
+      - Physical Places
+      parameters:
+      - name: organizationId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful
+          headers:
+            Link:
+              description: LDP BasicContainer link relation
+              schema:
+                type: string
+          content:
+            application/ld+json:
+              schema:
+                example:
+                  "@context":
+                    ldp: http://www.w3.org/ns/ldp#
+                  "@graph":
+                  - "@id": https://platform.ex/organizations/john-s-organization/physical-places/
+                    "@type":
+                    - ldp:Container
+                    - ldp:BasicContainer
+                    ldp:contains:
+                    - https://platform.ex/organizations/john-s-organization/physical-places/farm-location/
+                    - https://platform.ex/organizations/john-s-organization/physical-places/delivery-zone-north/
+        '404':
+          description: organization not found
+
+  "/organizations/{organizationId}/physical-places/{placeId}/index":
+    get:
+      summary: Get Physical Place Index
+      description: |
+        Returns the physical place index document containing GeoJSON features.
+        Physical places can be pickup locations (Point geometry) or delivery areas
+        (Polygon geometry).
+      tags:
+      - Physical Places
+      parameters:
+      - name: organizationId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: placeId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful
+          content:
+            application/ld+json:
+              schema:
+                example:
+                  "@context":
+                    dfc-b: https://w3id.org/dfc/ontology/src/DFC_BusinessOntology.owl#
+                    geojson: https://purl.org/geojson/vocab#
+                  "@graph":
+                  - "@id": farm-location/index
+                    "@type": dfc-b:PhysicalPlace
+                    dfc-b:name: Main Farm Location
+                    dfc-b:hasAddress: https://platform.ex/organizations/john-s-organization/addresses/farm-address
+                    dfc-b:hasGeoJsonFeature: farm-location/index#farmPoint
+                  - "@id": farm-location/index#farmPoint
+                    "@type": geojson:Feature
+                    geojson:geometry:
+                      "@type": geojson:Point
+                      geojson:coordinates:
+                        - -2.35
+                          - 48.5
+                    geojson:properties:
+                      "@type": geojson:Properties
+                      name: Farm Entrance
+                      description: Main entrance for pickup
+        '404':
+          description: physical place not found
+
+  "/organizations/{organizationId}/routes":
+    get:
+      summary: Get Organization Routes Container
+      description: |
+        Returns the routes LDP container for an organization.
+        Routes represent delivery or pickup routes that connect physical places.
+      tags:
+      - Routes
+      parameters:
+      - name: organizationId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful
+          headers:
+            Link:
+              description: LDP BasicContainer link relation
+              schema:
+                type: string
+          content:
+            application/ld+json:
+              schema:
+                example:
+                  "@context":
+                    ldp: http://www.w3.org/ns/ldp#
+                  "@graph":
+                  - "@id": https://platform.ex/organizations/john-s-organization/routes/
+                    "@type":
+                    - ldp:Container
+                    - ldp:BasicContainer
+                    ldp:contains:
+                    - https://platform.ex/organizations/john-s-organization/routes/tuesday-delivery/
+        '404':
+          description: organization not found
+
+  "/organizations/{organizationId}/routes/{routeId}/index":
+    get:
+      summary: Get Route Index
+      description: |
+        Returns the route index document containing steps and associated physical places.
+      tags:
+      - Routes
+      parameters:
+      - name: organizationId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: routeId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful
+          content:
+            application/ld+json:
+              schema:
+                example:
+                  "@context":
+                    dfc-b: https://w3id.org/dfc/ontology/src/DFC_BusinessOntology.owl#
+                  "@graph":
+                  - "@id": tuesday-delivery/index
+                    "@type": dfc-b:Route
+                    dfc-b:name: Tuesday Delivery Route
+                    dfc-b:usedInRoute: https://platform.ex/organizations/john-s-organization/template-sale-sessions/weekly-delivery/index
+                    dfc-b:hasStep: https://platform.ex/organizations/john-s-organization/routes/tuesday-delivery/index#step1
+                  - "@id": tuesday-delivery/index#step1
+                    "@type": dfc-b:PickUpStep
+                    dfc-b:sequence: 1
+                    dfc-b:locatedAt: https://platform.ex/organizations/john-s-organization/physical-places/farm-location/index
+                    dfc-b:startsAt:
+                      "@type": xsd:time
+                      "@value": "08:00:00"
+                  - "@id": tuesday-delivery/index#step2
+                    "@type": dfc-b:DeliveryStep
+                    dfc-b:sequence: 2
+                    dfc-b:locatedAt: https://platform.ex/organizations/john-s-organization/physical-places/delivery-zone-north/index
+                    dfc-b:startsAt:
+                      "@type": xsd:time
+                      "@value": "10:00:00"
+        '404':
+          description: route not found
+
+  "/organizations/{organizationId}/addresses":
+    get:
+      summary: Get Organization Addresses Container
+      description: |
+        Returns the addresses LDP container for an organization.
+        Addresses are linked to physical places for geographic context.
+      tags:
+      - Addresses
+      parameters:
+      - name: organizationId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful
+          headers:
+            Link:
+              description: LDP BasicContainer link relation
+              schema:
+                type: string
+          content:
+            application/ld+json:
+              schema:
+                example:
+                  "@context":
+                    ldp: http://www.w3.org/ns/ldp#
+                  "@graph":
+                  - "@id": https://platform.ex/organizations/john-s-organization/addresses/
+                    "@type":
+                    - ldp:Container
+                    - ldp:BasicContainer
+                    ldp:contains:
+                    - https://platform.ex/organizations/john-s-organization/addresses/farm-address/
+                    - https://platform.ex/organizations/john-s-organization/addresses/warehouse/
+        '404':
+          description: organization not found
+
+  "/organizations/{organizationId}/addresses/{addressId}/index":
+    get:
+      summary: Get Address Index
+      description: |
+        Returns the address index document containing address details.
+      tags:
+      - Addresses
+      parameters:
+      - name: organizationId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: addressId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful
+          content:
+            application/ld+json:
+              schema:
+                example:
+                  "@context":
+                    dfc-b: https://w3id.org/dfc/ontology/src/DFC_BusinessOntology.owl#
+                  "@graph":
+                  - "@id": farm-address/index
+                    "@type": dfc-b:Address
+                    dfc-b:street: "123 Farm Road"
+                    dfc-b:city: Rennes
+                    dfc-b:postcode: "35000"
+                    dfc-b:country: France
+                    dfc-b:hasCountryCode: FR
+                    dfc-b:latitude: 48.5
+                    dfc-b:longitude: -2.35
+                    dfc-b:basedAt: https://platform.ex/organizations/john-s-organization/physical-places/farm-location/index
+        '404':
+          description: address not found
