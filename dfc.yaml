@@ -2,7 +2,7 @@
 openapi: 3.0.1
 info:
   title: DFC Sample API
-  version: v1.16.0
+  version: v2.0.0
   contact:
     {
       "name": "DFC General Contact" ,
@@ -42,7 +42,7 @@ paths:
               examples:
                 test_example:
                   value:
-                    "@context": https://w3id.org/dfc/ontology/context/context_1.16.0.json
+                    "@context": https://w3id.org/dfc/ontology/context/context_2.0.0.json
                     "@id": http://test.host/api/dfc/Addresses/40000
                     "@type": dfc-b:Address
                     dfc-b:street: 10 Lovely Street
@@ -52,18 +52,18 @@ paths:
                     dfc-b:region: Virginia
                     dfc-b:latitude: 38.89750
                     dfc-b:longitude: -77.00920
-                    dfc-b:addressOf: http://test.host/api/dfc/Enterprises/10000
+                    dfc-b:addressOf: http://test.host/api/dfc/Organizations/10000
         '404':
           description: not found
-  "/api/dfc/Enterprises/{enterprise_id}/CatalogItems":
+  "/api/dfc/Organizations/{enterprise_id}/CatalogItems":
     parameters:
-    - name: enterprise_id
+    - name: organization_id
       in: path
       required: true
       schema:
         type: string
     get:
-      summary: List all CatalogItems for an Enterprise
+      summary: List all CatalogItems for an Organization
       parameters:
       - name: before
         description: The cursor returned from a previous request, requesting the API return elements before that id.
@@ -127,28 +127,28 @@ paths:
               examples:
                 test_example:
                   value:
-                    "@context": https://w3id.org/dfc/ontology/context/context_1.16.0.json
+                    "@context": https://w3id.org/dfc/ontology/context/context_2.0.0.json
                     "@graph":
-                    - "@id": http://test.host/api/dfc/Enterprises/10000
-                      "@type": dfc-b:Enterprise
+                    - "@id": http://test.host/api/dfc/Organizations/10000
+                      "@type": dfc-b:Organization
                       dfc-b:name: Fred's Farm
                       dfc-b:hasDescription: Beautiful
-                      dfc-b:manages: http://test.host/api/dfc/Enterprises/10000/CatalogItems/10001
-                    - "@id": http://test.host/api/dfc/Enterprises/10000/CatalogItems/10001
+                      dfc-b:manages: http://test.host/api/dfc/Organizations/10000/CatalogItems/10001
+                    - "@id": http://test.host/api/dfc/Organizations/10000/CatalogItems/10001
                       "@type": dfc-b:CatalogItem
-                      dfc-b:references: http://test.host/api/dfc/Enterprises/10000/SuppliedProducts/10002
+                      dfc-b:references: http://test.host/api/dfc/Organizations/10000/SuppliedProducts/10002
                       dfc-b:sku: AR
                       dfc-b:stockLimitation: 0
-                      dfc-b:offeredThrough: http://test.host/api/dfc/Enterprises/10000/customerCategories/10005/Offers/10001
-                    - "@id": http://test.host/api/dfc/Enterprises/10000/customerCategories/10005/Offers/10001
+                      dfc-b:offeredThrough: http://test.host/api/dfc/Organizations/10000/customerCategories/10005/Offers/10001
+                    - "@id": http://test.host/api/dfc/Organizations/10000/customerCategories/10005/Offers/10001
                       "@type": dfc-b:Offer
                       dfc-b:hasPrice: 19.99
                       dfc-b:stockLimitation: 0
         '401':
           description: unauthorized
-  "/api/dfc/Enterprises/{enterprise_id}/CatalogItems/{id}":
+  "/api/dfc/Organizations/{enterprise_id}/CatalogItems/{id}":
     parameters:
-    - name: enterprise_id
+    - name: organization_id
       in: path
       required: true
       schema:
@@ -170,22 +170,22 @@ paths:
               examples:
                 test_example:
                   value:
-                    "@context": https://w3id.org/dfc/ontology/context/context_1.16.0.json
+                    "@context": https://w3id.org/dfc/ontology/context/context_2.0.0.json
                     "@graph":
-                    - "@id": http://test.host/api/dfc/Enterprises/10000/CatalogItems/10001
+                    - "@id": http://test.host/api/dfc/Organizations/10000/CatalogItems/10001
                       "@type": dfc-b:CatalogItem
-                      dfc-b:references: http://test.host/api/dfc/Enterprises/10000/SuppliedProducts/10002
+                      dfc-b:references: http://test.host/api/dfc/Organizations/10000/SuppliedProducts/10002
                       dfc-b:sku: AR
                       dfc-b:stockLimitation: 0
-                      dfc-b:offeredThrough: http://test.host/api/dfc/Enterprises/10000/customerCategories/10005/Offers/10001
-                    - "@id": http://test.host/api/dfc/Enterprises/10000/customerCategories/10005/Offers/10001
+                      dfc-b:offeredThrough: http://test.host/api/dfc/Organizations/10000/customerCategories/10005/Offers/10001
+                    - "@id": http://test.host/api/dfc/Organizations/10000/customerCategories/10005/Offers/10001
                       "@type": dfc-b:Offer
                       dfc-b:hasPrice: 19.99
                       dfc-b:stockLimitation: 0
         '404':
           description: not found
     post:
-      summary: create a new CatalogItem for a given Enterprise
+      summary: create a new CatalogItem for a given Organization
       parameters: []
       tags:
       - CatalogItems
@@ -194,12 +194,12 @@ paths:
           application/json:
             schema:
               example:
-                "@context": https://w3id.org/dfc/ontology/context/context_1.16.0.json
+                "@context": https://w3id.org/dfc/ontology/context/context_2.0.0.json
                 "@graph": [
                 {
                   "@id": "#" ,
                   "@type": dfc-b:CatalogItem ,
-                  dfc-b:references: http://test.host/api/dfc/Enterprises/10000/SuppliedProducts/10002 ,
+                  dfc-b:references: http://test.host/api/dfc/Organizations/10000/SuppliedProducts/10002 ,
                   dfc-b:sku: AR ,
                   dfc-b:stockLimitation: 0 ,
                   dfc-b:offeredThrough: {
@@ -222,7 +222,7 @@ paths:
             application/json:
               schema:
                 example:
-                  "@id": http://test.host/api/dfc/Enterprises/10000/CatalogItems/10001
+                  "@id": http://test.host/api/dfc/Organizations/10000/CatalogItems/10001
         '400':
           description: bad request
         '401':
@@ -300,15 +300,15 @@ paths:
                 dfc-b:stockLimitation: '3'
                 dfc-b:sku: new-sku
 
-  "/api/dfc/Enterprises/{enterprise_id}/customerCategories":
+  "/api/dfc/Organizations/{enterprise_id}/customerCategories":
     parameters:
-    - name: enterprise_id
+    - name: organization_id
       in: path
       required: true
       schema:
         type: string
     get:
-      summary: Return a list of Customer Categories for an Enterprise
+      summary: Return a list of Customer Categories for an Organization
       parameters: []
       tags:
       - CustomerCategory
@@ -322,13 +322,13 @@ paths:
               examples:
                 test_example:
                   value:
-                    "@context": https://w3id.org/dfc/ontology/context/context_1.16.0.json
+                    "@context": https://w3id.org/dfc/ontology/context/context_2.0.0.json
                     "@graph":
-                    - "@id": http://test.host/api/dfc/Enterprises/10000/customerCategories/10005
+                    - "@id": http://test.host/api/dfc/Organizations/10000/customerCategories/10005
                       "@type": dfc-b:customerCategory
-                      dfc-b:definedBy: http://test.host/api/dfc/Enterprises/10000
+                      dfc-b:definedBy: http://test.host/api/dfc/Organizations/10000
     post:
-      summary: create a new Customer Category for a given Enterprise
+      summary: create a new Customer Category for a given Organization
       parameters: []
       tags:
       - CustomerCategory
@@ -339,7 +339,7 @@ paths:
             application/json:
               schema:
                 example:
-                  "@id": http://test.host/api/dfc/Enterprises/10000/customerCategories/10006
+                  "@id": http://test.host/api/dfc/Organizations/10000/customerCategories/10006
         '400':
           description: bad request
         '401':
@@ -350,11 +350,11 @@ paths:
             schema:
               example:
                 "@id": "#"
-                dfc-b:definedBy: http://test.host/api/dfc/Enterprises/10000
+                dfc-b:definedBy: http://test.host/api/dfc/Organizations/10000
 
-  "/api/dfc/Enterprises/{enterprise_id}/customerCategories/{id}":
+  "/api/dfc/Organizations/{enterprise_id}/customerCategories/{id}":
     parameters:
-    - name: enterprise_id
+    - name: organization_id
       in: path
       required: true
       schema:
@@ -365,7 +365,7 @@ paths:
       schema:
         type: string
     get:
-      summary: Return a specific Customer Category for an Enterprise
+      summary: Return a specific Customer Category for an Organization
       parameters: []
       tags:
       - CustomerCategory
@@ -377,13 +377,13 @@ paths:
               examples:
                 test_example:
                   value:
-                    "@context": https://w3id.org/dfc/ontology/context/context_1.16.0.json
+                    "@context": https://w3id.org/dfc/ontology/context/context_2.0.0.json
                     "@graph":
-                    - "@id": http://test.host/api/dfc/Enterprises/10000/customerCategories/10005
+                    - "@id": http://test.host/api/dfc/Organizations/10000/customerCategories/10005
                       "@type": dfc-b:customerCategory
-                      dfc-b:definedBy: http://test.host/api/dfc/Enterprises/10000
+                      dfc-b:definedBy: http://test.host/api/dfc/Organizations/10000
     delete:
-      summary: remove a Customer Category for a given Enterprise
+      summary: remove a Customer Category for a given Organization
       parameters: []
       tags:
       - CustomerCategory
@@ -392,18 +392,18 @@ paths:
           application/json:
             schema:
               example:
-                "@id": http://test.host/api/dfc/Enterprises/10000/customerCategories/10006
+                "@id": http://test.host/api/dfc/Organizations/10000/customerCategories/10006
       responses:
         '204':
           description: no content
         '401':
           description: unauthorized
 
-  /api/dfc/Enterprises/:
+  /api/dfc/Organizations/:
     get:
       tags:
-      - Enterprises
-      summary: Show all Enterprises (with pagination)
+      - Organizations
+      summary: Show all Organizations (with pagination)
       parameters:
       - name: before
         in: query
@@ -459,16 +459,16 @@ paths:
                   value:
                     '@context': https://www.datafoodconsortium.org
                     '@graph':
-                    - '@id': http://test.host/api/dfc/Enterprises/10000
-                      '@type': dfc-b:Enterprise
-                    - '@id': http://test.host/api/dfc/Enterprises/20000
-                      '@type': dfc-b:Enterprise
-                    - '@id': http://test.host/api/dfc/Enterprises/30000
-                      '@type': dfc-b:Enterprise
+                    - '@id': http://test.host/api/dfc/Organizations/10000
+                      '@type': dfc-b:Organization
+                    - '@id': http://test.host/api/dfc/Organizations/20000
+                      '@type': dfc-b:Organization
+                    - '@id': http://test.host/api/dfc/Organizations/30000
+                      '@type': dfc-b:Organization
 
         "404":
           description: not found
-  "/api/dfc/Enterprises/{id}":
+  "/api/dfc/Organizations/{id}":
     parameters:
     - name: id
       in: path
@@ -479,7 +479,7 @@ paths:
       summary: Show enterprise
       parameters: []
       tags:
-      - Enterprises
+      - Organizations
       responses:
         '200':
           description: successful
@@ -488,26 +488,26 @@ paths:
               examples:
                 test_example:
                   value:
-                    "@context": https://w3id.org/dfc/ontology/context/context_1.16.0.json
+                    "@context": https://w3id.org/dfc/ontology/context/context_2.0.0.json
                     "@graph": [
                     {
-                      "@id": http://test.host/api/dfc/Enterprises/10000 ,
-                      "@type": dfc-b:Enterprise ,
+                      "@id": http://test.host/api/dfc/Organizations/10000 ,
+                      "@type": dfc-b:Organization ,
                       dfc-b:hasAddress: http://test.host/api/dfc/Addresses/40000 ,
                       dfc-b:hasPhoneNumber: http://test.host/api/dfc/PhoneNumbers/444000200 ,
                       dfc-b:email: hello@example.org ,
                       dfc-b:websitePage: https://test.host/ ,
-                      dfc-b:hasSocialMedia: http://test.host/api/dfc/Enterprises/10000/SocialMedias/facebook ,
+                      dfc-b:hasSocialMedia: http://test.host/api/dfc/Organizations/10000/SocialMedias/facebook ,
                       dfc-b:name: Fred's Farm ,
                       dfc-b:hasDescription: This is an awesome enterprise ,
                       dfc-b:VATnumber: 123 456 ,
-                      dfc-b:manages: http://test.host/api/dfc/Enterprises/10000/CatalogItems/10021 ,
-                      dfc-b:supplies: http://test.host/api/dfc/Enterprises/10000/SuppliedProduct5/10001 ,
-                      dfc-b:supplies: http://test.host/api/dfc/Enterprises/10000/SuppliedProducts/10002 ,
-                      dfc-b:supplies: http://test.host/api/dfc/Enterprises/10000/SuppliedProducts/10005 ,
+                      dfc-b:manages: http://test.host/api/dfc/Organizations/10000/CatalogItems/10021 ,
+                      dfc-b:supplies: http://test.host/api/dfc/Organizations/10000/SuppliedProduct5/10001 ,
+                      dfc-b:supplies: http://test.host/api/dfc/Organizations/10000/SuppliedProducts/10002 ,
+                      dfc-b:supplies: http://test.host/api/dfc/Organizations/10000/SuppliedProducts/10005 ,
                       dfc-b:hasMainContact: http://test.host/api/dfc/Persons/10000 ,
                       dfc-b:logo: http://test.host/active-storage/url/logo.png ,
-                      dfc-b:affiliates: http://test.host/api/dfc/Enterprises/60000 ,
+                      dfc-b:affiliates: http://test.host/api/dfc/Organizations/60000 ,
                     },
                     {
                       "@id": http://test.host/api/dfc/Addresses/40000 ,
@@ -519,7 +519,7 @@ paths:
                       dfc-b:region: Virginia ,
                     },
                     {
-                      "@id": http://test.host/api/dfc/Enterprises/10000/SuppliedProducts/10001 ,
+                      "@id": http://test.host/api/dfc/Organizations/10000/SuppliedProducts/10001 ,
                       "@type": dfc-b:SuppliedProduct ,
                       dfc-b:name: Apple - 1g ,
                       dfc-b:description: Round ,
@@ -536,15 +536,15 @@ paths:
                       dfc-b:image: http://test.host/active-storage/url/logo-white.png
                     },
                     {
-                      "@id": http://test.host/api/dfc/Enterprises/10000/CatalogItems/10001 ,
+                      "@id": http://test.host/api/dfc/Organizations/10000/CatalogItems/10001 ,
                       "@type": dfc-b:CatalogItem ,
-                      dfc-b:references: http://test.host/api/dfc/Enterprises/10000/SuppliedProducts/10001 ,
+                      dfc-b:references: http://test.host/api/dfc/Organizations/10000/SuppliedProducts/10001 ,
                       dfc-b:sku: APP ,
                       dfc-b:stockLimitation: 5 ,
-                      dfc-b:offeredThrough: http://test.host/api/dfc/Enterprises/10000/customerCategories/10005/Offers/10001
+                      dfc-b:offeredThrough: http://test.host/api/dfc/Organizations/10000/customerCategories/10005/Offers/10001
                     },
                     {
-                     "@id": http://test.host/api/dfc/Enterprises/10000/SocialMedias/facebook  ,
+                     "@id": http://test.host/api/dfc/Organizations/10000/SocialMedias/facebook  ,
                       "@type": dfc-b:SocialMedia ,
                       dfc-b:name: facebook ,
                       dfc-b:URL: https://facebook.com/user
@@ -553,9 +553,9 @@ paths:
         '404':
           description: not found
     'post':
-      summary: Create an Enterprise
+      summary: Create an Organization
       tags:
-      - Enterprises
+      - Organizations
       responses:
         '201':
           description: created
@@ -570,9 +570,9 @@ paths:
               example:
                 test_example:
                   value:
-                    "@context": https://w3id.org/dfc/ontology/context/context_1.16.0.json
+                    "@context": https://w3id.org/dfc/ontology/context/context_2.0.0.json
                     "@id": "#"
-                    "@type": dfc-b:Enterprise
+                    "@type": dfc-b:Organization
                     dfc-b:hasAddress: http://test.host/api/dfc/Addresses/40000
                     dfc-b:hasPhoneNumber: http://test.host/api/dfc/PhoneNumbers/444000200
                     dfc-b:email: hello@example.org
@@ -585,12 +585,12 @@ paths:
                     dfc-b:supplies: "#/SuppliedProducts/10001"
                     dfc-b:hasMainContact: http://test.host/api/dfc/Persons/10000
                     dfc-b:logo: http://test.host/active-storage/url/logo.png
-                    dfc-b:affiliates: http://test.host/api/dfc/Enterprises/60000
+                    dfc-b:affiliates: http://test.host/api/dfc/Organizations/60000
     'put':
-      summary: Update an Enterprise
+      summary: Update an Organization
       parameters: []
       tags:
-      - Enterprises
+      - Organizations
       responses:
         '204':
           description: no content
@@ -599,27 +599,27 @@ paths:
           application/json:
             schema:
               example:
-                "@context": https://w3id.org/dfc/ontology/context/context_1.16.0.json
-                "@id":  http://test.host/api/dfc/Enterprises/10000
-                "@type": dfc-b:Enterprise
+                "@context": https://w3id.org/dfc/ontology/context/context_2.0.0.json
+                "@id":  http://test.host/api/dfc/Organizations/10000
+                "@type": dfc-b:Organization
                 dfc-b:hasAddress: http://test.host/api/dfc/Addresses/40000
                 dfc-b:hasPhoneNumber: http://test.host/api/dfc/PhoneNumbers/4401214000245
                 dfc-b:email: support@example.org
                 dfc-b:websitePage: https://www.test.host
-                dfc-b:hasSocialMedia: http://test.host/api/dfc/Enterprises/10000/SocialMedias/facebook
+                dfc-b:hasSocialMedia: http://test.host/api/dfc/Organizations/10000/SocialMedias/facebook
                 dfc-b:name: Fred's New & Improved Farm
                 dfc-b:hasDescription: This is now an even more awesome enterprise
                 dfc-b:VATnumber: 123 456
-                dfc-b:manages: http://test.host/api/dfc/Enterprises/10000/CatalogItems/10001
-                dfc-b:supplies: http://test.host/api/dfc/Enterprises/10000/SuppliedProducts/10001
+                dfc-b:manages: http://test.host/api/dfc/Organizations/10000/CatalogItems/10001
+                dfc-b:supplies: http://test.host/api/dfc/Organizations/10000/SuppliedProducts/10001
                 dfc-b:hasMainContact: http://test.host/api/dfc/Persons/10000
                 dfc-b:logo: http://test.host/active-storage/url/logo.png
-                dfc-b:affiliates: http://test.host/api/dfc/Enterprises/60000
+                dfc-b:affiliates: http://test.host/api/dfc/Organizations/60000
     delete:
-      summary: remove an Enterprise
+      summary: remove an Organization
       parameters: []
       tags:
-      - Enterprises
+      - Organizations
       responses:
         '204':
           description: no content
@@ -627,17 +627,17 @@ paths:
           description: unauthorized
 
 
-  "/api/dfc/Enterprises/{enterprise_id}/affiliatedTo":
+  "/api/dfc/Organizations/{enterprise_id}/affiliatedTo":
     post:
-      summary: Affilate 2 Enterprises (1 in path, 1 in requestBody)
+      summary: Affilate 2 Organizations (1 in path, 1 in requestBody)
       parameters:
-      - name: enterprise_id
+      - name: organization_id
         in: path
         required: true
         schema:
           type: string
       tags:
-      - Enterprises::affiliatedTo
+      - Organizations::affiliatedTo
       responses:
         '201':
           description: created
@@ -650,13 +650,13 @@ paths:
           application/json:
             schema:
               example:
-                "@id": http://test.host/api/dfc/Enterprises/10001
+                "@id": http://test.host/api/dfc/Organizations/10001
 
-  "/api/dfc/Enterprises/{enterprise_id}/affiliatedTo/{id}":
+  "/api/dfc/Organizations/{enterprise_id}/affiliatedTo/{id}":
     delete:
-      summary: Remove an Enterprise affiliatedTo link
+      summary: Remove an Organization affiliatedTo link
       parameters:
-      - name: enterprise_id
+      - name: organization_id
         in: path
         required: true
         schema:
@@ -667,7 +667,7 @@ paths:
         schema:
           type: string
       tags:
-      - Enterprises::affiliatedTo
+      - Organizations::affiliatedTo
       responses:
         '204':
           description: no content
@@ -676,9 +676,9 @@ paths:
 
 
 
-  "/api/dfc/Enterprises/{enterprise_id}/customerCategories/{customerCategory_id}/Offers/{id}":
+  "/api/dfc/Organizations/{enterprise_id}/customerCategories/{customerCategory_id}/Offers/{id}":
     parameters:
-    - name: enterprise_id
+    - name: organization_id
       in: path
       required: true
       schema:
@@ -705,8 +705,8 @@ paths:
               examples:
                 test_example:
                   value:
-                    "@context": https://w3id.org/dfc/ontology/context/context_1.16.0.json
-                    "@id": http://test.host/api/dfc/Enterprises/10000/customerCategories/10005/Offers/10001
+                    "@context": https://w3id.org/dfc/ontology/context/context_2.0.0.json
+                    "@id": http://test.host/api/dfc/Organizations/10000/customerCategories/10005/Offers/10001
                     "@type": dfc-b:Offer
                     dfc-b:hasPrice: 19.99
                     dfc-b:stockLimitation: 5
@@ -725,8 +725,8 @@ paths:
           application/json:
             schema:
               example:
-                "@context": https://w3id.org/dfc/ontology/context/context_1.16.0.json
-                "@id": http://test.host/api/dfc/Enterprises/10000/customerCategories/10005/Offers/10001
+                "@context": https://w3id.org/dfc/ontology/context/context_2.0.0.json
+                "@id": http://test.host/api/dfc/Organizations/10000/customerCategories/10005/Offers/10001
                 "@type": dfc-b:Offer
                 dfc-b:hasPrice: 9.99
                 dfc-b:stockLimitation: 7
@@ -753,7 +753,7 @@ paths:
               examples:
                 test_example:
                   value:
-                    "@context": https://w3id.org/dfc/ontology/context/context_1.16.0.json
+                    "@context": https://w3id.org/dfc/ontology/context/context_2.0.0.json
                     "@id": http://test.host/api/dfc/Persons/10000
                     "@type": dfc-b:Person
                     dfc-b:familyName: Khan
@@ -789,18 +789,18 @@ paths:
               examples:
                 test_example:
                   value:
-                    "@context": https://w3id.org/dfc/ontology/context/context_1.16.0.json
+                    "@context": https://w3id.org/dfc/ontology/context/context_2.0.0.json
                     "@id": http://test.host/api/dfc/PhoneNumbers/4401214000245
                     "@type": dfc-b:PhoneNumber
                     dfc-b:countryCode: 44
                     dfc-b:phoneNumber: 0121-400-0245
-                    dfc-b:phoneNumberOf: http://test.host/api/dfc/Enterprises/10000
+                    dfc-b:phoneNumberOf: http://test.host/api/dfc/Organizations/10000
         '404':
           description: not found
 
-  "/api/dfc/Enterprises/{enterprise_id}/SocialMedias/{name}":
+  "/api/dfc/Organizations/{enterprise_id}/SocialMedias/{name}":
     parameters:
-    - name: enterprise_id
+    - name: organization_id
       in: path
       required: true
       schema:
@@ -823,23 +823,23 @@ paths:
               examples:
                 test_example:
                   value:
-                    "@context": https://w3id.org/dfc/ontology/context/context_1.16.0.json
-                    "@id": http://test.host/api/dfc/Enterprises/10000/SocialMedias/facebook
+                    "@context": https://w3id.org/dfc/ontology/context/context_2.0.0.json
+                    "@id": http://test.host/api/dfc/Organizations/10000/SocialMedias/facebook
                     "@type": dfc-b:SocialMedia
                     dfc-b:name: facebook
                     dfc-b:URL: https://facebook.com/user
         '404':
           description: not found
 
-  "/api/dfc/Enterprises/{enterprise_id}/SuppliedProducts":
+  "/api/dfc/Organizations/{enterprise_id}/SuppliedProducts":
     parameters:
-    - name: enterprise_id
+    - name: organization_id
       in: path
       required: true
       schema:
         type: string
     get:
-      summary: List SuppliedProducts for an Enterprise
+      summary: List SuppliedProducts for an Organization
       parameters:
       - name: before
         description: The cursor returned from a previous request, requesting the API return elements before that id.
@@ -885,9 +885,9 @@ paths:
               examples:
                 test_example:
                   value:
-                    "@context": https://w3id.org/dfc/ontology/context/context_1.16.0.json
+                    "@context": https://w3id.org/dfc/ontology/context/context_2.0.0.json
                     "@graph":
-                    - "@id": http://test.host/api/dfc/Enterprises/10000/SuppliedProducts/10001
+                    - "@id": http://test.host/api/dfc/Organizations/10000/SuppliedProducts/10001
                       "@type": dfc-b:SuppliedProduct
                       dfc-b:name: Basil Pesto
                       dfc-b:description: Basil Pesto
@@ -900,10 +900,10 @@ paths:
                       dfc-b:lifetime: '12 months'
                       dfc-b:usageOrStorageCondition: ''
                       dfc-b:totalTheoreticalStock: 0.0
-                      dfc-b:hasVariant: http://test.host/api/dfc/Enterprises/10000/SuppliedProducts/10002
-                      dfc-b:hasVariant: http://test.host/api/dfc/Enterprises/10000/SuppliedProducts/10005
+                      dfc-b:hasVariant: http://test.host/api/dfc/Organizations/10000/SuppliedProducts/10002
+                      dfc-b:hasVariant: http://test.host/api/dfc/Organizations/10000/SuppliedProducts/10005
                       dfc-b:image: http://test.host/active-storage/url/logo-white.png
-                    - "@id": http://test.host/api/dfc/Enterprises/10000/SuppliedProducts/10001
+                    - "@id": http://test.host/api/dfc/Organizations/10000/SuppliedProducts/10001
                       "@type": dfc-b:SuppliedProduct
                       dfc-b:name: Basil Pesto - 100g
                       dfc-b:description: Basil Pesto
@@ -917,19 +917,19 @@ paths:
                       dfc-b:usageOrStorageCondition: ''
                       dfc-b:totalTheoreticalStock: 0.0
                       dfc-b:image: http://test.host/active-storage/url/logo-white.png
-                      dfc-b:referencedBy: http:/test.host/api/dfc/Enterprises/10000/CatalogItems/10001
-                      dfc-b:isVariantOf: http://test.host/api/dfc/Enterprises/10000/SuppliedProducts/10001
-                      dfc-b:asPlannedProductionFlow: http:/test.host/api/dfc/Enterprises/10000/asPlannedProductionFlow/101010
-                    - "@id": http:/test.host/api/dfc/Enterprises/10000/asPlannedProductionFlow/101010
+                      dfc-b:referencedBy: http:/test.host/api/dfc/Organizations/10000/CatalogItems/10001
+                      dfc-b:isVariantOf: http://test.host/api/dfc/Organizations/10000/SuppliedProducts/10001
+                      dfc-b:asPlannedProductionFlow: http:/test.host/api/dfc/Organizations/10000/asPlannedProductionFlow/101010
+                    - "@id": http:/test.host/api/dfc/Organizations/10000/asPlannedProductionFlow/101010
                       "@type": dfc-b:asPlannedProductionFlow
                       dfc-b:quantity: 12
-                      dfc-b:AsPlannedTransformation: http:/test.host/api/dfc/Enterprises/10000/AsPlannedTransformation/101010
-                    - "@id": http:/test.host/api/dfc/Enterprises/10000/AsPlannedTransformation/101010
+                      dfc-b:AsPlannedTransformation: http:/test.host/api/dfc/Organizations/10000/AsPlannedTransformation/101010
+                    - "@id": http:/test.host/api/dfc/Organizations/10000/AsPlannedTransformation/101010
                       "@type": dfc-b:AsPlannedTransformation
-                      dfc-b:hasInput: http:/test.host/api/dfc/Enterprises/10000/asPlannedProductionFlow/101010
-                      dfc-b:hasOutput: http:/test.host/api/dfc/Enterprises/10000/asPlannedConsumptionFlow/101010
+                      dfc-b:hasInput: http:/test.host/api/dfc/Organizations/10000/asPlannedProductionFlow/101010
+                      dfc-b:hasOutput: http:/test.host/api/dfc/Organizations/10000/asPlannedConsumptionFlow/101010
                       dfc-b:hasTransformationType: dfc-v:combine
-                    - "@id": http://test.host/api/dfc/Enterprises/10000/SuppliedProducts/10005
+                    - "@id": http://test.host/api/dfc/Organizations/10000/SuppliedProducts/10005
                       "@type": dfc-b:SuppliedProduct
                       dfc-b:name: Basil Pesto - Case
                       dfc-b:description: Case of  Basil  Pesto (12 jars)
@@ -942,13 +942,13 @@ paths:
                       dfc-b:usageOrStorageCondition: ''
                       dfc-b:totalTheoreticalStock: 10.0
                       dfc-b:image: http://test.host/active-storage/url/logo-white.png
-                      dfc-b:isVariantOf: http://test.host/api/dfc/Enterprises/10000/SuppliedProducts/10001 ,
-                      dfc-b:referencedBy: http:/test.host/api/dfc/Enterprises/10000/CatalogItems/10002
-                      dfc-b:asPlannedConsumptionFlow: http:/test.host/api/dfc/Enterprises/10000/asPlannedConsumptionFlow/101010
-                    - "@id": http:/test.host/api/dfc/Enterprises/10000/asPlannedConsumptionFlow/101010
+                      dfc-b:isVariantOf: http://test.host/api/dfc/Organizations/10000/SuppliedProducts/10001 ,
+                      dfc-b:referencedBy: http:/test.host/api/dfc/Organizations/10000/CatalogItems/10002
+                      dfc-b:asPlannedConsumptionFlow: http:/test.host/api/dfc/Organizations/10000/asPlannedConsumptionFlow/101010
+                    - "@id": http:/test.host/api/dfc/Organizations/10000/asPlannedConsumptionFlow/101010
                       "@type": dfc-b:asPlannedConsumptionFlow
                       dfc-b:quantity: 1
-                      dfc-b:AsPlannedTransformation: http:/test.host/api/dfc/Enterprises/10000/AsPlannedTransformation/101010
+                      dfc-b:AsPlannedTransformation: http:/test.host/api/dfc/Organizations/10000/AsPlannedTransformation/101010
 
 
         '404':
@@ -968,8 +968,8 @@ paths:
               examples:
                 test_example:
                   value:
-                    "@context": https://w3id.org/dfc/ontology/context/context_1.16.0.json
-                    "@id": http://test.host/api/dfc/Enterprises/10000/SuppliedProducts/10002
+                    "@context": https://w3id.org/dfc/ontology/context/context_2.0.0.json
+                    "@id": http://test.host/api/dfc/Organizations/10000/SuppliedProducts/10002
                     "@type": dfc-b:SuppliedProduct
                     dfc-b:name: Pesto - Apple (6g)
                     dfc-b:description: A delicious heritage apple
@@ -988,7 +988,7 @@ paths:
           application/json:
             schema:
               example:
-                "@context": https://w3id.org/dfc/ontology/context/context_1.16.0.json
+                "@context": https://w3id.org/dfc/ontology/context/context_2.0.0.json
                 "@id": "#"
                 "@type": dfc-b:SuppliedProduct
                 dfc-b:name: Apple
@@ -1003,9 +1003,9 @@ paths:
                 dfc-b:usageOrStorageCondition: ''
                 dfc-b:totalTheoreticalStock: 0.0
 
-  "/api/dfc/Enterprises/{enterprise_id}/SuppliedProducts/{id}":
+  "/api/dfc/Organizations/{enterprise_id}/SuppliedProducts/{id}":
     parameters:
-    - name: enterprise_id
+    - name: organization_id
       in: path
       required: true
       schema:
@@ -1027,8 +1027,8 @@ paths:
               examples:
                 test_example:
                   value:
-                    "@context": https://w3id.org/dfc/ontology/context/context_1.16.0.json
-                    "@id": http://test.host/api/dfc/Enterprises/10000/SuppliedProducts/10002
+                    "@context": https://w3id.org/dfc/ontology/context/context_2.0.0.json
+                    "@id": http://test.host/api/dfc/Organizations/10000/SuppliedProducts/10002
                     "@type": dfc-b:SuppliedProduct
                     dfc-b:name: Pesto - 300g
                     dfc-b:description: Basil Pesto
@@ -1062,14 +1062,14 @@ paths:
                 "@context":
                   rdfs: http://www.w3.org/2000/01/rdf-schema#
                   skos: http://www.w3.org/2004/02/skos/core#
-                  dfc: https://github.com/datafoodconsortium/ontology/releases/latest/download/DFC_FullModel.owl#
+                  dfc: https://w3id.org/dfc/ontology/DFC_FullModel.owl#
                   dc: http://purl.org/dc/elements/1.1/#
-                  dfc-b: https://github.com/datafoodconsortium/ontology/releases/latest/download/DFC_BusinessOntology.owl#
-                  dfc-p: https://github.com/datafoodconsortium/ontology/releases/latest/download/DFC_ProductGlossary.owl#
-                  dfc-t: https://github.com/datafoodconsortium/ontology/releases/latest/download/DFC_TechnicalOntology.owl#
-                  dfc-m: https://github.com/datafoodconsortium/taxonomies/releases/latest/download/measures.rdf#
-                  dfc-pt: https://github.com/datafoodconsortium/taxonomies/releases/latest/download/productTypes.rdf#
-                  dfc-f: https://github.com/datafoodconsortium/taxonomies/releases/latest/download/facets.rdf#
+                  dfc-b: https://w3id.org/dfc/ontology/DFC_BusinessOntology.owl#
+                  dfc-p: https://w3id.org/dfc/ontology/DFC_ProductGlossary.owl#
+                  dfc-t: https://w3id.org/dfc/ontology/DFC_TechnicalOntology.owl#
+                  dfc-m: https://w3id.org/dfc/taxonomy/measures.rdf#
+                  dfc-pt: https://w3id.org/dfc/taxonomy/productTypes.rdf#
+                  dfc-f: https://w3id.org/dfc/taxonomy/facets.rdf#
                   ontosec: http://www.semanticweb.org/ontologies/2008/11/OntologySecurity.owl#
                   dfc-p:hasUnit:
                     "@type": "@id"
@@ -1119,7 +1119,7 @@ paths:
                     "@type": "@id"
                   dfc-t:represent:
                     "@type": "@id"
-                "@id": http://test.host/api/dfc/Enterprises/10001/SuppliedProducts/10001
+                "@id": http://test.host/api/dfc/Organizations/10001/SuppliedProducts/10001
                 "@type": dfc-b:SuppliedProduct
                 dfc-b:alcoholPercentage: 0
                 dfc-b:description: Ali's Amazing Red Pesto - now it's red!
@@ -1137,15 +1137,15 @@ paths:
                 dfc-b:hasNutrientCharacteristic: []
                 dfc-b:hasAllergenCharacteristic: []
 
-  "/api/dfc/Enterprises/{enterprise_id}/Orders":
+  "/api/dfc/Organizations/{enterprise_id}/Orders":
     parameters:
-    - name: enterprise_id
+    - name: organization_id
       in: path
       required: true
       schema:
         type: string
     get:
-      summary: Show all Orders for an Enterprise
+      summary: Show all Orders for an Organization
       parameters:
       - name: before
         description: The cursor returned from a previous request, requesting the API return elements before that id.
@@ -1223,12 +1223,12 @@ paths:
               examples:
                 test_example:
                   value:
-                    "@context": https://w3id.org/dfc/ontology/context/context_1.16.0.json
+                    "@context": https://w3id.org/dfc/ontology/context/context_2.0.0.json
                     "@graph": [
                     {
-                      "@id": http://test.host/api/dfc/Enterprises/10000/Orders/10001 ,
+                      "@id": http://test.host/api/dfc/Organizations/10000/Orders/10001 ,
                       "@type": dfc-b:Order ,
-                      dfc-b:belongsTo: http://test.host/api/dfc/Enterprises/10000/SaleSessions/10002,
+                      dfc-b:belongsTo: http://test.host/api/dfc/Organizations/10000/SaleSessions/10002,
                       dfc-b:orderNumber: "MYORDERNUM:12345" ,
                       dfc-b:hasOrderStatus: dfc-v:Draft ,
                       dfc-b:hasFulfilmentStatus: dfc-v:Held ,
@@ -1246,10 +1246,10 @@ paths:
                       },
                       dfc-b:discount: 1.55 ,
                       dfc-b:OrderedBy: http://test.host/api/dfc/Persons/10000 ,
-                      dfc-b:soldBy: http://test.host/api/dfc/Enterprises/10050 ,
+                      dfc-b:soldBy: http://test.host/api/dfc/Organizations/10050 ,
                       dfc-b:selects: {
                         "@type": dfc-b:ShippingOption ,
-                        dfc-b:optionOf: http://test.host/api/dfc/Enterprises/10000/SaleSessions/10002 ,
+                        dfc-b:optionOf: http://test.host/api/dfc/Organizations/10000/SaleSessions/10002 ,
                         dfc-b:fee: 1.50 ,
                       },
                       dfc-b:uses: {
@@ -1257,9 +1257,9 @@ paths:
                         dfc-b:pickedUpAt: Our Fantastic Farm Gate
                       },
                       dfc-b:hasPart: {
-                        "@id": http://test.host/api/dfc/Enterprises/10000/Orders/10001/orderlines/10001-01 ,
+                        "@id": http://test.host/api/dfc/Organizations/10000/Orders/10001/orderlines/10001-01 ,
                         "@type": dfc-b:OrderLine ,
-                        dfc-b:concerns: http://test.host/api/dfc/Enterprises/10000/customerCategories/10005/Offers/10001 ,
+                        dfc-b:concerns: http://test.host/api/dfc/Organizations/10000/customerCategories/10005/Offers/10001 ,
                         dfc-b:hasQuantity: {
                           "@type": dfc-b:QuantitativeValue ,
                           dfc-b:hasUnit: Packet ,
@@ -1285,12 +1285,12 @@ paths:
           application/json:
             schema:
               example:
-                "@context": https://w3id.org/dfc/ontology/context/context_1.16.0.json
+                "@context": https://w3id.org/dfc/ontology/context/context_2.0.0.json
                 "@graph": [
                 {
                   "@id": "#" ,
                   "@type": dfc-b:Order ,
-                  dfc-b:belongsTo: http://test.host/api/dfc/Enterprises/10000/SaleSessions/10002,
+                  dfc-b:belongsTo: http://test.host/api/dfc/Organizations/10000/SaleSessions/10002,
                   dfc-b:orderNumber: "MYORDERNUM:12345" ,
                   dfc-b:hasOrderStatus: dfc-v:Draft ,
                   dfc-b:hasFulfilmentStatus: dfc-v:Held ,
@@ -1308,10 +1308,10 @@ paths:
                   },
                   dfc-b:discount: 1.55 ,
                   dfc-b:OrderedBy: http://test.host/api/dfc/Persons/10000 ,
-                  dfc-b:soldBy: http://test.host/api/dfc/Enterprises/10050 ,
+                  dfc-b:soldBy: http://test.host/api/dfc/Organizations/10050 ,
                   dfc-b:selects: {
                     "@type": dfc-b:ShippingOption ,
-                    dfc-b:optionOf: http://test.host/api/dfc/Enterprises/10000/SaleSessions/10002 ,
+                    dfc-b:optionOf: http://test.host/api/dfc/Organizations/10000/SaleSessions/10002 ,
                     dfc-b:fee: 1.50 ,
                   },
                   dfc-b:uses: {
@@ -1321,7 +1321,7 @@ paths:
                   dfc-b:hasPart: {
                     "@id": "#/orderlines/10001-01" ,
                     "@type": dfc-b:OrderLine ,
-                    dfc-b:concerns: http://test.host/api/dfc/Enterprises/10000/customerCategories/10005/Offers/10001 ,
+                    dfc-b:concerns: http://test.host/api/dfc/Organizations/10000/customerCategories/10005/Offers/10001 ,
                     dfc-b:hasQuantity: {
                       "@type": dfc-b:QuantitativeValue ,
                       dfc-b:hasUnit: Packet ,
@@ -1348,10 +1348,10 @@ paths:
               examples:
                 test_example:
                   value:
-                    "@context": https://w3id.org/dfc/ontology/context/context_1.16.0.json
-                    "@id": http://test.host/api/dfc/Enterprises/10000/Orders/10001
+                    "@context": https://w3id.org/dfc/ontology/context/context_2.0.0.json
+                    "@id": http://test.host/api/dfc/Organizations/10000/Orders/10001
                     "@type": dfc-b:Order
-                    dfc-b:belongsTo: http://test.host/api/dfc/Enterprises/10000/SaleSessions/10002
+                    dfc-b:belongsTo: http://test.host/api/dfc/Organizations/10000/SaleSessions/10002
                     dfc-b:orderNumber: "MYORDERNUM:12345"
                     dfc-b:hasOrderStatus: dfc-v:Draft
                     dfc-b:hasFulfilmentStatus: dfc-v:Held
@@ -1369,17 +1369,17 @@ paths:
                     dfc-b:OrderedBy: http://test.host/api/dfc/Persons/10000
                     dfc-b:selects:
                       "@type": dfc-b:ShippingOption
-                      dfc-b:optionOf: http://test.host/api/dfc/Enterprises/10000/SaleSessions/10002
+                      dfc-b:optionOf: http://test.host/api/dfc/Organizations/10000/SaleSessions/10002
                       dfc-b:fee: 1.50
                     dfc-b:uses:
                       "@type": dfc-b:PickupOption
                       dfc-b:pickedUpAt: Our Fantastic Farm Gate
-                    dfc-b:soldBy: http://test.host/api/dfc/Enterprises/10000
-                    dfc-b:hasPart: http://test.host/api/dfc/Enterprises/10000/Orders/10001/orderlines/10001-01
+                    dfc-b:soldBy: http://test.host/api/dfc/Organizations/10000
+                    dfc-b:hasPart: http://test.host/api/dfc/Organizations/10000/Orders/10001/orderlines/10001-01
 
-  "/api/dfc/Enterprises/{enterprise_id}/Orders/{id}":
+  "/api/dfc/Organizations/{enterprise_id}/Orders/{id}":
     parameters:
-    - name: enterprise_id
+    - name: organization_id
       in: path
       required: true
       schema:
@@ -1401,10 +1401,10 @@ paths:
               examples:
                 test_example:
                   value:
-                    "@context": https://w3id.org/dfc/ontology/context/context_1.16.0.json
-                    "@id": http://test.host/api/dfc/Enterprises/10000/Orders/10001
+                    "@context": https://w3id.org/dfc/ontology/context/context_2.0.0.json
+                    "@id": http://test.host/api/dfc/Organizations/10000/Orders/10001
                     "@type": dfc-b:Order
-                    dfc-b:belongsTo: http://test.host/api/dfc/Enterprises/10000/SaleSessions/10002
+                    dfc-b:belongsTo: http://test.host/api/dfc/Organizations/10000/SaleSessions/10002
                     dfc-b:orderNumber: "MYORDERNUM:12345"
                     dfc-b:hasOrderStatus: dfc-v:Draft
                     dfc-b:hasFulfilmentStatus: dfc-v:Held
@@ -1422,16 +1422,16 @@ paths:
                     dfc-b:OrderedBy: http://test.host/api/dfc/Persons/10000
                     dfc-b:selects:
                       "@type": dfc-b:ShippingOption
-                      dfc-b:optionOf: http://test.host/api/dfc/Enterprises/10000/SaleSessions/10002
+                      dfc-b:optionOf: http://test.host/api/dfc/Organizations/10000/SaleSessions/10002
                       dfc-b:fee: 1.50
                     dfc-b:uses:
                       "@type": dfc-b:PickupOption
                       dfc-b:pickedUpAt: Our Fantastic Farm Gate
-                    dfc-b:soldBy: http://test.host/api/dfc/Enterprises/10000
+                    dfc-b:soldBy: http://test.host/api/dfc/Organizations/10000
                     dfc-b:hasPart:
-                    - "@id": http://test.host/api/dfc/Enterprises/10000/Orders/10001/orderlines/10001-01
+                    - "@id": http://test.host/api/dfc/Organizations/10000/Orders/10001/orderlines/10001-01
                       "@type": dfc-b:OrderLine
-                      dfc-b:concerns: http://test.host/api/dfc/Enterprises/10000/customerCategories/10005/Offers/10001
+                      dfc-b:concerns: http://test.host/api/dfc/Organizations/10000/customerCategories/10005/Offers/10001
                       dfc-b:hasQuantity:
                         "@type": dfc-b:QuantitativeValue
                         dfc-b:hasUnit: Packet
@@ -1458,10 +1458,10 @@ paths:
           application/json:
             schema:
               example:
-                "@context": https://w3id.org/dfc/ontology/context/context_1.16.0.json
-                "@id": http://test.host/api/dfc/Enterprises/10000/Orders/10001
+                "@context": https://w3id.org/dfc/ontology/context/context_2.0.0.json
+                "@id": http://test.host/api/dfc/Organizations/10000/Orders/10001
                 "@type": dfc-b:Order
-                dfc-b:belongsTo: http://test.host/api/dfc/Enterprises/10000/SaleSessions/10002
+                dfc-b:belongsTo: http://test.host/api/dfc/Organizations/10000/SaleSessions/10002
                 dfc-b:orderNumber: "MYORDERNUM:12345"
                 dfc-b:hasOrderStatus: dfc-v:Complete
                 dfc-b:hasFulfilmentStatus: dfc-v:Held
@@ -1479,16 +1479,16 @@ paths:
                 dfc-b:OrderedBy: http://test.host/api/dfc/Persons/10000
                 dfc-b:selects:
                   "@type": dfc-b:ShippingOption
-                  dfc-b:optionOf: http://test.host/api/dfc/Enterprises/10000/SaleSessions/10002
+                  dfc-b:optionOf: http://test.host/api/dfc/Organizations/10000/SaleSessions/10002
                   dfc-b:fee: 1.50
                 dfc-b:uses:
                   "@type": dfc-b:PickupOption
                   dfc-b:pickedUpAt: Our Fantastic Farm Gate
-                dfc-b:soldBy: http://test.host/api/dfc/Enterprises/10000
+                dfc-b:soldBy: http://test.host/api/dfc/Organizations/10000
                 dfc-b:hasPart:
-                - "@id": http://test.host/api/dfc/Enterprises/10000/Orders/10001/orderlines/10001-01
+                - "@id": http://test.host/api/dfc/Organizations/10000/Orders/10001/orderlines/10001-01
                   "@type": dfc-b:OrderLine
-                  dfc-b:concerns: http://test.host/api/dfc/Enterprises/10000/customerCategories/10005/Offers/10001
+                  dfc-b:concerns: http://test.host/api/dfc/Organizations/10000/customerCategories/10005/Offers/10001
                   dfc-b:hasQuantity:
                     "@type": dfc-b:QuantitativeValue
                     dfc-b:hasUnit: Packet
@@ -1500,9 +1500,9 @@ paths:
                     dfc-b:VATrate: 0.0
                   dfc-b:discount: []
 
-  "/api/dfc/Enterprises/{enterprise_id}/Orders/{order_id}/orderlines":
+  "/api/dfc/Organizations/{enterprise_id}/Orders/{order_id}/orderlines":
     parameters:
-    - name: enterprise_id
+    - name: organization_id
       in: path
       required: true
       schema:
@@ -1524,11 +1524,11 @@ paths:
               examples:
                 test_example:
                   value:
-                    "@context": https://w3id.org/dfc/ontology/context/context_1.16.0.json
-                    "@id": http://test.host/api/dfc/Enterprises/10000/Orders/10001/orderlines/10001-01
+                    "@context": https://w3id.org/dfc/ontology/context/context_2.0.0.json
+                    "@id": http://test.host/api/dfc/Organizations/10000/Orders/10001/orderlines/10001-01
                     "@type": dfc-b:OrderLine
-                    dfc-b:concerns: http://test.host/api/dfc/Enterprises/10000/customerCategories/10005/Offers/10001
-                    dfc-b:partOf: http://test.host/api/dfc/Enterprises/10000/Orders/10001
+                    dfc-b:concerns: http://test.host/api/dfc/Organizations/10000/customerCategories/10005/Offers/10001
+                    dfc-b:partOf: http://test.host/api/dfc/Organizations/10000/Orders/10001
                     dfc-b:hasQuantity:
                       "@type": dfc-b:QuantitativeValue
                       dfc-b:hasUnit: Packet
@@ -1556,11 +1556,11 @@ paths:
               examples:
                 test_example:
                   value:
-                    "@context": https://w3id.org/dfc/ontology/context/context_1.16.0.json
-                    "@id": http://test.host/api/dfc/Enterprises/10000/Orders/10001/orderlines/10001-01
+                    "@context": https://w3id.org/dfc/ontology/context/context_2.0.0.json
+                    "@id": http://test.host/api/dfc/Organizations/10000/Orders/10001/orderlines/10001-01
                     "@type": dfc-b:OrderLine
-                    dfc-b:concerns: http://test.host/api/dfc/Enterprises/10000/customerCategories/10005/Offers/10001
-                    dfc-b:partOf: http://test.host/api/dfc/Enterprises/10000/Orders/10001
+                    dfc-b:concerns: http://test.host/api/dfc/Organizations/10000/customerCategories/10005/Offers/10001
+                    dfc-b:partOf: http://test.host/api/dfc/Organizations/10000/Orders/10001
                     dfc-b:hasQuantity:
                       "@type": dfc-b:QuantitativeValue
                       dfc-b:hasUnit: Packet
@@ -1576,11 +1576,11 @@ paths:
           application/json:
             schema:
               example:
-                "@context": https://w3id.org/dfc/ontology/context/context_1.16.0.json
+                "@context": https://w3id.org/dfc/ontology/context/context_2.0.0.json
                 "@id": "#"
                 "@type": dfc-b:OrderLine
-                dfc-b:concerns: http://test.host/api/dfc/Enterprises/10000/customerCategories/10005/Offers/10001
-                dfc-b:partOf: http://test.host/api/dfc/Enterprises/10000/Orders/10001
+                dfc-b:concerns: http://test.host/api/dfc/Organizations/10000/customerCategories/10005/Offers/10001
+                dfc-b:partOf: http://test.host/api/dfc/Organizations/10000/Orders/10001
                 dfc-b:hasQuantity:
                   "@type": dfc-b:QuantitativeValue
                   dfc-b:hasUnit: Packet
@@ -1592,9 +1592,9 @@ paths:
                   dfc-b:VATrate: 0.0
                 dfc-b:discount: 2.95
 
-  "/api/dfc/Enterprises/{enterprise_id}/Orders/{order_id}/orderlines/{id}":
+  "/api/dfc/Organizations/{enterprise_id}/Orders/{order_id}/orderlines/{id}":
     parameters:
-    - name: enterprise_id
+    - name: organization_id
       in: path
       required: true
       schema:
@@ -1621,11 +1621,11 @@ paths:
               examples:
                 test_example:
                   value:
-                    "@context": https://w3id.org/dfc/ontology/context/context_1.16.0.json
-                    "@id": http://test.host/api/dfc/Enterprises/10000/Orders/10001/orderlines/10001-01
+                    "@context": https://w3id.org/dfc/ontology/context/context_2.0.0.json
+                    "@id": http://test.host/api/dfc/Organizations/10000/Orders/10001/orderlines/10001-01
                     "@type": dfc-b:OrderLine
-                    dfc-b:concerns: http://test.host/api/dfc/Enterprises/10000/customerCategories/10005/Offers/10001
-                    dfc-b:partOf: http://test.host/api/dfc/Enterprises/10000/Orders/10001
+                    dfc-b:concerns: http://test.host/api/dfc/Organizations/10000/customerCategories/10005/Offers/10001
+                    dfc-b:partOf: http://test.host/api/dfc/Organizations/10000/Orders/10001
                     dfc-b:hasQuantity:
                       "@type": dfc-b:QuantitativeValue
                       dfc-b:hasUnit: Packet
@@ -1652,11 +1652,11 @@ paths:
           application/json:
             schema:
               example:
-                "@context": https://w3id.org/dfc/ontology/context/context_1.16.0.json
-                "@id": http://test.host/api/dfc/Enterprises/10000/Orders/10001/orderlines/10001-01
+                "@context": https://w3id.org/dfc/ontology/context/context_2.0.0.json
+                "@id": http://test.host/api/dfc/Organizations/10000/Orders/10001/orderlines/10001-01
                 "@type": dfc-b:OrderLine
-                dfc-b:concerns: http://test.host/api/dfc/Enterprises/10000/customerCategories/10005/Offers/10001
-                dfc-b:partOf: http://test.host/api/dfc/Enterprises/10000/Orders/10001
+                dfc-b:concerns: http://test.host/api/dfc/Organizations/10000/customerCategories/10005/Offers/10001
+                dfc-b:partOf: http://test.host/api/dfc/Organizations/10000/Orders/10001
                 dfc-b:hasQuantity:
                   "@type": dfc-b:QuantitativeValue
                   dfc-b:hasUnit: Packet
@@ -1669,15 +1669,15 @@ paths:
                 dfc-b:discount: 2.95
 
 
-  "/api/dfc/Enterprises/{enterprise_id}/SaleSessions":
+  "/api/dfc/Organizations/{enterprise_id}/SaleSessions":
     parameters:
-    - name: enterprise_id
+    - name: organization_id
       in: path
       required: true
       schema:
         type: string
     get:
-      summary: List all  Sales Session for an Enterprise
+      summary: List all Sales Sessions for an Organization
       tags:
       - SaleSessions
       responses:
@@ -1688,23 +1688,23 @@ paths:
               examples:
                 test_example:
                   value:
-                    "@context": https://w3id.org/dfc/ontology/context/context_1.16.0.json
-                    "@id": http://test.host/api/dfc/Enterprises/10000/SaleSessions/10002
+                    "@context": https://w3id.org/dfc/ontology/context/context_2.0.0.json
+                    "@id": http://test.host/api/dfc/Organizations/10000/SaleSessions/10002
                     "@type": dfc-b:SaleSession
                     dfc-b:startDate: "2024-03-14T01:00:00+01:00"
                     dfc-b:endDate: "2024-03-21T00:59:59+01:00"
-                    dfc-b:holds: http://test.host/api/dfc/Enterprises/10000/Orders/10001
+                    dfc-b:holds: http://test.host/api/dfc/Organizations/10000/Orders/10001
                     dfc-b:hasOption:
                       "@type": dfc-b:ShippingOption
-                      "@id": http://test.host/api/dfc/Enterprises/10000/ShippingOptions/004
+                      "@id": http://test.host/api/dfc/Organizations/10000/ShippingOptions/004
                       dfc-b:fee: 1.50
                     dfc-b:hostedAt:
                       "@type": dfc-b:VirtualPlace
                       dfc-b:URL: http:/test.host/store/FredsFarm/
-                    dfc-b:lists: http://test.host/api/dfc/Enterprises/10000/customerCategories/10005/Offers/10001
+                    dfc-b:lists: http://test.host/api/dfc/Organizations/10000/customerCategories/10005/Offers/10001
                     dfc-b:objectOf:
                       "@type": dfc-b:Coordination
-                      dfc-b:coordinatedBy: http://test.host/api/dfc/Enterprises/10000
+                      dfc-b:coordinatedBy: http://test.host/api/dfc/Organizations/10000
                       dfc-b:marginPercent: 5.0
         '404':
           description: not found
@@ -1723,51 +1723,51 @@ paths:
               examples:
                 test_example:
                   value:
-                    "@context": https://w3id.org/dfc/ontology/context/context_1.16.0.json
-                    "@id": http://test.host/api/dfc/Enterprises/10000/SaleSessions/10002
+                    "@context": https://w3id.org/dfc/ontology/context/context_2.0.0.json
+                    "@id": http://test.host/api/dfc/Organizations/10000/SaleSessions/10002
                     "@type": dfc-b:SaleSession
                     dfc-b:startDate: "2024-03-14T01:00:00+01:00"
                     dfc-b:endDate: "2024-03-21T00:59:59+01:00"
-                    dfc-b:holds: http://test.host/api/dfc/Enterprises/10000/Orders/10001
+                    dfc-b:holds: http://test.host/api/dfc/Organizations/10000/Orders/10001
                     dfc-b:hasOption:
                       "@type": dfc-b:ShippingOption
-                      "@id": http://test.host/api/dfc/Enterprises/10000/ShippingOptions/004
+                      "@id": http://test.host/api/dfc/Organizations/10000/ShippingOptions/004
                       dfc-b:fee: 1.50
                     dfc-b:hostedAt:
                       "@type": dfc-b:VirtualPlace
                       dfc-b:URL: http:/test.host/store/FredsFarm/
-                    dfc-b:lists: http://test.host/api/dfc/Enterprises/10000/customerCategories/10005/Offers/10001
+                    dfc-b:lists: http://test.host/api/dfc/Organizations/10000/customerCategories/10005/Offers/10001
                     dfc-b:objectOf:
                       "@type": dfc-b:Coordination
-                      dfc-b:coordinatedBy: http://test.host/api/dfc/Enterprises/10000
+                      dfc-b:coordinatedBy: http://test.host/api/dfc/Organizations/10000
                       dfc-b:marginPercent: 5.0
       requestBody:
         content:
           application/json:
             schema:
               example:
-                "@context": https://w3id.org/dfc/ontology/context/context_1.16.0.json
+                "@context": https://w3id.org/dfc/ontology/context/context_2.0.0.json
                 "@id": "#"
                 "@type": dfc-b:SaleSession
                 dfc-b:startDate: "2024-03-14T01:00:00+01:00"
                 dfc-b:endDate: "2024-03-21T00:59:59+01:00"
                 dfc-b:hasOption:
                   "@type": dfc-b:ShippingOption
-                  "@id": http://test.host/api/dfc/Enterprises/10000/ShippingOptions/004
+                  "@id": http://test.host/api/dfc/Organizations/10000/ShippingOptions/004
                   dfc-b:fee: 1.50
                 dfc-b:hostedAt:
                   "@type": dfc-b:VirtualPlace
                   dfc-b:URL: http:/test.host/store/FredsFarm/
-                dfc-b:lists: http://test.host/api/dfc/Enterprises/10000/customerCategories/10005/Offers/10001
+                dfc-b:lists: http://test.host/api/dfc/Organizations/10000/customerCategories/10005/Offers/10001
                 dfc-b:objectOf:
                   "@type": dfc-b:Coordination
-                  dfc-b:coordinatedBy: http://test.host/api/dfc/Enterprises/10000
+                  dfc-b:coordinatedBy: http://test.host/api/dfc/Organizations/10000
                   dfc-b:marginPercent: 5.0
 
 
-  "/api/dfc/Enterprises/{enterprise_id}/SaleSessions/{id}":
+  "/api/dfc/Organizations/{enterprise_id}/SaleSessions/{id}":
     parameters:
-    - name: enterprise_id
+    - name: organization_id
       in: path
       required: true
       schema:
@@ -1789,23 +1789,23 @@ paths:
               examples:
                 test_example:
                   value:
-                    "@context": https://w3id.org/dfc/ontology/context/context_1.16.0.json
-                    "@id": http://test.host/api/dfc/Enterprises/10000/SaleSessions/10002
+                    "@context": https://w3id.org/dfc/ontology/context/context_2.0.0.json
+                    "@id": http://test.host/api/dfc/Organizations/10000/SaleSessions/10002
                     "@type": dfc-b:SaleSession
                     dfc-b:startDate: "2024-03-14T01:00:00+01:00"
                     dfc-b:endDate: "2024-03-21T00:59:59+01:00"
-                    dfc-b:holds: http://test.host/api/dfc/Enterprises/10000/Orders/10001
+                    dfc-b:holds: http://test.host/api/dfc/Organizations/10000/Orders/10001
                     dfc-b:hasOption:
                       "@type": dfc-b:ShippingOption
-                      "@id": http://test.host/api/dfc/Enterprises/10000/ShippingOptions/004
+                      "@id": http://test.host/api/dfc/Organizations/10000/ShippingOptions/004
                       dfc-b:fee: 1.50
                     dfc-b:hostedAt:
                       "@type": dfc-b:VirtualPlace
                       dfc-b:URL: http:/test.host/store/FredsFarm/
-                    dfc-b:lists: http://test.host/api/dfc/Enterprises/10000/customerCategories/10005/Offers/10001
+                    dfc-b:lists: http://test.host/api/dfc/Organizations/10000/customerCategories/10005/Offers/10001
                     dfc-b:objectOf:
                       "@type": dfc-b:Coordination
-                      dfc-b:coordinatedBy: http://test.host/api/dfc/Enterprises/10000
+                      dfc-b:coordinatedBy: http://test.host/api/dfc/Organizations/10000
                       dfc-b:marginPercent: 5.0
         '404':
           description: not found
@@ -1823,23 +1823,23 @@ paths:
           application/json:
             schema:
               example:
-                "@context": https://w3id.org/dfc/ontology/context/context_1.16.0.json
-                "@id": http://test.host/api/dfc/Enterprises/10000/SaleSessions/10002
+                "@context": https://w3id.org/dfc/ontology/context/context_2.0.0.json
+                "@id": http://test.host/api/dfc/Organizations/10000/SaleSessions/10002
                 "@type": dfc-b:SaleSession
                 dfc-b:startDate: "2024-03-14T01:00:00+01:00"
                 dfc-b:endDate: "2024-03-18T08:47:15+01:00"
-                dfc-b:holds: http://test.host/api/dfc/Enterprises/10000/Orders/10001
+                dfc-b:holds: http://test.host/api/dfc/Organizations/10000/Orders/10001
                 dfc-b:hasOption:
                   "@type": dfc-b:ShippingOption
-                  "@id": http://test.host/api/dfc/Enterprises/10000/ShippingOptions/004
+                  "@id": http://test.host/api/dfc/Organizations/10000/ShippingOptions/004
                   dfc-b:fee: 1.50
                 dfc-b:hostedAt:
                   "@type": dfc-b:VirtualPlace
                   dfc-b:URL: http:/test.host/store/FredsFarm/
-                dfc-b:lists: http://test.host/api/dfc/Enterprises/10000/customerCategories/10005/Offers/10001
+                dfc-b:lists: http://test.host/api/dfc/Organizations/10000/customerCategories/10005/Offers/10001
                 dfc-b:objectOf:
                   "@type": dfc-b:Coordination
-                  dfc-b:coordinatedBy: http://test.host/api/dfc/Enterprises/10000
+                  dfc-b:coordinatedBy: http://test.host/api/dfc/Organizations/10000
                   dfc-b:marginPercent: 5.0
 
 

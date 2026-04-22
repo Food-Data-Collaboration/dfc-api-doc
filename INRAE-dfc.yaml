@@ -1,6 +1,6 @@
 openapi: 3.0.0
 info:
-  version: v0.1
+  version: v2.0.0
   title: DFC INRAE Endpoint
   contact:
     {
@@ -25,7 +25,7 @@ paths:
   "/api/dfc/Persons/{id}/AffilateSalesData":
     get:
       summary: Returns anonymized order line data
-      description: Show anonymized sales data, for a given date range, for all Enterprises that have authorized this Person to collect their data.
+      description: Show anonymized sales data, for a given date range, for all Organizations that have authorized this Person to collect their data.
       parameters:
       - name: id
         in: path
@@ -78,11 +78,11 @@ paths:
               examples:
                 test_example:
                   value:
-                    "@context": https://www.datafoodconsortium.org
+                    "@context": https://w3id.org/dfc/ontology/context/context_2.0.0.json
                     "@id": http://test.host/api/dfc/Persons/1001/AffilateSalesData
                     "@type": dfc-b:Person
                     dfc-b:affiliates:
-                      "@type": dfc-Enterprise
+                      "@type": dfc-b:Organization
                       dfc-b:hasAddress:
                         "@type": dfc-b:Address
                         dfc-b:postcode: 20170   # Producer Postcode
@@ -114,7 +114,7 @@ paths:
                               dfc-b:objectOf:
                                 "@type": dfc-b:Coordination
                                 dfc-b:coordinatedBy:
-                                  "@type": dfc-b:Enterprise
+                                  "@type": dfc-b:Organization
                                   dfc-b:hasAddress:
                                     "@type": dfc-b:Address
                                     dfc-b:postcode: 20170   # Shop/Distrobutor Postcode

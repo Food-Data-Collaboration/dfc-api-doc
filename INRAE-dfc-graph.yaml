@@ -1,6 +1,6 @@
 openapi: 3.0.0
 info:
-  version: v0.1
+  version: v2.0.0
   title: DFC INRAE Endpoint
   contact:
     {
@@ -25,7 +25,7 @@ paths:
   "/api/dfc/Persons/{id}/AffilateSalesData":
     get:
       summary: Returns anonymized order line data
-      description: Show anonymized sales data, for a given date range, for all Enterprises that have authorized this Person to collect their data.
+      description: Show anonymized sales data, for a given date range, for all Organizations that have authorized this Person to collect their data.
       parameters:
       - name: id
         in: path
@@ -78,32 +78,32 @@ paths:
               examples:
                 test_example:
                   value:
-                    "@context": https://www.datafoodconsortium.org
+                    "@context": https://w3id.org/dfc/ontology/context/context_2.0.0.json
                     "@graph":  [
                     {
                       "@id": http://test.host/api/dfc/Persons/1001/AffilateSalesData,
                       "@type": dfc-b:Person,
-                      dfc-b:affiliates: http://test.host/api/dfc/Enterprises/10000
+                      dfc-b:affiliates: http://test.host/api/dfc/Organizations/10000
                     },
                     {
-                      "@id": http://test.host/api/dfc/Enterprises/10000 , # Producer Enterprise
-                      "@type": dfc-Enterprise,
+                      "@id": http://test.host/api/dfc/Organizations/10000 , # Producer Organization
+                      "@type": dfc-b:Organization,
                       dfc-b:hasAddress: http://test.host/api/dfc/Addresses/Car-20170 ,
-                      dfc-b:supplies: https://test.host/api/dfc/Enterprises/10000/SuppliedProducts/10001 ,
-                      dfc-b-supplies: https://test.host/api/dfc/Enterprises/10000/SuppliedProducts/10002
+                      dfc-b:supplies: https://test.host/api/dfc/Organizations/10000/SuppliedProducts/10001 ,
+                      dfc-b-supplies: https://test.host/api/dfc/Organizations/10000/SuppliedProducts/10002
                     },
                     {
-                      "@id": http://test.host/api/dfc/Enterprises/10023 , # 2nd Producer Enterprise
-                      "@type": dfc-Enterprise,
+                      "@id": http://test.host/api/dfc/Organizations/10023 , # 2nd Producer Organization
+                      "@type": dfc-b:Organization,
                       dfc-b:hasAddress: http://test.host/api/dfc/Addresses/Car-20170 ,
-                      dfc-b:supplies: https://test.host/api/dfc/Enterprises/10023/SuppliedProducts/10231 ,
-                      dfc-b-supplies: https://test.host/api/dfc/Enterprises/10023/SuppliedProducts/10232
+                      dfc-b:supplies: https://test.host/api/dfc/Organizations/10023/SuppliedProducts/10231 ,
+                      dfc-b-supplies: https://test.host/api/dfc/Organizations/10023/SuppliedProducts/10232
                     },
                     {
-                      "@id": http://test.host/api/dfc/Enterprises/10050 , # Distributor Enterprise
-                      "@type": dfc-Enterprise,
+                      "@id": http://test.host/api/dfc/Organizations/10050 , # Distributor Organization
+                      "@type": dfc-b:Organization,
                       dfc-b:hasAddress: http://test.host/api/dfc/Addresses/Car-20173 ,
-                      dfc-b:coordinates: https://test.host/api/dfc/Enterprises/10050/SaleSessions/10002 ,
+                      dfc-b:coordinates: https://test.host/api/dfc/Organizations/10050/SaleSessions/10002 ,
                     },
                     {
                       "@id": http://test.host/api/dfc/Addresses/Car-20170 ,
@@ -118,7 +118,7 @@ paths:
                       dfc-b:city: Carbini
                     },
                     {
-                      "@id": https://test.host/api/dfc/Enterprises/10000/SuppliedProducts/10001 ,
+                      "@id": https://test.host/api/dfc/Organizations/10000/SuppliedProducts/10001 ,
                       "@type": dfc-b:SuppliedProduct ,
                       dfc-b:Name: Basil Pesto 250g Jar ,
                       dfc-b:hasType: dfc-pt:processed-vegetable   , # Not required
@@ -127,11 +127,11 @@ paths:
                         dfc-b:hasUnit: dfc-m:Gram ,         # Product (in this
                         dfc-b:value: 250.0                  # case 250g)
                       },
-                      dfc-b:suppliedBy: http://test.host/api/dfc/Enterprises/10000 ,
-                      dfc-b:concernedBy: https://test.host/api/dfc/Enterprises/10000/Orders/10001/OrderLines/10001-01
+                      dfc-b:suppliedBy: http://test.host/api/dfc/Organizations/10000 ,
+                      dfc-b:concernedBy: https://test.host/api/dfc/Organizations/10000/Orders/10001/OrderLines/10001-01
                     },
                     {
-                      "@id": https://test.host/api/dfc/Enterprises/10000/SuppliedProducts/10002 ,
+                      "@id": https://test.host/api/dfc/Organizations/10000/SuppliedProducts/10002 ,
                       "@type": dfc-b:SuppliedProduct ,
                       dfc-b:Name: Tomatoes - Cour de Beouf ,
                       dfc-b:hasType: dfc-pt:Tomatoes   , # Not required
@@ -140,13 +140,13 @@ paths:
                         dfc-b:hasUnit: dfc-m:Gram ,         # Product (in this
                         dfc-b:value: 500.0                  # case 250g)
                       },
-                      dfc-b:suppliedBy: http://test.host/api/dfc/Enterprises/10000 ,
-                      dfc-b:concernedBy: https://test.host/api/dfc/Enterprises/10000/Orders/10001/OrderLines/10001-02
+                      dfc-b:suppliedBy: http://test.host/api/dfc/Organizations/10000 ,
+                      dfc-b:concernedBy: https://test.host/api/dfc/Organizations/10000/Orders/10001/OrderLines/10001-02
                     },
                     {
-                      "@id": https://test.host/api/dfc/Enterprises/10000/Orders/10001/OrderLines/10001-01 ,
+                      "@id": https://test.host/api/dfc/Organizations/10000/Orders/10001/OrderLines/10001-01 ,
                       "@type": dfc-b:OrderLine ,
-                      dfc-b:concerns: http://test.host/api/dfc/Enterprises/10000/SuppliedProducts/10001 ,
+                      dfc-b:concerns: http://test.host/api/dfc/Organizations/10000/SuppliedProducts/10001 ,
                       dfc-b:hasQuantity:  {
                         "@type": dfc-b:QuantitativeValue ,  # the quantity related to
                         dfc-b:hasUnit: jar ,                # the actual Sale (in
@@ -158,12 +158,12 @@ paths:
                         dfc-b:value: 19.95 ,
                         dfc-b:VATrate: 0.0
                       },
-                      dfc-b:partOf: https://test.host/api/dfc/Enterprises/10000/Orders/10001
+                      dfc-b:partOf: https://test.host/api/dfc/Organizations/10000/Orders/10001
                     },
                     {
-                      "@id": https://test.host/api/dfc/Enterprises/10000/Orders/10001/OrderLines/10001-02 ,
+                      "@id": https://test.host/api/dfc/Organizations/10000/Orders/10001/OrderLines/10001-02 ,
                       "@type": dfc-b:OrderLine ,
-                      dfc-b:concerns: http://test.host/api/dfc/Enterprises/10000/SuppliedProducts/10002 ,
+                      dfc-b:concerns: http://test.host/api/dfc/Organizations/10000/SuppliedProducts/10002 ,
                       dfc-b:hasQuantity:  {
                         "@type": dfc-b:QuantitativeValue ,  # the quantity related to
                         dfc-b:hasUnit: Bag ,                # the actual Sale (in
@@ -175,15 +175,15 @@ paths:
                         dfc-b:value: 12.50 ,
                         dfc-b:VATrate: 0.0
                       },
-                      dfc-b:partOf: https://test.host/api/dfc/Enterprises/10000/Orders/10001
+                      dfc-b:partOf: https://test.host/api/dfc/Organizations/10000/Orders/10001
                     },
                     {
-                      "@id": https://test.host/api/dfc/Enterprises/10000/Orders/10001 ,
+                      "@id": https://test.host/api/dfc/Organizations/10000/Orders/10001 ,
                       "@type": dfc-b:Order ,
                       dfc-b:date: "2024-06-25" ,  # Order Date
-                      dfc-b:soldBy: https://test.host/api/dfc/Enterprises/10050 ,
-                      dfc-b:hasPart: https://test.host/api/dfc/Enterprises/10000/Orders/10001/OrderLines/10001-01 ,
-                      dfc-b:hasPart: https://test.host/api/dfc/Enterprises/10000/Orders/10001/OrderLines/10001-02
+                      dfc-b:soldBy: https://test.host/api/dfc/Organizations/10050 ,
+                      dfc-b:hasPart: https://test.host/api/dfc/Organizations/10000/Orders/10001/OrderLines/10001-01 ,
+                      dfc-b:hasPart: https://test.host/api/dfc/Organizations/10000/Orders/10001/OrderLines/10001-02
                     }
                     ]
         '404':

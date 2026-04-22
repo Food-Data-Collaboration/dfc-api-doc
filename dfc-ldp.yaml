@@ -1,0 +1,444 @@
+openapi: 3.0.1
+info:
+  title: DFC LDP Container Discovery API
+  version: v2.0.0
+  contact:
+    {
+      "name": "DFC General Contact" ,
+      "url": "https://www.dfc-standard.org/" ,
+      "email": "hello@dfc-standard.org"
+    }
+  description: |
+    <p>
+    DFC LDP Container Discovery API implements the Data Food Consortium (DFC) v2.0.0 specifications.
+    This API provides discoverability endpoints for DFC platforms including Platform WebIDs,
+    User WebIDs, Organization containers, and Identity Service endpoints.
+    <p>
+components:
+  securitySchemes:
+    oidc_token:
+      type: openIdConnect
+      openIdConnectUrl: https://login.lescommuns.org/auth/realm/datafoodconsortium
+
+security:
+- oidc_token: []
+
+paths:
+  /webid:
+    get:
+      summary: Get Platform WebID
+      description: |
+        Returns the public platform WebID document.
+        The platform WebID MUST advertise supported protocol and ontology versions,
+        and provide a link to the Identity Service.
+      tags:
+      - WebID
+      responses:
+        '200':
+          description: successful
+          content:
+            application/ld+json:
+              schema:
+                example:
+                  "@graph":
+                  - "@id": https://platform.ex/webid
+                    "@type": foaf:PersonalProfileDocument
+                    foaf:maker: https://platform.ex/webid#me
+                    foaf:primaryTopic: https://platform.ex/webid#me
+                  - "@id": https://platform.ex/webid#me
+                    "@type":
+                    - dfc-t:Platform
+                    - foaf:Agent
+                    foaf:name: Example platform
+                    dfc-t:supportedProtocolVersion: "2.0.0"
+                    dfc-t:supportedOntologyVersion: "2.0.0"
+                    dfc-t:hasIdentityService: https://platform.ex/identity-service
+
+  /identity-service:
+    head:
+      summary: Get User WebID via Identity Service
+      description: |
+        Returns the user's WebID on this platform in exchange for a valid OIDC token.
+        The token MUST contain the user's email address. Returns 303 See Other with
+        Location header pointing to the user's WebID. If the WebID doesn't exist,
+        it is created before returning.
+      tags:
+      - Identity Service
+      responses:
+        '303':
+          description: See Other - redirects to user's WebID
+          headers:
+            Location:
+              description: URL of the user's WebID
+              schema:
+                type: string
+                format: uri
+        '400':
+          description: Bad Request - malformed or missing email in token
+        '403':
+          description: Forbidden - invalid OIDC token
+
+  "/users/{userId}/webid":
+    get:
+      summary: Get User WebID
+      description: |
+        Returns the public WebID document for a DFC user. User WebIDs are linked
+        to private preferences documents and TypeIndexes.
+      tags:
+      - WebID
+      parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful
+          content:
+            application/ld+json:
+              schema:
+                example:
+                  "@graph":
+                  - "@id": https://platform.ex/users/john/webid
+                    "@type": foaf:PersonalProfileDocument
+                    foaf:maker: https://platform.ex/users/john/webid#me
+                    foaf:primaryTopic: https://platform.ex/users/john/webid#me
+                  - "@id": https://platform.ex/users/john/webid#me
+                    "@type": foaf:Agent
+                    pim:preferencesFile: https://platform.ex/users/john/prefs
+        '404':
+          description: user not found
+
+  "/users/{userId}/prefs":
+    get:
+      summary: Get User Preferences
+      description: |
+        Returns the user's preferences document, which links to their private TypeIndex.
+      tags:
+      - User Preferences
+      parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful
+          content:
+            application/ld+json:
+              schema:
+                example:
+                  "@graph":
+                  - "@id": https://platform.ex/users/john/prefs
+                    "@type": pim:ConfigurationFile
+                  - "@id": https://platform.ex/users/john/webid#me
+                    solid:privateTypeIndex: https://platform.ex/users/john/privateTypeIndex
+        '404':
+          description: user not found
+
+  "/users/{userId}/privateTypeIndex":
+    get:
+      summary: Get User's Private Type Index
+      description: |
+        Returns the private TypeIndex that registers instances of Organization for this user.
+      tags:
+      - Type Index
+      parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful
+          content:
+            application/ld+json:
+              schema:
+                example:
+                  "@graph":
+                  - "@id": https://platform.ex/users/john/privateTypeIndex
+                    "@type":
+                    - solid:TypeIndex
+                    - solid:ListedDocument
+                  - "@id": https://platform.ex/users/john/privateTypeIndex#reg1
+                    "@type": solid:TypeIndexRegistration
+                    solid:forClass: dfc-b:Organization
+                    solid:instance: https://platform.ex/organizations/john-s-organization/index
+        '404':
+          description: user not found
+
+  "/organizations":
+    get:
+      summary: List Organizations
+      description: Returns a list of all organizations on this platform (LDP container).
+      tags:
+      - Organizations
+      responses:
+        '200':
+          description: successful
+          headers:
+            Link:
+              description: LDP BasicContainer link relation
+              schema:
+                type: string
+          content:
+            application/ld+json:
+              schema:
+                example:
+                  "@context":
+                    ldp: http://www.w3.org/ns/ldp#
+                    dc: http://purl.org/dc/terms/
+                    posix: http://www.w3.org/ns/posix/stat#
+                    xsd: http://www.w3.org/2001/XMLSchema#
+                  "@graph":
+                  - "@id": https://platform.ex/organizations/
+                    "@type":
+                    - ldp:Container
+                    - ldp:BasicContainer
+                    - ldp:Resource
+                    dc:modified:
+                      "@type": xsd:dateTime
+                      "@value": "2026-01-15T10:30:00.000Z"
+                    ldp:contains:
+                    - https://platform.ex/organizations/john-s-organization/
+                    - https://platform.ex/organizations/janes-farm/
+
+  "/organizations/{organizationId}":
+    get:
+      summary: Get Organization (Enterprise container)
+      description: |
+        Returns the organization container index. An organization container is a LDP
+        container containing catalogs, supplied-products, and orders.
+      tags:
+      - Organizations
+      parameters:
+      - name: organizationId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful
+          content:
+            application/ld+json:
+              schema:
+                example:
+                  "@context":
+                    dfc-b: https://w3id.org/dfc/ontology/DFC_BusinessOntology.owl#
+                    dfc-t: https://w3id.org/dfc/ontology/DFC_TechnicalOntology.owl#
+                  "@graph":
+                  - "@id": https://platform.ex/organizations/john-s-organization/index
+                    "@type": dfc-b:Organization
+                    dfc-b:name: John's Farm
+                    dfc-b:hasAddress: https://platform.ex/organizations/john-s-organization/addresses/
+                    dfc-b:supplies: https://platform.ex/organizations/john-s-organization/supplied-products/
+                    dfc-b:manages: https://platform.ex/organizations/john-s-organization/catalogs/
+                    dfc-b:orders: https://platform.ex/organizations/john-s-organization/orders/
+        '404':
+          description: organization not found
+
+  "/organizations/{organizationId}/catalogs":
+    get:
+      summary: Get Organization Catalogs Container
+      description: |
+        Returns the catalogs LDP container for an organization.
+        Catalogs contain catalog items, offers, and prices.
+      tags:
+      - Catalogs
+      parameters:
+      - name: organizationId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful
+          headers:
+            Link:
+              description: LDP BasicContainer link relation
+              schema:
+                type: string
+          content:
+            application/ld+json:
+              schema:
+                example:
+                  "@context":
+                    ldp: http://www.w3.org/ns/ldp#
+                  "@graph":
+                  - "@id": https://platform.ex/organizations/john-s-organization/catalogs/
+                    "@type":
+                    - ldp:Container
+                    - ldp:BasicContainer
+                    ldp:contains:
+                    - https://platform.ex/organizations/john-s-organization/catalogs/main-catalog/
+        '404':
+          description: organization not found
+
+  "/organizations/{organizationId}/catalogs/{catalogId}/index":
+    get:
+      summary: Get Catalog Index
+      description: |
+        Returns the catalog index document containing catalog items, offers, and prices.
+      tags:
+      - Catalogs
+      parameters:
+      - name: organizationId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: catalogId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful
+          content:
+            application/ld+json:
+              schema:
+                example:
+                  "@context":
+                    dfc-b: https://w3id.org/dfc/ontology/DFC_BusinessOntology.owl#
+                  "@graph":
+                  - "@id": main-catalog/index
+                    "@type": dfc-b:Catalog
+                    dfc-b:name: Main Catalog
+                    dfc-b:maintainedBy: https://platform.ex/organizations/john-s-organization/index
+                  - "@id": main-catalog/index#catalogItem1
+                    "@type": dfc-b:CatalogItem
+                    dfc-b:references: https://platform.ex/organizations/john-s-organization/supplied-products/tomato/index
+                    dfc-b:offeredThrough: main-catalog/index#offer1
+                  - "@id": main-catalog/index#offer1
+                    "@type": dfc-b:Offer
+                    dfc-b:hasPrice: main-catalog/index#price1
+                  - "@id": main-catalog/index#price1
+                    "@type": dfc-b:Price
+                    dfc-b:hasUnit: EUR
+                    dfc-b:value: 2.4
+        '404':
+          description: catalog not found
+
+  "/organizations/{organizationId}/supplied-products":
+    get:
+      summary: Get Organization Supplied Products Container
+      description: |
+        Returns the supplied products LDP container for an organization.
+      tags:
+      - Supplied Products
+      parameters:
+      - name: organizationId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful
+          headers:
+            Link:
+              description: LDP BasicContainer link relation
+              schema:
+                type: string
+          content:
+            application/ld+json:
+              schema:
+                example:
+                  "@context":
+                    ldp: http://www.w3.org/ns/ldp#
+                  "@graph":
+                  - "@id": https://platform.ex/organizations/john-s-organization/supplied-products/
+                    "@type":
+                    - ldp:Container
+                    - ldp:BasicContainer
+                    ldp:contains:
+                    - https://platform.ex/organizations/john-s-organization/supplied-products/tomato/
+                    - https://platform.ex/organizations/john-s-organization/supplied-products/basil/
+        '404':
+          description: organization not found
+
+  "/organizations/{organizationId}/supplied-products/{productId}/index":
+    get:
+      summary: Get Supplied Product Index
+      description: Returns the index document for a supplied product.
+      tags:
+      - Supplied Products
+      parameters:
+      - name: organizationId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: productId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful
+          content:
+            application/ld+json:
+              schema:
+                example:
+                  "@context":
+                    dfc-b: https://w3id.org/dfc/ontology/DFC_BusinessOntology.owl#
+                    dfc-pt: https://w3id.org/dfc/taxonomy/productTypes.rdf#
+                    dfc-m: https://w3id.org/dfc/taxonomy/measures.rdf#
+                  "@graph":
+                  - "@id": tomato/index
+                    "@type": dfc-b:SuppliedProduct
+                    dfc-b:producedBy: https://platform.ex/organizations/john-s-organization/index
+                    dfc-b:name: Organic Tomatoes
+                    dfc-b:hasType: dfc-pt:tomato
+                    dfc-b:hasQuantity:
+                      "@type": dfc-b:QuantitativeValue
+                      dfc-b:hasUnit: dfc-m:Kilogram
+                      dfc-b:value: 1.0
+        '404':
+          description: product not found
+
+  "/organizations/{organizationId}/orders":
+    get:
+      summary: Get Organization Orders Container
+      description: Returns the orders LDP container for an organization.
+      tags:
+      - Orders
+      parameters:
+      - name: organizationId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful
+          headers:
+            Link:
+              description: LDP BasicContainer link relation
+              schema:
+                type: string
+          content:
+            application/ld+json:
+              schema:
+                example:
+                  "@context":
+                    ldp: http://www.w3.org/ns/ldp#
+                  "@graph":
+                  - "@id": https://platform.ex/organizations/john-s-organization/orders/
+                    "@type":
+                    - ldp:Container
+                    - ldp:BasicContainer
+                    ldp:contains:
+                    - https://platform.ex/organizations/john-s-organization/orders/order-001/
+        '404':
+          description: organization not found
+
+servers:
+- url: "/"
