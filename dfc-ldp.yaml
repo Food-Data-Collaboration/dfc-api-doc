@@ -228,8 +228,8 @@ paths:
               schema:
                 example:
                   "@context":
-                    dfc-b: https://w3id.org/dfc/ontology/DFC_BusinessOntology.owl#
-                    dfc-t: https://w3id.org/dfc/ontology/DFC_TechnicalOntology.owl#
+                    dfc-b: https://w3id.org/dfc/ontology/src/DFC_BusinessOntology.owl#
+                    dfc-t: https://w3id.org/dfc/ontology/src/DFC_TechnicalOntology.owl#
                   "@graph":
                   - "@id": https://platform.ex/organizations/john-s-organization/index
                     "@type": dfc-b:Organization
@@ -305,7 +305,7 @@ paths:
               schema:
                 example:
                   "@context":
-                    dfc-b: https://w3id.org/dfc/ontology/DFC_BusinessOntology.owl#
+                    dfc-b: https://w3id.org/dfc/ontology/src/DFC_BusinessOntology.owl#
                   "@graph":
                   - "@id": main-catalog/index
                     "@type": dfc-b:Catalog
@@ -388,7 +388,7 @@ paths:
               schema:
                 example:
                   "@context":
-                    dfc-b: https://w3id.org/dfc/ontology/DFC_BusinessOntology.owl#
+                    dfc-b: https://w3id.org/dfc/ontology/src/DFC_BusinessOntology.owl#
                     dfc-pt: https://w3id.org/dfc/taxonomy/productTypes.rdf#
                     dfc-m: https://w3id.org/dfc/taxonomy/measures.rdf#
                   "@graph":

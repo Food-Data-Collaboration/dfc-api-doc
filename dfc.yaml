@@ -1062,11 +1062,11 @@ paths:
                 "@context":
                   rdfs: http://www.w3.org/2000/01/rdf-schema#
                   skos: http://www.w3.org/2004/02/skos/core#
-                  dfc: https://w3id.org/dfc/ontology/DFC_FullModel.owl#
+                  dfc: https://w3id.org/dfc/ontology/src/DFC_FullModel.owl#
                   dc: http://purl.org/dc/elements/1.1/#
-                  dfc-b: https://w3id.org/dfc/ontology/DFC_BusinessOntology.owl#
-                  dfc-p: https://w3id.org/dfc/ontology/DFC_ProductGlossary.owl#
-                  dfc-t: https://w3id.org/dfc/ontology/DFC_TechnicalOntology.owl#
+                  dfc-b: https://w3id.org/dfc/ontology/src/DFC_BusinessOntology.owl#
+                  dfc-p: https://w3id.org/dfc/ontology/src/DFC_ProductGlossary.owl#
+                  dfc-t: https://w3id.org/dfc/ontology/src/DFC_TechnicalOntology.owl#
                   dfc-m: https://w3id.org/dfc/taxonomy/measures.rdf#
                   dfc-pt: https://w3id.org/dfc/taxonomy/productTypes.rdf#
                   dfc-f: https://w3id.org/dfc/taxonomy/facets.rdf#
