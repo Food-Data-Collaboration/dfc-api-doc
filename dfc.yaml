@@ -27,6 +27,12 @@ paths:
     get:
       summary: Show address
       parameters:
+    - name: x-dfc-version
+      in: header
+      required: true
+      schema:
+        type: string
+        example: "2.0.0"
       - name: id
         in: path
         required: true
@@ -57,97 +63,12 @@ paths:
           description: not found
   "/api/dfc/Organizations/{enterprise_id}/CatalogItems":
     parameters:
-    - name: organization_id
-      in: path
+    - name: x-dfc-version
+      in: header
       required: true
       schema:
         type: string
-    get:
-      summary: List all CatalogItems for an Organization
-      parameters:
-      - name: before
-        description: The cursor returned from a previous request, requesting the API return elements before that id.
-        in: query
-        required: false
-        schema:
-          type: string
-      - name: after
-        description: The cursor returned from a previous request, requesting the API return elements after that id.
-        in: query
-        required: false
-        schema:
-          type: string
-      - name: first
-        description: Return up to the first x elements in the list
-        in: query
-        required: false
-        schema:
-          type: integer
-          format: int32
-          minimum: 1
-          maximum: 255
-          default: 25
-          example: 25
-      - name: last
-        description: Return up to the last x elements in the list
-        in: query
-        required: false
-        schema:
-          type: integer
-          format: int32
-          minimum: 1
-          maximum: 255
-          default: 25
-          example: 25
-      tags:
-      - CatalogItems
-      responses:
-        '404':
-          description: not found
-        '200':
-          description: success
-          headers:
-            PageInfo:
-              description: Provides cursor information for pagination.
-              style: simple
-              explode: false
-              schema:
-                type: object
-                properties:
-                  hasPreviousPage:
-                    type: boolean
-                  hasNextPage:
-                    type: boolean
-                  startCursor:
-                    type: string
-                  endCursor:
-                    type: string
-          content:
-            application/json:
-              examples:
-                test_example:
-                  value:
-                    "@context": https://w3id.org/dfc/ontology/context/context_2.0.0.json
-                    "@graph":
-                    - "@id": http://test.host/api/dfc/Organizations/10000
-                      "@type": dfc-b:Organization
-                      dfc-b:name: Fred's Farm
-                      dfc-b:hasDescription: Beautiful
-                      dfc-b:manages: http://test.host/api/dfc/Organizations/10000/CatalogItems/10001
-                    - "@id": http://test.host/api/dfc/Organizations/10000/CatalogItems/10001
-                      "@type": dfc-b:CatalogItem
-                      dfc-b:references: http://test.host/api/dfc/Organizations/10000/SuppliedProducts/10002
-                      dfc-b:sku: AR
-                      dfc-b:stockLimitation: 0
-                      dfc-b:offeredThrough: http://test.host/api/dfc/Organizations/10000/customerCategories/10005/Offers/10001
-                    - "@id": http://test.host/api/dfc/Organizations/10000/customerCategories/10005/Offers/10001
-                      "@type": dfc-b:Offer
-                      dfc-b:hasPrice: 19.99
-                      dfc-b:stockLimitation: 0
-        '401':
-          description: unauthorized
-  "/api/dfc/Organizations/{enterprise_id}/CatalogItems/{id}":
-    parameters:
+        example: "2.0.0"
     - name: organization_id
       in: path
       required: true
@@ -165,6 +86,12 @@ paths:
       responses:
         '200':
           description: success
+          headers:
+            x-dfc-version:
+              description: The DFC version the API relates to
+              schema:
+                type: string
+                example: "2.0.0"
           content:
             application/json:
               examples:
@@ -302,6 +229,12 @@ paths:
 
   "/api/dfc/Organizations/{enterprise_id}/customerCategories":
     parameters:
+    - name: x-dfc-version
+      in: header
+      required: true
+      schema:
+        type: string
+        example: "2.0.0"
     - name: organization_id
       in: path
       required: true
@@ -317,6 +250,12 @@ paths:
           description: not found
         '200':
           description: successful
+          headers:
+            x-dfc-version:
+              description: The DFC version the API relates to
+              schema:
+                type: string
+                example: "2.0.0"
           content:
             application/json:
               examples:
@@ -354,6 +293,12 @@ paths:
 
   "/api/dfc/Organizations/{enterprise_id}/customerCategories/{id}":
     parameters:
+    - name: x-dfc-version
+      in: header
+      required: true
+      schema:
+        type: string
+        example: "2.0.0"
     - name: organization_id
       in: path
       required: true
@@ -372,6 +317,12 @@ paths:
       responses:
         '200':
           description: successful
+          headers:
+            x-dfc-version:
+              description: The DFC version the API relates to
+              schema:
+                type: string
+                example: "2.0.0"
           content:
             application/json:
               examples:
@@ -449,9 +400,15 @@ paths:
           format: int32
           example: 25
           default: 25
-      responses:
-        "200":
+responses:
+        '200':
           description: successful
+          headers:
+            x-dfc-version:
+              description: The DFC version the API relates to
+              schema:
+                type: string
+                example: "2.0.0"
           content:
             application/json:
               examples:
@@ -470,6 +427,12 @@ paths:
           description: not found
   "/api/dfc/Organizations/{id}":
     parameters:
+    - name: x-dfc-version
+      in: header
+      required: true
+      schema:
+        type: string
+        example: "2.0.0"
     - name: id
       in: path
       required: true
@@ -477,12 +440,18 @@ paths:
         type: string
     get:
       summary: Show enterprise
-      parameters: []
+parameters: []
       tags:
       - Organizations
       responses:
-        '200':
+        "200":
           description: successful
+          headers:
+            x-dfc-version:
+              description: The DFC version the API relates to
+              schema:
+                type: string
+                example: "2.0.0"
           content:
             application/json:
               examples:
@@ -631,6 +600,12 @@ paths:
     post:
       summary: Affilate 2 Organizations (1 in path, 1 in requestBody)
       parameters:
+      - name: x-dfc-version
+        in: header
+        required: true
+        schema:
+          type: string
+          example: "2.0.0"
       - name: organization_id
         in: path
         required: true
@@ -656,6 +631,12 @@ paths:
     delete:
       summary: Remove an Organization affiliatedTo link
       parameters:
+      - name: x-dfc-version
+        in: header
+        required: true
+        schema:
+          type: string
+          example: "2.0.0"
       - name: organization_id
         in: path
         required: true
@@ -678,6 +659,12 @@ paths:
 
   "/api/dfc/Organizations/{enterprise_id}/customerCategories/{customerCategory_id}/Offers/{id}":
     parameters:
+    - name: x-dfc-version
+      in: header
+      required: true
+      schema:
+        type: string
+        example: "2.0.0"
     - name: organization_id
       in: path
       required: true
@@ -735,6 +722,12 @@ paths:
 
   "/api/dfc/persons/{id}":
     parameters:
+    - name: x-dfc-version
+      in: header
+      required: true
+      schema:
+        type: string
+        example: "2.0.0"
     - name: id
       in: path
       required: true
@@ -771,6 +764,12 @@ paths:
 
   "/api/dfc/PhoneNumbers/{id}":
     parameters:
+    - name: x-dfc-version
+      in: header
+      required: true
+      schema:
+        type: string
+        example: "2.0.0"
     - name: id
       in: path
       required: true
@@ -800,12 +799,18 @@ paths:
 
   "/api/dfc/Organizations/{enterprise_id}/SocialMedias/{name}":
     parameters:
+    - name: x-dfc-version
+      in: header
+      required: true
+      schema:
+        type: string
+        example: "2.0.0"
     - name: organization_id
       in: path
       required: true
       schema:
         type: string
-    - name: name
+    - name: id
       in: path
       required: true
       schema:
@@ -833,6 +838,12 @@ paths:
 
   "/api/dfc/Organizations/{enterprise_id}/SuppliedProducts":
     parameters:
+    - name: x-dfc-version
+      in: header
+      required: true
+      schema:
+        type: string
+        example: "2.0.0"
     - name: organization_id
       in: path
       required: true
@@ -1005,6 +1016,12 @@ paths:
 
   "/api/dfc/Organizations/{enterprise_id}/SuppliedProducts/{id}":
     parameters:
+    - name: x-dfc-version
+      in: header
+      required: true
+      schema:
+        type: string
+        example: "2.0.0"
     - name: organization_id
       in: path
       required: true
@@ -1139,6 +1156,12 @@ paths:
 
   "/api/dfc/Organizations/{enterprise_id}/Orders":
     parameters:
+    - name: x-dfc-version
+      in: header
+      required: true
+      schema:
+        type: string
+        example: "2.0.0"
     - name: organization_id
       in: path
       required: true
@@ -1379,6 +1402,12 @@ paths:
 
   "/api/dfc/Organizations/{enterprise_id}/Orders/{id}":
     parameters:
+    - name: x-dfc-version
+      in: header
+      required: true
+      schema:
+        type: string
+        example: "2.0.0"
     - name: organization_id
       in: path
       required: true
@@ -1502,6 +1531,12 @@ paths:
 
   "/api/dfc/Organizations/{enterprise_id}/Orders/{order_id}/orderlines":
     parameters:
+    - name: x-dfc-version
+      in: header
+      required: true
+      schema:
+        type: string
+        example: "2.0.0"
     - name: organization_id
       in: path
       required: true
@@ -1594,6 +1629,12 @@ paths:
 
   "/api/dfc/Organizations/{enterprise_id}/Orders/{order_id}/orderlines/{id}":
     parameters:
+    - name: x-dfc-version
+      in: header
+      required: true
+      schema:
+        type: string
+        example: "2.0.0"
     - name: organization_id
       in: path
       required: true
@@ -1671,6 +1712,12 @@ paths:
 
   "/api/dfc/Organizations/{enterprise_id}/SaleSessions":
     parameters:
+    - name: x-dfc-version
+      in: header
+      required: true
+      schema:
+        type: string
+        example: "2.0.0"
     - name: organization_id
       in: path
       required: true
@@ -1767,6 +1814,12 @@ paths:
 
   "/api/dfc/Organizations/{enterprise_id}/SaleSessions/{id}":
     parameters:
+    - name: x-dfc-version
+      in: header
+      required: true
+      schema:
+        type: string
+        example: "2.0.0"
     - name: organization_id
       in: path
       required: true

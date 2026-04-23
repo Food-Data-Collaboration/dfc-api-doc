@@ -31,11 +31,24 @@ paths:
         Returns the public platform WebID document.
         The platform WebID MUST advertise supported protocol and ontology versions,
         and provide a link to the Identity Service.
+      parameters:
+      - name: x-dfc-version
+        in: header
+        required: true
+        schema:
+          type: string
+          example: "2.0.0"
       tags:
       - WebID
       responses:
         '200':
           description: successful
+          headers:
+            x-dfc-version:
+              description: The DFC version the API relates to
+              schema:
+                type: string
+                example: "2.0.0"
           content:
             application/ld+json:
               schema:
@@ -62,6 +75,13 @@ paths:
         The token MUST contain the user's email address. Returns 303 See Other with
         Location header pointing to the user's WebID. If the WebID doesn't exist,
         it is created before returning.
+      parameters:
+      - name: x-dfc-version
+        in: header
+        required: true
+        schema:
+          type: string
+          example: "2.0.0"
       tags:
       - Identity Service
       responses:
@@ -78,15 +98,19 @@ paths:
         '403':
           description: Forbidden - invalid OIDC token
 
-  "/users/{userId}/webid":
+"/users/{userId}/webid":
     get:
       summary: Get User WebID
       description: |
         Returns the public WebID document for a DFC user. User WebIDs are linked
         to private preferences documents and TypeIndexes.
-      tags:
-      - WebID
       parameters:
+      - name: x-dfc-version
+        in: header
+        required: true
+        schema:
+          type: string
+          example: "2.0.0"
       - name: userId
         in: path
         required: true
@@ -110,14 +134,18 @@ paths:
         '404':
           description: user not found
 
-  "/users/{userId}/prefs":
+"/users/{userId}/prefs":
     get:
       summary: Get User Preferences
       description: |
         Returns the user's preferences document, which links to their private TypeIndex.
-      tags:
-      - User Preferences
       parameters:
+      - name: x-dfc-version
+        in: header
+        required: true
+        schema:
+          type: string
+          example: "2.0.0"
       - name: userId
         in: path
         required: true
@@ -138,14 +166,18 @@ paths:
         '404':
           description: user not found
 
-  "/users/{userId}/privateTypeIndex":
+"/users/{userId}/privateTypeIndex":
     get:
       summary: Get User's Private Type Index
       description: |
         Returns the private TypeIndex that registers instances of Organization for this user.
-      tags:
-      - Type Index
       parameters:
+      - name: x-dfc-version
+        in: header
+        required: true
+        schema:
+          type: string
+          example: "2.0.0"
       - name: userId
         in: path
         required: true
@@ -174,6 +206,13 @@ paths:
     get:
       summary: List Organizations
       description: Returns a list of all organizations on this platform (LDP container).
+      parameters:
+      - name: x-dfc-version
+        in: header
+        required: true
+        schema:
+          type: string
+          example: "2.0.0"
       tags:
       - Organizations
       responses:
@@ -206,15 +245,19 @@ paths:
                     - https://platform.ex/organizations/john-s-organization/
                     - https://platform.ex/organizations/janes-farm/
 
-  "/organizations/{organizationId}":
+"/organizations/{organizationId}":
     get:
       summary: Get Organization (Enterprise container)
       description: |
         Returns the organization container index. An organization container is a LDP
         container containing catalogs, supplied-products, and orders.
-      tags:
-      - Organizations
       parameters:
+      - name: x-dfc-version
+        in: header
+        required: true
+        schema:
+          type: string
+          example: "2.0.0"
       - name: organizationId
         in: path
         required: true
@@ -243,15 +286,19 @@ paths:
         '404':
           description: organization not found
 
-  "/organizations/{organizationId}/catalogs":
+"/organizations/{organizationId}/catalogs":
     get:
       summary: Get Organization Catalogs Container
       description: |
         Returns the catalogs LDP container for an organization.
         Catalogs contain catalog items, offers, and prices.
-      tags:
-      - Catalogs
       parameters:
+      - name: x-dfc-version
+        in: header
+        required: true
+        schema:
+          type: string
+          example: "2.0.0"
       - name: organizationId
         in: path
         required: true
@@ -281,16 +328,20 @@ paths:
         '404':
           description: organization not found
 
-  "/organizations/{organizationId}/certifications":
+"/organizations/{organizationId}/certifications":
     get:
       summary: Get Organization Certifications Container
       description: |
         Returns the certifications LDP container for an organization.
         Certifications represent organic, fair-trade, or other certifications held by the organization.
         Each certification includes operatorId, certiferReference, and optional certificationScore.
-      tags:
-      - Certifications
       parameters:
+      - name: x-dfc-version
+        in: header
+        required: true
+        schema:
+          type: string
+          example: "2.0.0"
       - name: organizationId
         in: path
         required: true
@@ -321,17 +372,26 @@ paths:
         '404':
           description: organization not found
 
-  "/organizations/{organizationId}/certifications/{certificationId}/index":
+"/organizations/{organizationId}/certifications/{certificationId}/index":
     get:
       summary: Get Certification Index
       description: |
         Returns the certification index document containing certification details.
         Includes operatorId (organic licence number), certiferReference (certifying body ID),
         and optional certificationScore for applicable standards.
-      tags:
-      - Certifications
       parameters:
+      - name: x-dfc-version
+        in: header
+        required: true
+        schema:
+          type: string
+          example: "2.0.0"
       - name: organizationId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: certificationId
         in: path
         required: true
         schema:
@@ -371,15 +431,24 @@ paths:
         '404':
           description: certification not found
 
-  "/organizations/{organizationId}/catalogs/{catalogId}/index":
+"/organizations/{organizationId}/catalogs/{catalogId}/index":
     get:
       summary: Get Catalog Index
       description: |
         Returns the catalog index document containing catalog items, offers, and prices.
-      tags:
-      - Catalogs
       parameters:
+      - name: x-dfc-version
+        in: header
+        required: true
+        schema:
+          type: string
+          example: "2.0.0"
       - name: organizationId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: catalogId
         in: path
         required: true
         schema:
@@ -417,14 +486,18 @@ paths:
         '404':
           description: catalog not found
 
-  "/organizations/{organizationId}/supplied-products":
+"/organizations/{organizationId}/supplied-products":
     get:
       summary: Get Organization Supplied Products Container
       description: |
         Returns the supplied products LDP container for an organization.
-      tags:
-      - Supplied Products
       parameters:
+      - name: x-dfc-version
+        in: header
+        required: true
+        schema:
+          type: string
+          example: "2.0.0"
       - name: organizationId
         in: path
         required: true
@@ -455,14 +528,23 @@ paths:
         '404':
           description: organization not found
 
-  "/organizations/{organizationId}/supplied-products/{productId}/index":
+"/organizations/{organizationId}/supplied-products/{productId}/index":
     get:
       summary: Get Supplied Product Index
       description: Returns the index document for a supplied product.
-      tags:
-      - Supplied Products
       parameters:
+      - name: x-dfc-version
+        in: header
+        required: true
+        schema:
+          type: string
+          example: "2.0.0"
       - name: organizationId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: productId
         in: path
         required: true
         schema:
@@ -496,13 +578,17 @@ paths:
         '404':
           description: product not found
 
-  "/organizations/{organizationId}/orders":
+"/organizations/{organizationId}/orders":
     get:
       summary: Get Organization Orders Container
       description: Returns the orders LDP container for an organization.
-      tags:
-      - Orders
       parameters:
+      - name: x-dfc-version
+        in: header
+        required: true
+        schema:
+          type: string
+          example: "2.0.0"
       - name: organizationId
         in: path
         required: true
@@ -536,7 +622,7 @@ servers:
 - url: "/"
 
 paths:
-  "/organizations/{organizationId}/template-sale-sessions":
+"/organizations/{organizationId}/template-sale-sessions":
     get:
       summary: Get Organization Template Sale Sessions Container
       description: |
@@ -544,9 +630,13 @@ paths:
         TemplateSaleSessions hold distribution patterns including:
         - Recurring schedules (using iCal rrule)
         - GeoJSON features for pickup points and delivery areas
-      tags:
-      - Template Sale Sessions
       parameters:
+      - name: x-dfc-version
+        in: header
+        required: true
+        schema:
+          type: string
+          example: "2.0.0"
       - name: organizationId
         in: path
         required: true
@@ -576,17 +666,26 @@ paths:
         '404':
           description: organization not found
 
-  "/organizations/{organizationId}/template-sale-sessions/{sessionId}/index":
+"/organizations/{organizationId}/template-sale-sessions/{sessionId}/index":
     get:
       summary: Get Template Sale Session Index
       description: |
         Returns the template sale session index document.
         Contains scheduling information (iCal recurrence rules) and GeoJSON features
         for pickup points (Point) and delivery areas (Polygon).
-      tags:
-      - Template Sale Sessions
       parameters:
+      - name: x-dfc-version
+        in: header
+        required: true
+        schema:
+          type: string
+          example: "2.0.0"
       - name: organizationId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: sessionId
         in: path
         required: true
         schema:
@@ -663,16 +762,20 @@ paths:
         '404':
           description: template sale session not found
 
-  "/organizations/{organizationId}/physical-places":
+"/organizations/{organizationId}/physical-places":
     get:
       summary: Get Organization Physical Places Container
       description: |
         Returns the physical places LDP container for an organization.
         Physical places represent locations such as pickup points and delivery areas,
         and contain GeoJSON features (Point or Polygon geometries).
-      tags:
-      - Physical Places
       parameters:
+      - name: x-dfc-version
+        in: header
+        required: true
+        schema:
+          type: string
+          example: "2.0.0"
       - name: organizationId
         in: path
         required: true
@@ -703,17 +806,26 @@ paths:
         '404':
           description: organization not found
 
-  "/organizations/{organizationId}/physical-places/{placeId}/index":
+"/organizations/{organizationId}/physical-places/{placeId}/index":
     get:
       summary: Get Physical Place Index
       description: |
         Returns the physical place index document containing GeoJSON features.
         Physical places can be pickup locations (Point geometry) or delivery areas
         (Polygon geometry).
-      tags:
-      - Physical Places
       parameters:
+      - name: x-dfc-version
+        in: header
+        required: true
+        schema:
+          type: string
+          example: "2.0.0"
       - name: organizationId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: placeId
         in: path
         required: true
         schema:
@@ -753,15 +865,19 @@ paths:
         '404':
           description: physical place not found
 
-  "/organizations/{organizationId}/routes":
+"/organizations/{organizationId}/routes":
     get:
       summary: Get Organization Routes Container
       description: |
         Returns the routes LDP container for an organization.
         Routes represent delivery or pickup routes that connect physical places.
-      tags:
-      - Routes
       parameters:
+      - name: x-dfc-version
+        in: header
+        required: true
+        schema:
+          type: string
+          example: "2.0.0"
       - name: organizationId
         in: path
         required: true
@@ -791,15 +907,24 @@ paths:
         '404':
           description: organization not found
 
-  "/organizations/{organizationId}/routes/{routeId}/index":
+"/organizations/{organizationId}/routes/{routeId}/index":
     get:
       summary: Get Route Index
       description: |
         Returns the route index document containing steps and associated physical places.
-      tags:
-      - Routes
       parameters:
+      - name: x-dfc-version
+        in: header
+        required: true
+        schema:
+          type: string
+          example: "2.0.0"
       - name: organizationId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: routeId
         in: path
         required: true
         schema:
@@ -841,15 +966,19 @@ paths:
         '404':
           description: route not found
 
-  "/organizations/{organizationId}/addresses":
+"/organizations/{organizationId}/addresses":
     get:
       summary: Get Organization Addresses Container
       description: |
         Returns the addresses LDP container for an organization.
         Addresses are linked to physical places for geographic context.
-      tags:
-      - Addresses
       parameters:
+      - name: x-dfc-version
+        in: header
+        required: true
+        schema:
+          type: string
+          example: "2.0.0"
       - name: organizationId
         in: path
         required: true
@@ -880,15 +1009,24 @@ paths:
         '404':
           description: organization not found
 
-  "/organizations/{organizationId}/addresses/{addressId}/index":
+"/organizations/{organizationId}/addresses/{addressId}/index":
     get:
       summary: Get Address Index
       description: |
         Returns the address index document containing address details.
-      tags:
-      - Addresses
       parameters:
+      - name: x-dfc-version
+        in: header
+        required: true
+        schema:
+          type: string
+          example: "2.0.0"
       - name: organizationId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: addressId
         in: path
         required: true
         schema:
