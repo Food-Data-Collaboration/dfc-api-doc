@@ -461,10 +461,13 @@ responses:
                     '@graph':
                     - '@id': http://test.host/api/dfc/Organizations/10000
                       '@type': dfc-b:Organization
+                      dfc-b:name: "Organization 10000"
                     - '@id': http://test.host/api/dfc/Organizations/20000
                       '@type': dfc-b:Organization
+                      dfc-b:name: "Organization 20000"
                     - '@id': http://test.host/api/dfc/Organizations/30000
                       '@type': dfc-b:Organization
+                      dfc-b:name: "Organization 30000"
 
         "404":
           description: not found
