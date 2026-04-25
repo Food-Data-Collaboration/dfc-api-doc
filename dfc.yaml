@@ -62,25 +62,20 @@ paths:
         '404':
           description: not found
   "/api/dfc/Organizations/{enterprise_id}/CatalogItems":
-    parameters:
-    - name: x-dfc-version
-      in: header
-      required: true
-      schema:
-        type: string
-        example: "2.0.0"
-    - name: organization_id
-      in: path
-      required: true
-      schema:
-        type: string
-    - name: id
-      in: path
-      required: true
-      schema:
-        type: string
     get:
       summary: Show CatalogItem
+      parameters:
+      - name: x-dfc-version
+        in: header
+        required: true
+        schema:
+          type: string
+          example: "2.0.0"
+      - name: enterprise_id
+        in: path
+        required: true
+        schema:
+          type: string
       tags:
       - CatalogItems
       responses:
@@ -113,7 +108,19 @@ paths:
           description: not found
     post:
       summary: create a new CatalogItem for a given Organization
-      parameters: []
+      parameters:
+      - name: x-dfc-version
+        in: header
+        required: true
+        schema:
+          type: string
+          example: "2.0.0"
+      - name: enterprise_id
+        in: path
+        required: true
+        schema:
+          type: string
+      tags:
       tags:
       - CatalogItems
       requestBody:
@@ -156,7 +163,18 @@ paths:
           description: unauthorized
     put:
       summary: Update CatalogItem
-      parameters: []
+      parameters:
+      - name: x-dfc-version
+        in: header
+        required: true
+        schema:
+          type: string
+          example: "2.0.0"
+      - name: enterprise_id
+        in: path
+        required: true
+        schema:
+          type: string
       tags:
       - CatalogItems
       responses:
@@ -228,21 +246,20 @@ paths:
                 dfc-b:sku: new-sku
 
   "/api/dfc/Organizations/{enterprise_id}/customerCategories":
-    parameters:
-    - name: x-dfc-version
-      in: header
-      required: true
-      schema:
-        type: string
-        example: "2.0.0"
-    - name: organization_id
-      in: path
-      required: true
-      schema:
-        type: string
     get:
       summary: Return a list of Customer Categories for an Organization
-      parameters: []
+      parameters:
+      - name: x-dfc-version
+        in: header
+        required: true
+        schema:
+          type: string
+          example: "2.0.0"
+      - name: enterprise_id
+        in: path
+        required: true
+        schema:
+          type: string
       tags:
       - CustomerCategory
       responses:
@@ -268,7 +285,18 @@ paths:
                       dfc-b:definedBy: http://test.host/api/dfc/Organizations/10000
     post:
       summary: create a new Customer Category for a given Organization
-      parameters: []
+      parameters:
+      - name: x-dfc-version
+        in: header
+        required: true
+        schema:
+          type: string
+          example: "2.0.0"
+      - name: enterprise_id
+        in: path
+        required: true
+        schema:
+          type: string
       tags:
       - CustomerCategory
       responses:
@@ -292,26 +320,25 @@ paths:
                 dfc-b:definedBy: http://test.host/api/dfc/Organizations/10000
 
   "/api/dfc/Organizations/{enterprise_id}/customerCategories/{id}":
-    parameters:
-    - name: x-dfc-version
-      in: header
-      required: true
-      schema:
-        type: string
-        example: "2.0.0"
-    - name: organization_id
-      in: path
-      required: true
-      schema:
-        type: string
-    - name: id
-      in: path
-      required: true
-      schema:
-        type: string
     get:
       summary: Return a specific Customer Category for an Organization
-      parameters: []
+      parameters:
+      - name: x-dfc-version
+        in: header
+        required: true
+        schema:
+          type: string
+          example: "2.0.0"
+      - name: enterprise_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
       tags:
       - CustomerCategory
       responses:
@@ -335,7 +362,23 @@ paths:
                       dfc-b:definedBy: http://test.host/api/dfc/Organizations/10000
     delete:
       summary: remove a Customer Category for a given Organization
-      parameters: []
+      parameters:
+      - name: x-dfc-version
+        in: header
+        required: true
+        schema:
+          type: string
+          example: "2.0.0"
+      - name: enterprise_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
       tags:
       - CustomerCategory
       requestBody:
@@ -440,7 +483,7 @@ responses:
         type: string
     get:
       summary: Show enterprise
-parameters: []
+      parameters: []
       tags:
       - Organizations
       responses:
