@@ -44,7 +44,7 @@ paths:
         '200':
           description: successful
           content:
-            application/json:
+            application/ld+json:
               examples:
                 test_example:
                   value:
@@ -93,7 +93,7 @@ paths:
                 type: string
                 example: "2.0.0"
           content:
-            application/json:
+            application/ld+json:
               examples:
                 test_example:
                   value:
@@ -118,7 +118,7 @@ paths:
       - CatalogItems
       requestBody:
         content:
-          application/json:
+          application/ld+json:
             schema:
               example:
                 "@context": https://w3id.org/dfc/ontology/context/context_2.0.0.json
@@ -146,7 +146,7 @@ paths:
         '201':
           description: created
           content:
-            application/json:
+            application/ld+json:
               schema:
                 example:
                   "@id": http://test.host/api/dfc/Organizations/10000/CatalogItems/10001
@@ -164,7 +164,7 @@ paths:
           description: no content
       requestBody:
         content:
-          application/json:
+          application/ld+json:
             schema:
               example:
                 "@context":
@@ -257,7 +257,7 @@ paths:
                 type: string
                 example: "2.0.0"
           content:
-            application/json:
+            application/ld+json:
               examples:
                 test_example:
                   value:
@@ -275,7 +275,7 @@ paths:
         '201':
           description: created
           content:
-            application/json:
+            application/ld+json:
               schema:
                 example:
                   "@id": http://test.host/api/dfc/Organizations/10000/customerCategories/10006
@@ -285,7 +285,7 @@ paths:
           description: unauthorized
       requestBody:
         content:
-          application/json:
+          application/ld+json:
             schema:
               example:
                 "@id": "#"
@@ -324,7 +324,7 @@ paths:
                 type: string
                 example: "2.0.0"
           content:
-            application/json:
+            application/ld+json:
               examples:
                 test_example:
                   value:
@@ -340,7 +340,7 @@ paths:
       - CustomerCategory
       requestBody:
         content:
-          application/json:
+          application/ld+json:
             schema:
               example:
                 "@id": http://test.host/api/dfc/Organizations/10000/customerCategories/10006
@@ -410,7 +410,7 @@ responses:
                 type: string
                 example: "2.0.0"
           content:
-            application/json:
+            application/ld+json:
               examples:
                 test_example:
                   value:
@@ -453,7 +453,7 @@ parameters: []
                 type: string
                 example: "2.0.0"
           content:
-            application/json:
+            application/ld+json:
               examples:
                 test_example:
                   value:
@@ -534,7 +534,7 @@ parameters: []
           description: unauthorized
       requestBody:
         content:
-          application/json:
+          application/ld+json:
             schema:
               example:
                 test_example:
@@ -565,7 +565,7 @@ parameters: []
           description: no content
       requestBody:
         content:
-          application/json:
+          application/ld+json:
             schema:
               example:
                 "@context": https://w3id.org/dfc/ontology/context/context_2.0.0.json
@@ -622,7 +622,7 @@ parameters: []
           description: unauthorized
       requestBody:
         content:
-          application/json:
+          application/ld+json:
             schema:
               example:
                 "@id": http://test.host/api/dfc/Organizations/10001
@@ -688,7 +688,7 @@ parameters: []
         '200':
           description: success
           content:
-            application/json:
+            application/ld+json:
               examples:
                 test_example:
                   value:
@@ -709,7 +709,7 @@ parameters: []
           description: success
       requestBody:
         content:
-          application/json:
+          application/ld+json:
             schema:
               example:
                 "@context": https://w3id.org/dfc/ontology/context/context_2.0.0.json
@@ -742,7 +742,7 @@ parameters: []
         '200':
           description: successful
           content:
-            application/json:
+            application/ld+json:
               examples:
                 test_example:
                   value:
@@ -784,7 +784,7 @@ parameters: []
         '200':
           description: successful
           content:
-            application/json:
+            application/ld+json:
               examples:
                 test_example:
                   value:
@@ -824,7 +824,7 @@ parameters: []
         '200':
           description: successful
           content:
-            application/json:
+            application/ld+json:
               examples:
                 test_example:
                   value:
@@ -892,7 +892,7 @@ parameters: []
         '200':
           description: success
           content:
-            application/json:
+            application/ld+json:
               examples:
                 test_example:
                   value:
@@ -975,7 +975,7 @@ parameters: []
         '200':
           description: success
           content:
-            application/json:
+            application/ld+json:
               examples:
                 test_example:
                   value:
@@ -996,7 +996,7 @@ parameters: []
                     dfc-b:image: http://test.host/active-storage/url/logo-white.png
       requestBody:
         content:
-          application/json:
+          application/ld+json:
             schema:
               example:
                 "@context": https://w3id.org/dfc/ontology/context/context_2.0.0.json
@@ -1040,7 +1040,7 @@ parameters: []
         '200':
           description: success
           content:
-            application/json:
+            application/ld+json:
               examples:
                 test_example:
                   value:
@@ -1073,7 +1073,7 @@ parameters: []
           description: success
       requestBody:
         content:
-          application/json:
+          application/ld+json:
             schema:
               example:
                 "@context":
@@ -1242,7 +1242,7 @@ parameters: []
         '200':
           description: success
           content:
-            application/json:
+            application/ld+json:
               examples:
                 test_example:
                   value:
@@ -1305,7 +1305,7 @@ parameters: []
       - Orders
       requestBody:
         content:
-          application/json:
+          application/ld+json:
             schema:
               example:
                 "@context": https://w3id.org/dfc/ontology/context/context_2.0.0.json
@@ -1367,7 +1367,7 @@ parameters: []
         '200':
           description: success
           content:
-            application/json:
+            application/ld+json:
               examples:
                 test_example:
                   value:
@@ -1426,7 +1426,7 @@ parameters: []
         '200':
           description: success
           content:
-            application/json:
+            application/ld+json:
               examples:
                 test_example:
                   value:
@@ -1484,7 +1484,7 @@ parameters: []
           description: success
       requestBody:
         content:
-          application/json:
+          application/ld+json:
             schema:
               example:
                 "@context": https://w3id.org/dfc/ontology/context/context_2.0.0.json
@@ -1555,7 +1555,7 @@ parameters: []
         '200':
           description: success
           content:
-            application/json:
+            application/ld+json:
               examples:
                 test_example:
                   value:
@@ -1587,7 +1587,7 @@ parameters: []
         '200':
           description: success
           content:
-            application/json:
+            application/ld+json:
               examples:
                 test_example:
                   value:
@@ -1608,7 +1608,7 @@ parameters: []
                     dfc-b:discount: 2.95
       requestBody:
         content:
-          application/json:
+          application/ld+json:
             schema:
               example:
                 "@context": https://w3id.org/dfc/ontology/context/context_2.0.0.json
@@ -1658,7 +1658,7 @@ parameters: []
         '200':
           description: success
           content:
-            application/json:
+            application/ld+json:
               examples:
                 test_example:
                   value:
@@ -1690,7 +1690,7 @@ parameters: []
           description: success
       requestBody:
         content:
-          application/json:
+          application/ld+json:
             schema:
               example:
                 "@context": https://w3id.org/dfc/ontology/context/context_2.0.0.json
@@ -1731,7 +1731,7 @@ parameters: []
         '200':
           description: success
           content:
-            application/json:
+            application/ld+json:
               examples:
                 test_example:
                   value:
@@ -1766,7 +1766,7 @@ parameters: []
         '200':
           description: success
           content:
-            application/json:
+            application/ld+json:
               examples:
                 test_example:
                   value:
@@ -1790,7 +1790,7 @@ parameters: []
                       dfc-b:marginPercent: 5.0
       requestBody:
         content:
-          application/json:
+          application/ld+json:
             schema:
               example:
                 "@context": https://w3id.org/dfc/ontology/context/context_2.0.0.json
@@ -1838,7 +1838,7 @@ parameters: []
         '200':
           description: success
           content:
-            application/json:
+            application/ld+json:
               examples:
                 test_example:
                   value:
@@ -1873,7 +1873,7 @@ parameters: []
           description: success
       requestBody:
         content:
-          application/json:
+          application/ld+json:
             schema:
               example:
                 "@context": https://w3id.org/dfc/ontology/context/context_2.0.0.json
