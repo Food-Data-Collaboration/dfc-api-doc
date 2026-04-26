@@ -1743,31 +1743,31 @@ paths:
                   dfc-b:VATrate: 0.0
                 dfc-b:discount: 2.95
 
-  "/api/dfc/Organizations/{enterprise_id}/Orders/{order_id}/orderlines/{id}":
-    parameters:
-    - name: x-dfc-version
-      in: header
-      required: true
-      schema:
-        type: string
-        example: "2.0.0"
-    - name: organization_id
-      in: path
-      required: true
-      schema:
-        type: string
-    - name: order_id
-      in: path
-      required: true
-      schema:
-        type: string
-    - name: id
-      in: path
-      required: true
-      schema:
-        type: string
+"/api/dfc/Organizations/{enterprise_id}/Orders/{order_id}/orderlines/{id}":
     get:
-      summary: Retrieve a single Order Line
+      summary: Show single Order Line for an Order
+      parameters:
+      - name: x-dfc-version
+        in: header
+        required: true
+        schema:
+          type: string
+          example: "2.0.0"
+      - name: enterprise_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: order_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
       tags:
       - OrderLines
       responses:
@@ -1827,20 +1827,20 @@ paths:
 
 
   "/api/dfc/Organizations/{enterprise_id}/SaleSessions":
-    parameters:
-    - name: x-dfc-version
-      in: header
-      required: true
-      schema:
-        type: string
-        example: "2.0.0"
-    - name: organization_id
-      in: path
-      required: true
-      schema:
-        type: string
     get:
       summary: List all Sales Sessions for an Organization
+      parameters:
+      - name: x-dfc-version
+        in: header
+        required: true
+        schema:
+          type: string
+          example: "2.0.0"
+      - name: enterprise_id
+        in: path
+        required: true
+        schema:
+          type: string
       tags:
       - SaleSessions
       responses:
@@ -1928,26 +1928,26 @@ paths:
                   dfc-b:marginPercent: 5.0
 
 
-  "/api/dfc/Organizations/{enterprise_id}/SaleSessions/{id}":
-    parameters:
-    - name: x-dfc-version
-      in: header
-      required: true
-      schema:
-        type: string
-        example: "2.0.0"
-    - name: organization_id
-      in: path
-      required: true
-      schema:
-        type: string
-    - name: id
-      in: path
-      required: true
-      schema:
-        type: string
+"/api/dfc/Organizations/{enterprise_id}/SaleSessions/{id}":
     get:
-      summary: Retrieve a single Sales Session
+      summary: Show a single SaleSession
+      parameters:
+      - name: x-dfc-version
+        in: header
+        required: true
+        schema:
+          type: string
+          example: "2.0.0"
+      - name: enterprise_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
       tags:
       - SaleSessions
       responses:
