@@ -1,4 +1,3 @@
-
 openapi: 3.0.1
 info:
   title: DFC Sample API
@@ -27,11 +26,11 @@ paths:
     get:
       summary: Show address
       parameters:
-    - name: x-dfc-version
-      in: header
-      required: true
-      schema:
-        type: string
+      - name: x-dfc-version
+        in: header
+        required: true
+        schema:
+          type: string
         example: "2.0.0"
       - name: id
         in: path
@@ -120,7 +119,6 @@ paths:
         required: true
         schema:
           type: string
-      tags:
       tags:
       - CatalogItems
       requestBody:
@@ -443,7 +441,7 @@ paths:
           format: int32
           example: 25
           default: 25
-responses:
+      responses:
         '200':
           description: successful
           headers:
@@ -468,9 +466,8 @@ responses:
                     - '@id': http://test.host/api/dfc/Organizations/30000
                       '@type': dfc-b:Organization
                       dfc-b:name: "Organization 30000"
-
-        "404":
-          description: not found
+        '404':
+          description: "not found"
   "/api/dfc/Organizations/{id}":
     parameters:
     - name: x-dfc-version
@@ -567,7 +564,7 @@ responses:
                     ]
         '404':
           description: not found
-    'post':
+    post:
       summary: Create an Organization
       tags:
       - Organizations
@@ -601,7 +598,7 @@ responses:
                     dfc-b:hasMainContact: http://test.host/api/dfc/Persons/10000
                     dfc-b:logo: http://test.host/active-storage/url/logo.png
                     dfc-b:affiliates: http://test.host/api/dfc/Organizations/60000
-    'put':
+    put:
       summary: Update an Organization
       parameters: []
       tags:
@@ -652,7 +649,7 @@ responses:
         schema:
           type: string
           example: "2.0.0"
-      - name: organization_id
+      - name: enterprise_id
         in: path
         required: true
         schema:
@@ -683,7 +680,7 @@ responses:
         schema:
           type: string
           example: "2.0.0"
-      - name: organization_id
+      - name: enterprise_id
         in: path
         required: true
         schema:
@@ -711,7 +708,7 @@ responses:
       schema:
         type: string
         example: "2.0.0"
-    - name: organization_id
+    - name: enterprise_id
       in: path
       required: true
       schema:
@@ -747,7 +744,28 @@ responses:
                     dfc-b:offersTo: https://test.host/api/dfc/enterprises/10000/customerCategories/10005
     put:
       summary: Update Offer
-      parameters: []
+      parameters:
+      - name: x-dfc-version
+        in: header
+        required: true
+        schema:
+          type: string
+          example: "2.0.0"
+      - name: enterprise_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: customerCategory_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
       tags:
       - Offers
       responses:
@@ -844,26 +862,25 @@ responses:
           description: not found
 
   "/api/dfc/Organizations/{enterprise_id}/SocialMedias/{name}":
-    parameters:
-    - name: x-dfc-version
-      in: header
-      required: true
-      schema:
-        type: string
-        example: "2.0.0"
-    - name: organization_id
-      in: path
-      required: true
-      schema:
-        type: string
-    - name: id
-      in: path
-      required: true
-      schema:
-        type: string
     get:
       summary: Show social media
-      parameters: []
+      parameters:
+      - name: x-dfc-version
+        in: header
+        required: true
+        schema:
+          type: string
+          example: "2.0.0"
+      - name: enterprise_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: name
+        in: path
+        required: true
+        schema:
+          type: string
       tags:
       - SocialMedias
       responses:
@@ -883,21 +900,20 @@ responses:
           description: not found
 
   "/api/dfc/Organizations/{enterprise_id}/SuppliedProducts":
-    parameters:
-    - name: x-dfc-version
-      in: header
-      required: true
-      schema:
-        type: string
-        example: "2.0.0"
-    - name: organization_id
-      in: path
-      required: true
-      schema:
-        type: string
     get:
       summary: List SuppliedProducts for an Organization
       parameters:
+      - name: x-dfc-version
+        in: header
+        required: true
+        schema:
+          type: string
+          example: "2.0.0"
+      - name: enterprise_id
+        in: path
+        required: true
+        schema:
+          type: string
       - name: before
         description: The cursor returned from a previous request, requesting the API return elements before that id.
         in: query
@@ -1012,7 +1028,18 @@ responses:
           description: not found
     post:
       summary: Create SuppliedProduct
-      parameters: []
+      parameters:
+      - name: x-dfc-version
+        in: header
+        required: true
+        schema:
+          type: string
+          example: "2.0.0"
+      - name: enterprise_id
+        in: path
+        required: true
+        schema:
+          type: string
       tags:
       - SuppliedProducts
       responses:
