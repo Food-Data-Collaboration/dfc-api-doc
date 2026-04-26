@@ -1095,7 +1095,7 @@ paths:
       schema:
         type: string
         example: "2.0.0"
-    - name: organization_id
+    - name: enterprise_id
       in: path
       required: true
       schema:
@@ -1136,7 +1136,23 @@ paths:
           description: not found
     put:
       summary: Update SuppliedProduct
-      parameters: []
+      parameters:
+      - name: x-dfc-version
+        in: header
+        required: true
+        schema:
+          type: string
+          example: "2.0.0"
+      - name: enterprise_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
       tags:
       - SuppliedProducts
       responses:
@@ -1228,21 +1244,20 @@ paths:
                 dfc-b:hasAllergenCharacteristic: []
 
   "/api/dfc/Organizations/{enterprise_id}/Orders":
-    parameters:
-    - name: x-dfc-version
-      in: header
-      required: true
-      schema:
-        type: string
-        example: "2.0.0"
-    - name: organization_id
-      in: path
-      required: true
-      schema:
-        type: string
     get:
       summary: Show all Orders for an Organization
       parameters:
+      - name: x-dfc-version
+        in: header
+        required: true
+        schema:
+          type: string
+          example: "2.0.0"
+      - name: enterprise_id
+        in: path
+        required: true
+        schema:
+          type: string
       - name: before
         description: The cursor returned from a previous request, requesting the API return elements before that id.
         in: query
@@ -1373,7 +1388,18 @@ paths:
                     ]
     post:
       summary: Create an Order
-      parameters: []
+      parameters:
+      - name: x-dfc-version
+        in: header
+        required: true
+        schema:
+          type: string
+          example: "2.0.0"
+      - name: enterprise_id
+        in: path
+        required: true
+        schema:
+          type: string
       tags:
       - Orders
       requestBody:
@@ -1473,7 +1499,7 @@ paths:
                     dfc-b:soldBy: http://test.host/api/dfc/Organizations/10000
                     dfc-b:hasPart: http://test.host/api/dfc/Organizations/10000/Orders/10001/orderlines/10001-01
 
-  "/api/dfc/Organizations/{enterprise_id}/Orders/{id}":
+"/api/dfc/Organizations/{enterprise_id}/Orders/{id}":
     parameters:
     - name: x-dfc-version
       in: header
@@ -1481,7 +1507,7 @@ paths:
       schema:
         type: string
         example: "2.0.0"
-    - name: organization_id
+    - name: enterprise_id
       in: path
       required: true
       schema:
@@ -1492,7 +1518,7 @@ paths:
       schema:
         type: string
     get:
-      summary: Show a single Order
+      summary: Show Order
       tags:
       - Orders
       responses:
@@ -1548,6 +1574,23 @@ paths:
           description: not found
     put:
       summary: Update a single Order
+      parameters:
+      - name: x-dfc-version
+        in: header
+        required: true
+        schema:
+          type: string
+          example: "2.0.0"
+      - name: enterprise_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
       tags:
       - Orders
       responses:
@@ -1603,25 +1646,25 @@ paths:
                   dfc-b:discount: []
 
   "/api/dfc/Organizations/{enterprise_id}/Orders/{order_id}/orderlines":
-    parameters:
-    - name: x-dfc-version
-      in: header
-      required: true
-      schema:
-        type: string
-        example: "2.0.0"
-    - name: organization_id
-      in: path
-      required: true
-      schema:
-        type: string
-    - name: order_id
-      in: path
-      required: true
-      schema:
-        type: string
     get:
       summary: Show all Order Lines for an Order
+      parameters:
+      - name: x-dfc-version
+        in: header
+        required: true
+        schema:
+          type: string
+          example: "2.0.0"
+      - name: enterprise_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: order_id
+        in: path
+        required: true
+        schema:
+          type: string
       tags:
       - OrderLines
       responses:
