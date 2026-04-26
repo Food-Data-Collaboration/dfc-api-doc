@@ -1499,7 +1499,7 @@ paths:
                     dfc-b:soldBy: http://test.host/api/dfc/Organizations/10000
                     dfc-b:hasPart: http://test.host/api/dfc/Organizations/10000/Orders/10001/orderlines/10001-01
 
-"/api/dfc/Organizations/{enterprise_id}/Orders/{id}":
+  "/api/dfc/Organizations/{enterprise_id}/Orders/{id}":
     parameters:
     - name: x-dfc-version
       in: header
@@ -1694,7 +1694,23 @@ paths:
           description: not found
     post:
       summary: Create Order Line
-      parameters: []
+      parameters:
+      - name: x-dfc-version
+        in: header
+        required: true
+        schema:
+          type: string
+          example: "2.0.0"
+      - name: enterprise_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: order_id
+        in: path
+        required: true
+        schema:
+          type: string
       tags:
       - OrderLines
       responses:
@@ -1741,9 +1757,9 @@ paths:
                   dfc-b:hasUnit: GBP
                   dfc-b:value: 19.95
                   dfc-b:VATrate: 0.0
-                dfc-b:discount: 2.95
+                  dfc-b:discount: 2.95
 
-"/api/dfc/Organizations/{enterprise_id}/Orders/{order_id}/orderlines/{id}":
+  "/api/dfc/Organizations/{enterprise_id}/Orders/{order_id}/orderlines/{id}":
     get:
       summary: Show single Order Line for an Order
       parameters:
@@ -1797,6 +1813,28 @@ paths:
           description: not found
     put:
       summary: Update a single Order Line
+      parameters:
+      - name: x-dfc-version
+        in: header
+        required: true
+        schema:
+          type: string
+          example: "2.0.0"
+      - name: enterprise_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: order_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
       tags:
       - OrderLines
       responses:
@@ -1873,7 +1911,18 @@ paths:
           description: not found
     post:
       summary: Create Sales Session
-      parameters: []
+      parameters:
+      - name: x-dfc-version
+        in: header
+        required: true
+        schema:
+          type: string
+          example: "2.0.0"
+      - name: enterprise_id
+        in: path
+        required: true
+        schema:
+          type: string
       tags:
       - SaleSessions
       responses:
@@ -1927,8 +1976,7 @@ paths:
                   dfc-b:coordinatedBy: http://test.host/api/dfc/Organizations/10000
                   dfc-b:marginPercent: 5.0
 
-
-"/api/dfc/Organizations/{enterprise_id}/SaleSessions/{id}":
+  "/api/dfc/Organizations/{enterprise_id}/SaleSessions/{id}":
     get:
       summary: Show a single SaleSession
       parameters:
@@ -1980,6 +2028,23 @@ paths:
           description: not found
     put:
       summary: Update a sinlge Sales Session
+      parameters:
+      - name: x-dfc-version
+        in: header
+        required: true
+        schema:
+          type: string
+          example: "2.0.0"
+      - name: enterprise_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
       tags:
       - SaleSessions
       responses:

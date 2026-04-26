@@ -198,7 +198,7 @@ paths:
                   - "@id": https://platform.ex/users/john/privateTypeIndex#reg1
                     "@type": solid:TypeIndexRegistration
                     solid:forClass: dfc-b:Organization
-                    solid:instance: https://platform.ex/organizations/john-s-organization/index
+                    solid:instance: https://platform.ex/organizations/awesome-farm/index
         '404':
           description: user not found
 
@@ -231,8 +231,8 @@ paths:
                   - "@id": https://platform.ex/organizations/
                     "@type": [ldp:Container, ldp:BasicContainer]
                     ldp:hasMemberRelation: ldp:contains
-                    ldp:member: [https://platform.ex/organizations/john-s-organization/index, https://platform.ex/organizations/janes-farm/index]
-                    ldp:contains: [https://platform.ex/organizations/john-s-organization/index, https://platform.ex/organizations/janes-farm/index]
+                    ldp:member: [https://platform.ex/organizations/awesome-farm/index, https://platform.ex/organizations/janes-farm/index]
+                    ldp:contains: [https://platform.ex/organizations/awesome-farm/index, https://platform.ex/organizations/janes-farm/index]
                     ldp:ModifiedDate: "2026-01-15T10:30:00.000Z"
 
   "/organizations/{organizationId}":
@@ -262,15 +262,15 @@ paths:
                 example:
                   "@context": https://w3id.org/dfc/ontology/context/context_2.0.0.json
                   "@graph":
-                  - "@id": https://platform.ex/organizations/john-s-organization/index
+                  - "@id": https://platform.ex/organizations/awesome-farm/index
                     "@type": dfc-b:Organization
                     dfc-b:name: John's Farm
-                    dfc-b:hasTemplateSaleSession: [https://platform.ex/organizations/john-s-organization/template-sale-sessions/]
-                    dfc-b:hasCertification: [https://platform.ex/organizations/john-s-organization/certifications/]
-                    dfc-b:hasAddress: [https://platform.ex/organizations/john-s-organization/addresses/]
-                    dfc-b:supplies: [https://platform.ex/organizations/john-s-organization/supplied-products/]
-                    dfc-b:manages: [https://platform.ex/organizations/john-s-organization/catalogs/]
-                    dfc-b:orders: [https://platform.ex/organizations/john-s-organization/orders/]
+                    dfc-b:hasTemplateSaleSession: [https://platform.ex/organizations/awesome-farm/template-sale-sessions/]
+                    dfc-b:hasCertification: [https://platform.ex/organizations/awesome-farm/certifications/]
+                    dfc-b:hasAddress: [https://platform.ex/organizations/awesome-farm/addresses/]
+                    dfc-b:supplies: [https://platform.ex/organizations/awesome-farm/supplied-products/]
+                    dfc-b:manages: [https://platform.ex/organizations/awesome-farm/catalogs/]
+                    dfc-b:orders: [https://platform.ex/organizations/awesome-farm/orders/]
         '404':
           description: organization not found
 
@@ -306,11 +306,11 @@ paths:
                 example:
                   "@context": https://w3id.org/dfc/ontology/context/context_2.0.0.json
                   "@graph":
-                  - "@id": https://platform.ex/organizations/john-s-organization/catalogs/
+                  - "@id": https://platform.ex/organizations/awesome-farm/catalogs/
                     "@type": [ldp:Container, ldp:BasicContainer]
                     ldp:hasMemberRelation: ldp:contains
-                    ldp:member: [https://platform.ex/organizations/john-s-organization/catalogs/main-catalog/index]
-                    ldp:contains: [https://platform.ex/organizations/john-s-organization/catalogs/main-catalog/index]
+                    ldp:member: [https://platform.ex/organizations/awesome-farm/catalogs/main-catalog/index]
+                    ldp:contains: [https://platform.ex/organizations/awesome-farm/catalogs/main-catalog/index]
         '404':
           description: organization not found
 
@@ -347,11 +347,11 @@ paths:
                 example:
                   "@context": https://w3id.org/dfc/ontology/context/context_2.0.0.json
                   "@graph":
-                  - "@id": https://platform.ex/organizations/john-s-organization/certifications/
+                  - "@id": https://platform.ex/organizations/awesome-farm/certifications/
                     "@type": [ldp:Container, ldp:BasicContainer]
                     ldp:hasMemberRelation: ldp:contains
-                    ldp:member: [https://platform.ex/organizations/john-s-organization/certifications/organic-eu/index, https://platform.ex/organizations/john-s-organization/certifications/demeter/index]
-                    ldp:contains: [https://platform.ex/organizations/john-s-organization/certifications/organic-eu/index, https://platform.ex/organizations/john-s-organization/certifications/demeter/index]
+                    ldp:member: [https://platform.ex/organizations/awesome-farm/certifications/organic-eu/index, https://platform.ex/organizations/awesome-farm/certifications/demeter/index]
+                    ldp:contains: [https://platform.ex/organizations/awesome-farm/certifications/organic-eu/index, https://platform.ex/organizations/awesome-farm/certifications/demeter/index]
         '404':
           description: organization not found
 
@@ -388,18 +388,18 @@ paths:
                 example:
                   "@context": https://w3id.org/dfc/ontology/context/context_2.0.0.json
                   "@graph":
-                  - "@id": https://platform.ex/organizations/john-s-organization/certifications/organic-eu/index
+                  - "@id": https://platform.ex/organizations/awesome-farm/certifications/organic-eu/index
                     "@type": dfc-b:Certification
                     dfc-b:name: EU Organic Certification
-                    dfc-b:isCertifiedBy: https://platform.ex/organizations/john-s-organization/index
+                    dfc-b:isCertifiedBy: https://platform.ex/organizations/awesome-farm/index
                     dfc-b:hasCertification: dfc-f:Organic-EU
                     dfc-b:operatorId: "FR-BIO-01"
                     dfc-b:certiferReference: "UK-ORG-05"
                     dfc-b:certificationScore: ""
-                  - "@id": https://platform.ex/organizations/john-s-organization/certifications/demeter/index
+                  - "@id": https://platform.ex/organizations/awesome-farm/certifications/demeter/index
                     "@type": dfc-b:Certification
                     dfc-b:name: Demeter Biodynamic Certification
-                    dfc-b:isCertifiedBy: https://platform.ex/organizations/john-s-organization/index
+                    dfc-b:isCertifiedBy: https://platform.ex/organizations/awesome-farm/index
                     dfc-b:hasCertification: dfc-f:Demeter
                     dfc-b:operatorId: "FR-DEM-12345"
                     dfc-b:certiferReference: "DEM-INT-001"
@@ -438,18 +438,18 @@ paths:
                 example:
                   "@context": https://w3id.org/dfc/ontology/context/context_2.0.0.json
                   "@graph":
-                  - "@id": https://platform.ex/organizations/john-s-organization/catalogs/main-catalog/index
+                  - "@id": https://platform.ex/organizations/awesome-farm/catalogs/main-catalog/index
                     "@type": dfc-b:Catalog
                     dfc-b:name: Main Catalog
-                    dfc-b:maintainedBy: https://platform.ex/organizations/john-s-organization/index
-                  - "@id": https://platform.ex/organizations/john-s-organization/catalogs/main-catalog/index#catalogItem1
+                    dfc-b:maintainedBy: https://platform.ex/organizations/awesome-farm/index
+                  - "@id": https://platform.ex/organizations/awesome-farm/catalogs/main-catalog/index#catalogItem1
                     "@type": dfc-b:CatalogItem
-                    dfc-b:references: https://platform.ex/organizations/john-s-organization/supplied-products/tomato/index
+                    dfc-b:references: https://platform.ex/organizations/awesome-farm/supplied-products/tomato/index
                     dfc-b:offeredThrough:
-                      "@id": https://platform.ex/organizations/john-s-organization/catalogs/main-catalog/index#offer1
+                      "@id": https://platform.ex/organizations/awesome-farm/catalogs/main-catalog/index#offer1
                       "@type": dfc-b:Offer
                       dfc-b:hasPrice:
-                        "@id": https://platform.ex/organizations/john-s-organization/catalogs/main-catalog/index#price1
+                        "@id": https://platform.ex/organizations/awesome-farm/catalogs/main-catalog/index#price1
                         "@type": dfc-b:Price
                         dfc-b:hasUnit: EUR
                         dfc-b:value: 2.4
@@ -487,11 +487,11 @@ paths:
                 example:
                   "@context": https://w3id.org/dfc/ontology/context/context_2.0.0.json
                   "@graph":
-                  - "@id": https://platform.ex/organizations/john-s-organization/supplied-products/
+                  - "@id": https://platform.ex/organizations/awesome-farm/supplied-products/
                     "@type": [ldp:Container, ldp:BasicContainer]
                     ldp:hasMemberRelation: ldp:contains
-                    ldp:member: [https://platform.ex/organizations/john-s-organization/supplied-products/tomato/index, https://platform.ex/organizations/john-s-organization/supplied-products/basil/index]
-                    ldp:contains: [https://platform.ex/organizations/john-s-organization/supplied-products/tomato/index, https://platform.ex/organizations/john-s-organization/supplied-products/basil/index]
+                    ldp:member: [https://platform.ex/organizations/awesome-farm/supplied-products/tomato/index, https://platform.ex/organizations/awesome-farm/supplied-products/basil/index]
+                    ldp:contains: [https://platform.ex/organizations/awesome-farm/supplied-products/tomato/index, https://platform.ex/organizations/awesome-farm/supplied-products/basil/index]
         '404':
           description: organization not found
 
@@ -525,9 +525,9 @@ paths:
                 example:
                   "@context": https://w3id.org/dfc/ontology/context/context_2.0.0.json
                   "@graph":
-                  - "@id": https://platform.ex/organizations/john-s-organization/supplied-products/tomato/index
+                  - "@id": https://platform.ex/organizations/awesome-farm/supplied-products/tomato/index
                     "@type": dfc-b:SuppliedProduct
-                    dfc-b:producedBy: https://platform.ex/organizations/john-s-organization/index
+                    dfc-b:producedBy: https://platform.ex/organizations/awesome-farm/index
                     dfc-b:name: Organic Tomatoes
                     dfc-b:hasType: dfc-pt:tomato
                     dfc-b:hasQuantity:
@@ -567,11 +567,11 @@ paths:
                 example:
                   "@context": https://w3id.org/dfc/ontology/context/context_2.0.0.json
                   "@graph":
-                  - "@id": https://platform.ex/organizations/john-s-organization/orders/
+                  - "@id": https://platform.ex/organizations/awesome-farm/orders/
                     "@type": [ldp:Container, ldp:BasicContainer]
                     ldp:hasMemberRelation: ldp:contains
-                    ldp:member: [https://platform.ex/organizations/john-s-organization/orders/order-001/index]
-                    ldp:contains: [https://platform.ex/organizations/john-s-organization/orders/order-001/index]
+                    ldp:member: [https://platform.ex/organizations/awesome-farm/orders/order-001/index]
+                    ldp:contains: [https://platform.ex/organizations/awesome-farm/orders/order-001/index]
         '404':
           description: organization not found
 
@@ -609,11 +609,11 @@ paths:
                 example:
                   "@context": https://w3id.org/dfc/ontology/context/context_2.0.0.json
                   "@graph":
-                  - "@id": https://platform.ex/organizations/john-s-organization/template-sale-sessions/
+                  - "@id": https://platform.ex/organizations/awesome-farm/template-sale-sessions/
                     "@type": [ldp:Container, ldp:BasicContainer]
                     ldp:hasMemberRelation: ldp:contains
-                    ldp:member: [https://platform.ex/organizations/john-s-organization/template-sale-sessions/weekly-delivery/index]
-                    ldp:contains: [https://platform.ex/organizations/john-s-organization/template-sale-sessions/weekly-delivery/index]
+                    ldp:member: [https://platform.ex/organizations/awesome-farm/template-sale-sessions/weekly-delivery/index]
+                    ldp:contains: [https://platform.ex/organizations/awesome-farm/template-sale-sessions/weekly-delivery/index]
         '404':
           description: organization not found
 
@@ -650,13 +650,13 @@ paths:
                 example:
                   "@context": https://w3id.org/dfc/ontology/context/context_2.0.0.json
                   "@graph":
-                  - "@id": https://platform.ex/organizations/john-s-organization/template-sale-sessions/weekly-delivery/index
+                  - "@id": https://platform.ex/organizations/awesome-farm/template-sale-sessions/weekly-delivery/index
                     "@type": dfc-b:TemplateSaleSession
                     dfc-b:name: Weekly Delivery Route
-                    dfc-b:coordinatedBy: https://platform.ex/organizations/john-s-organization/index
-                    dfc-b:hasGeoJsonFeature: [https://platform.ex/organizations/john-s-organization/template-sale-sessions/weekly-delivery/index#deliveryArea]
-                    dfc-b:occursAt: [https://platform.ex/organizations/john-s-organization/template-sale-sessions/weekly-delivery/index#schedule]
-                  - "@id": https://platform.ex/organizations/john-s-organization/template-sale-sessions/weekly-delivery/index#schedule
+                    dfc-b:coordinatedBy: https://platform.ex/organizations/awesome-farm/index
+                    dfc-b:hasGeoJsonFeature: [https://platform.ex/organizations/awesome-farm/template-sale-sessions/weekly-delivery/index#deliveryArea]
+                    dfc-b:occursAt: [https://platform.ex/organizations/awesome-farm/template-sale-sessions/weekly-delivery/index#schedule]
+                  - "@id": https://platform.ex/organizations/awesome-farm/template-sale-sessions/weekly-delivery/index#schedule
                     "@type": cal:Vevent
                     cal:dtstart:
                       "@type": xsd:dateTime
@@ -669,7 +669,7 @@ paths:
                       cal:freq: WEEKLY
                       cal:byday: TU
                     cal:interval: 1
-                  - "@id": https://platform.ex/organizations/john-s-organization/template-sale-sessions/weekly-delivery/index#deliveryArea
+                  - "@id": https://platform.ex/organizations/awesome-farm/template-sale-sessions/weekly-delivery/index#deliveryArea
                     "@type": geojson:Feature
                     geojson:geometry:
                       "@type": geojson:Polygon
@@ -688,7 +688,7 @@ paths:
                       "@type": geojson:Properties
                       name: Rennes Delivery Area
                       description: Weekly delivery to Rennes area
-                  - "@id": https://platform.ex/organizations/john-s-organization/template-sale-sessions/weekly-delivery/index#pickupPoint1
+                  - "@id": https://platform.ex/organizations/awesome-farm/template-sale-sessions/weekly-delivery/index#pickupPoint1
                     "@type": geojson:Feature
                     geojson:geometry:
                       "@type": geojson:Point
@@ -735,11 +735,11 @@ paths:
                 example:
                   "@context": https://w3id.org/dfc/ontology/context/context_2.0.0.json
                   "@graph":
-                  - "@id": https://platform.ex/organizations/john-s-organization/physical-places/
+                  - "@id": https://platform.ex/organizations/awesome-farm/physical-places/
                     "@type": [ldp:Container, ldp:BasicContainer]
                     ldp:hasMemberRelation: ldp:contains
-                    ldp:member: [https://platform.ex/organizations/john-s-organization/physical-places/farm-location/index, https://platform.ex/organizations/john-s-organization/physical-places/delivery-zone-north/index]
-                    ldp:contains: [https://platform.ex/organizations/john-s-organization/physical-places/farm-location/index, https://platform.ex/organizations/john-s-organization/physical-places/delivery-zone-north/index]
+                    ldp:member: [https://platform.ex/organizations/awesome-farm/physical-places/farm-location/index, https://platform.ex/organizations/awesome-farm/physical-places/delivery-zone-north/index]
+                    ldp:contains: [https://platform.ex/organizations/awesome-farm/physical-places/farm-location/index, https://platform.ex/organizations/awesome-farm/physical-places/delivery-zone-north/index]
         '404':
           description: organization not found
 
@@ -776,12 +776,12 @@ paths:
                 example:
                   "@context": https://w3id.org/dfc/ontology/context/context_2.0.0.json
                   "@graph":
-                  - "@id": https://platform.ex/organizations/john-s-organization/physical-places/farm-location/index
+                  - "@id": https://platform.ex/organizations/awesome-farm/physical-places/farm-location/index
                     "@type": dfc-b:PhysicalPlace
                     dfc-b:name: Main Farm Location
-                    dfc-b:hasAddress: https://platform.ex/organizations/john-s-organization/addresses/farm-address/index
-                    dfc-b:hasGeoJsonFeature: [https://platform.ex/organizations/john-s-organization/physical-places/farm-location/index#farmPoint]
-                  - "@id": https://platform.ex/organizations/john-s-organization/physical-places/farm-location/index#farmPoint
+                    dfc-b:hasAddress: https://platform.ex/organizations/awesome-farm/addresses/farm-address/index
+                    dfc-b:hasGeoJsonFeature: [https://platform.ex/organizations/awesome-farm/physical-places/farm-location/index#farmPoint]
+                  - "@id": https://platform.ex/organizations/awesome-farm/physical-places/farm-location/index#farmPoint
                     "@type": geojson:Feature
                     geojson:geometry:
                       "@type": geojson:Point
@@ -827,11 +827,11 @@ paths:
                 example:
                   "@context": https://w3id.org/dfc/ontology/context/context_2.0.0.json
                   "@graph":
-                  - "@id": https://platform.ex/organizations/john-s-organization/routes/
+                  - "@id": https://platform.ex/organizations/awesome-farm/routes/
                     "@type": [ldp:Container, ldp:BasicContainer]
                     ldp:hasMemberRelation: ldp:contains
-                    ldp:member: [https://platform.ex/organizations/john-s-organization/routes/tuesday-delivery/index]
-                    ldp:contains: [https://platform.ex/organizations/john-s-organization/routes/tuesday-delivery/index]
+                    ldp:member: [https://platform.ex/organizations/awesome-farm/routes/tuesday-delivery/index]
+                    ldp:contains: [https://platform.ex/organizations/awesome-farm/routes/tuesday-delivery/index]
         '404':
           description: organization not found
 
@@ -866,22 +866,22 @@ paths:
                 example:
                   "@context": https://w3id.org/dfc/ontology/context/context_2.0.0.json
                   "@graph":
-                  - "@id": https://platform.ex/organizations/john-s-organization/routes/tuesday-delivery/index
+                  - "@id": https://platform.ex/organizations/awesome-farm/routes/tuesday-delivery/index
                     "@type": dfc-b:Route
                     dfc-b:name: Tuesday Delivery Route
-                    dfc-b:usedInRoute: https://platform.ex/organizations/john-s-organization/template-sale-sessions/weekly-delivery/index
-                    dfc-b:hasStep: [https://platform.ex/organizations/john-s-organization/routes/tuesday-delivery/index#step1]
-                  - "@id": https://platform.ex/organizations/john-s-organization/routes/tuesday-delivery/index#step1
+                    dfc-b:usedInRoute: https://platform.ex/organizations/awesome-farm/template-sale-sessions/weekly-delivery/index
+                    dfc-b:hasStep: [https://platform.ex/organizations/awesome-farm/routes/tuesday-delivery/index#step1]
+                  - "@id": https://platform.ex/organizations/awesome-farm/routes/tuesday-delivery/index#step1
                     "@type": dfc-b:PickUpStep
                     dfc-b:sequence: 1
-                    dfc-b:locatedAt: https://platform.ex/organizations/john-s-organization/physical-places/farm-location/index
+                    dfc-b:locatedAt: https://platform.ex/organizations/awesome-farm/physical-places/farm-location/index
                     dfc-b:startsAt:
                       "@type": xsd:time
                       "@value": "08:00:00"
-                  - "@id": https://platform.ex/organizations/john-s-organization/routes/tuesday-delivery/index#step2
+                  - "@id": https://platform.ex/organizations/awesome-farm/routes/tuesday-delivery/index#step2
                     "@type": dfc-b:DeliveryStep
                     dfc-b:sequence: 2
-                    dfc-b:locatedAt: https://platform.ex/organizations/john-s-organization/physical-places/delivery-zone-north/index
+                    dfc-b:locatedAt: https://platform.ex/organizations/awesome-farm/physical-places/delivery-zone-north/index
                     dfc-b:startsAt:
                       "@type": xsd:time
                       "@value": "10:00:00"
@@ -920,11 +920,11 @@ paths:
                 example:
                   "@context": https://w3id.org/dfc/ontology/context/context_2.0.0.json
                   "@graph":
-                  - "@id": https://platform.ex/organizations/john-s-organization/addresses/
+                  - "@id": https://platform.ex/organizations/awesome-farm/addresses/
                     "@type": [ldp:Container, ldp:BasicContainer]
                     ldp:hasMemberRelation: ldp:contains
-                    ldp:member: [https://platform.ex/organizations/john-s-organization/addresses/farm-address/index, https://platform.ex/organizations/john-s-organization/addresses/warehouse/index]
-                    ldp:contains: [https://platform.ex/organizations/john-s-organization/addresses/farm-address/index, https://platform.ex/organizations/john-s-organization/addresses/warehouse/index]
+                    ldp:member: [https://platform.ex/organizations/awesome-farm/addresses/farm-address/index, https://platform.ex/organizations/awesome-farm/addresses/warehouse/index]
+                    ldp:contains: [https://platform.ex/organizations/awesome-farm/addresses/farm-address/index, https://platform.ex/organizations/awesome-farm/addresses/warehouse/index]
         '404':
           description: organization not found
 
@@ -959,7 +959,7 @@ paths:
                 example:
                   "@context": https://w3id.org/dfc/ontology/context/context_2.0.0.json
                   "@graph":
-                  - "@id": https://platform.ex/organizations/john-s-organization/addresses/farm-address/index
+                  - "@id": https://platform.ex/organizations/awesome-farm/addresses/farm-address/index
                     "@type": dfc-b:Address
                     dfc-b:street: "123 Farm Road"
                     dfc-b:city: Rennes
@@ -968,6 +968,364 @@ paths:
                     dfc-b:hasCountryCode: FR
                     dfc-b:latitude: 48.5
                     dfc-b:longitude: -2.35
-                    dfc-b:basedAt: https://platform.ex/organizations/john-s-organization/physical-places/farm-location/index
+                    dfc-b:basedAt: https://platform.ex/organizations/awesome-farm/physical-places/farm-location/index
         '404':
           description: address not found
+
+  "/organizations/{organizationId}/customer-categories":
+    get:
+      summary: Get Organization Customer Categories Container
+      description: |
+        Returns the customer categories LDP container for an organization.
+      parameters:
+      - name: x-dfc-version
+        in: header
+        required: true
+        schema:
+          type: string
+          example: "2.0.0"
+      - name: organizationId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful
+          headers:
+            Link:
+              description: LDP BasicContainer link relation
+              schema:
+                type: string
+          content:
+            application/ld+json:
+              schema:
+                example:
+                  "@context": https://w3id.org/dfc/ontology/context/context_2.0.0.json
+                  "@graph":
+                  - "@id": https://platform.ex/organizations/awesome-farm/customer-categories/
+                    "@type": [ldp:Container, ldp:BasicContainer]
+                    ldp:hasMemberRelation: ldp:contains
+                    ldp:member: [https://platform.ex/organizations/awesome-farm/customer-categories/retail/index]
+                    ldp:contains: [https://platform.ex/organizations/awesome-farm/customer-categories/retail/index]
+        '404':
+          description: organization not found
+
+  "/organizations/{organizationId}/customer-categories/{categoryId}/index":
+    get:
+      summary: Get Customer Category Index
+      description: Returns the customer category index document.
+      parameters:
+      - name: x-dfc-version
+        in: header
+        required: true
+        schema:
+          type: string
+          example: "2.0.0"
+      - name: organizationId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: categoryId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful
+          content:
+            application/ld+json:
+              schema:
+                example:
+                  "@context": https://w3id.org/dfc/ontology/context/context_2.0.0.json
+                  "@graph":
+                  - "@id": https://platform.ex/organizations/awesome-farm/customer-categories/retail/index
+                    "@type": dfc-b:CustomerCategory
+                    dfc-b:name: Retail Customers
+                    dfc-b:definedBy: https://platform.ex/organizations/awesome-farm/index
+        '404':
+          description: customer category not found
+
+  "/organizations/{organizationId}/affiliated-to":
+    get:
+      summary: Get Organization Affiliated To Container
+      description: Returns the affiliated-to LDP container for an organization.
+      parameters:
+      - name: x-dfc-version
+        in: header
+        required: true
+        schema:
+          type: string
+          example: "2.0.0"
+      - name: organizationId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful
+          content:
+            application/ld+json:
+              schema:
+                example:
+                  "@context": https://w3id.org/dfc/ontology/context/context_2.0.0.json
+                  "@graph":
+                  - "@id": https://platform.ex/organizations/awesome-farm/affiliated-to/
+                    "@type": [ldp:Container, ldp:BasicContainer]
+                    ldp:hasMemberRelation: ldp:contains
+                    ldp:member: [https://platform.ex/organizations/awesome-farm/affiliated-to/partner-org/index]
+                    ldp:contains: [https://platform.ex/organizations/awesome-farm/affiliated-to/partner-org/index]
+        '404':
+          description: organization not found
+
+  "/organizations/{organizationId}/affiliated-to/{id}/index":
+    get:
+      summary: Get Affiliated Organization Index
+      description: Returns the affiliated organization index document.
+      parameters:
+      - name: x-dfc-version
+        in: header
+        required: true
+        schema:
+          type: string
+          example: "2.0.0"
+      - name: organizationId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful
+          content:
+            application/ld+json:
+              schema:
+                example:
+                  "@context": https://w3id.org/dfc/ontology/context/context_2.0.0.json
+                  "@graph":
+                  - "@id": https://platform.ex/organizations/awesome-farm/affiliated-to/partner-org/index
+                    "@type": dfc-b:Organization
+                    dfc-b:name: Partner Organization
+        '404':
+          description: affiliated organization not found
+
+  "/organizations/{organizationId}/social-medias":
+    get:
+      summary: Get Organization Social Medias Container
+      description: Returns the social medias LDP container for an organization.
+      parameters:
+      - name: x-dfc-version
+        in: header
+        required: true
+        schema:
+          type: string
+          example: "2.0.0"
+      - name: organizationId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful
+          content:
+            application/ld+json:
+              schema:
+                example:
+                  "@context": https://w3id.org/dfc/ontology/context/context_2.0.0.json
+                  "@graph":
+                  - "@id": https://platform.ex/organizations/awesome-farm/social-medias/
+                    "@type": [ldp:Container, ldp:BasicContainer]
+                    ldp:hasMemberRelation: ldp:contains
+                    ldp:member: [https://platform.ex/organizations/awesome-farm/social-medias/facebook/index]
+                    ldp:contains: [https://platform.ex/organizations/awesome-farm/social-medias/facebook/index]
+        '404':
+          description: organization not found
+
+  "/organizations/{organizationId}/social-medias/{name}/index":
+    get:
+      summary: Get Social Media Index
+      description: Returns the social media index document.
+      parameters:
+      - name: x-dfc-version
+        in: header
+        required: true
+        schema:
+          type: string
+          example: "2.0.0"
+      - name: organizationId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: name
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful
+          content:
+            application/ld+json:
+              schema:
+                example:
+                  "@context": https://w3id.org/dfc/ontology/context/context_2.0.0.json
+                  "@graph":
+                  - "@id": https://platform.ex/organizations/awesome-farm/social-medias/facebook/index
+                    "@type": dfc-b:SocialMedia
+                    dfc-b:name: facebook
+                    dfc-b:addressOf: https://platform.ex/organizations/awesome-farm/index
+        '404':
+          description: social media not found
+
+  "/organizations/{organizationId}/orders/{orderId}/orderlines":
+    get:
+      summary: Get Order Order Lines Container
+      description: Returns the order lines LDP container for an order.
+      parameters:
+      - name: x-dfc-version
+        in: header
+        required: true
+        schema:
+          type: string
+          example: "2.0.0"
+      - name: organizationId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: orderId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful
+          content:
+            application/ld+json:
+              schema:
+                example:
+                  "@context": https://w3id.org/dfc/ontology/context/context_2.0.0.json
+                  "@graph":
+                  - "@id": https://platform.ex/organizations/awesome-farm/orders/order-001/orderlines/
+                    "@type": [ldp:Container, ldp:BasicContainer]
+                    ldp:hasMemberRelation: ldp:contains
+                    ldp:member: [https://platform.ex/organizations/awesome-farm/orders/order-001/orderlines/001/index]
+                    ldp:contains: [https://platform.ex/organizations/awesome-farm/orders/order-001/orderlines/001/index]
+        '404':
+          description: order not found
+
+  "/organizations/{organizationId}/orders/{orderId}/orderlines/{lineId}/index":
+    get:
+      summary: Get Order Line Index
+      description: Returns the order line index document.
+      parameters:
+      - name: x-dfc-version
+        in: header
+        required: true
+        schema:
+          type: string
+          example: "2.0.0"
+      - name: organizationId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: orderId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: lineId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful
+          content:
+            application/ld+json:
+              schema:
+                example:
+                  "@context": https://w3id.org/dfc/ontology/context/context_2.0.0.json
+                  "@graph":
+                  - "@id": https://platform.ex/organizations/awesome-farm/orders/order-001/orderlines/001/index
+                    "@type": dfc-b:OrderLine
+                    dfc-b:partOf: https://platform.ex/organizations/awesome-farm/orders/order-001/index
+                    dfc-b:concerns: https://platform.ex/organizations/awesome-farm/catalogs/main-catalog/index
+        '404':
+          description: order line not found
+
+  "/persons/{personId}/index":
+    get:
+      summary: Get Person Index
+      description: Returns the person index document.
+      parameters:
+      - name: x-dfc-version
+        in: header
+        required: true
+        schema:
+          type: string
+          example: "2.0.0"
+      - name: personId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful
+          content:
+            application/ld+json:
+              schema:
+                example:
+                  "@context": https://w3id.org/dfc/ontology/context/context_2.0.0.json
+                  "@graph":
+                  - "@id": https://platform.ex/persons/john/index
+                    "@type": dfc-b:Person
+                    dfc-b:firstName: John
+                    dfc-b:lastName: Doe
+        '404':
+          description: person not found
+
+  "/phone-numbers/{phoneNumberId}/index":
+    get:
+      summary: Get Phone Number Index
+      description: Returns the phone number index document.
+      parameters:
+      - name: x-dfc-version
+        in: header
+        required: true
+        schema:
+          type: string
+          example: "2.0.0"
+      - name: phoneNumberId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful
+          content:
+            application/ld+json:
+              schema:
+                example:
+                  "@context": https://w3id.org/dfc/ontology/context/context_2.0.0.json
+                  "@graph":
+                  - "@id": https://platform.ex/phone-numbers/12345/index
+                    "@type": dfc-b:PhoneNumber
+                    dfc-b:phoneNumber: "+33 1 23 45 67 89"
+        '404':
+          description: phone number not found
