@@ -16,7 +16,7 @@ components:
   securitySchemes:
     oidc_token:
       type: openIdConnect
-      openIdConnectUrl: https://login.lescommuns.org/auth/realm/datafoodconsortium
+      openIdConnectUrl: https://login.fooddatacollaboration.org.uk/auth/realm/dev
 
 security:
 - oidc_token: []
