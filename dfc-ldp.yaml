@@ -1,0 +1,1331 @@
+openapi: 3.0.1
+info:
+  title: DFC LDP Container Discovery API
+  version: v2.0.0
+  contact:
+    {
+      "name": "DFC General Contact" ,
+      "url": "https://www.dfc-standard.org/" ,
+      "email": "hello@dfc-standard.org"
+    }
+  description: |
+    <p>
+    DFC LDP Container Discovery API implements the Data Food Consortium (DFC) v2.0.0 specifications.
+    This API provides discoverability endpoints for DFC platforms including Platform WebIDs,
+    User WebIDs, Organization containers, and Identity Service endpoints.
+    <p>
+components:
+  securitySchemes:
+    oidc_token:
+      type: openIdConnect
+      openIdConnectUrl: https://login.fooddatacollaboration.org.uk/auth/realm/dev
+
+security:
+- oidc_token: []
+
+paths:
+  /webid:
+    get:
+      summary: Get Platform WebID
+      description: |
+        Returns the public platform WebID document.
+        The platform WebID MUST advertise supported protocol and ontology versions,
+        and provide a link to the Identity Service.
+      parameters:
+      - name: x-dfc-version
+        in: header
+        required: true
+        schema:
+          type: string
+          example: "2.0.0"
+      tags:
+      - WebID
+      responses:
+        '200':
+          description: successful
+          headers:
+            x-dfc-version:
+              description: The DFC version the API relates to
+              schema:
+                type: string
+                example: "2.0.0"
+          content:
+            application/ld+json:
+              schema:
+                example:
+                  "@graph":
+                  - "@id": https://platform.ex/webid
+                    "@type": foaf:PersonalProfileDocument
+                    foaf:maker: https://platform.ex/webid#me
+                    foaf:primaryTopic: https://platform.ex/webid#me
+                  - "@id": https://platform.ex/webid#me
+                    "@type":
+                    - dfc-t:Platform
+                    - foaf:Agent
+                    foaf:name: Example platform
+                    dfc-t:supportedProtocolVersion: "2.0.0"
+                    dfc-t:supportedOntologyVersion: "2.0.0"
+                    dfc-t:hasIdentityService: https://platform.ex/identity-service
+
+  /identity-service:
+    head:
+      summary: Get User WebID via Identity Service
+      description: |
+        Returns the user's WebID on this platform in exchange for a valid OIDC token.
+        The token MUST contain the user's email address. Returns 303 See Other with
+        Location header pointing to the user's WebID. If the WebID doesn't exist,
+        it is created before returning.
+      parameters:
+      - name: x-dfc-version
+        in: header
+        required: true
+        schema:
+          type: string
+          example: "2.0.0"
+      tags:
+      - Identity Service
+      responses:
+        '303':
+          description: See Other - redirects to user's WebID
+          headers:
+            Location:
+              description: URL of the user's WebID
+              schema:
+                type: string
+                format: uri
+        '400':
+          description: Bad Request - malformed or missing email in token
+        '403':
+          description: Forbidden - invalid OIDC token
+
+  "/users/{userId}/webid":
+    get:
+      summary: Get User WebID
+      description: |
+        Returns the public WebID document for a DFC user. User WebIDs are linked
+        to private preferences documents and TypeIndexes.
+      parameters:
+      - name: x-dfc-version
+        in: header
+        required: true
+        schema:
+          type: string
+          example: "2.0.0"
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful
+          content:
+            application/ld+json:
+              schema:
+                example:
+                  "@graph":
+                  - "@id": https://platform.ex/users/john/webid
+                    "@type": foaf:PersonalProfileDocument
+                    foaf:maker: https://platform.ex/users/john/webid#me
+                    foaf:primaryTopic: https://platform.ex/users/john/webid#me
+                  - "@id": https://platform.ex/users/john/webid#me
+                    "@type": foaf:Agent
+                    pim:preferencesFile: https://platform.ex/users/john/prefs
+        '404':
+          description: user not found
+
+  "/users/{userId}/prefs":
+    get:
+      summary: Get User Preferences
+      description: |
+        Returns the user's preferences document, which links to their private TypeIndex.
+      parameters:
+      - name: x-dfc-version
+        in: header
+        required: true
+        schema:
+          type: string
+          example: "2.0.0"
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful
+          content:
+            application/ld+json:
+              schema:
+                example:
+                  "@graph":
+                  - "@id": https://platform.ex/users/john/prefs
+                    "@type": pim:ConfigurationFile
+                  - "@id": https://platform.ex/users/john/webid#me
+                    solid:privateTypeIndex: https://platform.ex/users/john/privateTypeIndex
+        '404':
+          description: user not found
+
+  "/users/{userId}/privateTypeIndex":
+    get:
+      summary: Get User's Private Type Index
+      description: |
+        Returns the private TypeIndex that registers instances of Organization for this user.
+      parameters:
+      - name: x-dfc-version
+        in: header
+        required: true
+        schema:
+          type: string
+          example: "2.0.0"
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful
+          content:
+            application/ld+json:
+              schema:
+                example:
+                  "@graph":
+                  - "@id": https://platform.ex/users/john/privateTypeIndex
+                    "@type":
+                    - solid:TypeIndex
+                    - solid:ListedDocument
+                  - "@id": https://platform.ex/users/john/privateTypeIndex#reg1
+                    "@type": solid:TypeIndexRegistration
+                    solid:forClass: dfc-b:Organization
+                    solid:instance: https://platform.ex/organizations/awesome-farm/index
+        '404':
+          description: user not found
+
+  "/organizations":
+    get:
+      summary: List Organizations
+      parameters:
+      - name: x-dfc-version
+        in: header
+        required: true
+        schema:
+          type: string
+          example: "2.0.0"
+      tags:
+      - Organizations
+      responses:
+        '200':
+          description: successful
+          headers:
+            Link:
+              description: LDP BasicContainer link relation
+              schema:
+                type: string
+          content:
+            application/ld+json:
+              schema:
+                example:
+                  "@context": https://w3id.org/dfc/ontology/context/context_2.0.0.json
+                  "@graph":
+                  - "@id": https://platform.ex/organizations/
+                    "@type": [ldp:Container, ldp:BasicContainer]
+                    ldp:hasMemberRelation: ldp:contains
+                    ldp:member: [https://platform.ex/organizations/awesome-farm/index, https://platform.ex/organizations/janes-farm/index]
+                    ldp:contains: [https://platform.ex/organizations/awesome-farm/index, https://platform.ex/organizations/janes-farm/index]
+                    ldp:ModifiedDate: "2026-01-15T10:30:00.000Z"
+
+  "/organizations/{organizationId}":
+    get:
+      summary: Get Organization (Enterprise container)
+      description: |
+        Returns the organization container index. An organization container is a LDP
+        container containing catalogs, supplied-products, and orders.
+      parameters:
+      - name: x-dfc-version
+        in: header
+        required: true
+        schema:
+          type: string
+          example: "2.0.0"
+      - name: organizationId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful
+          content:
+            application/ld+json:
+              schema:
+                example:
+                  "@context": https://w3id.org/dfc/ontology/context/context_2.0.0.json
+                  "@graph":
+                  - "@id": https://platform.ex/organizations/awesome-farm/index
+                    "@type": dfc-b:Organization
+                    dfc-b:name: John's Farm
+                    dfc-b:hasTemplateSaleSession: [https://platform.ex/organizations/awesome-farm/template-sale-sessions/]
+                    dfc-b:hasCertification: [https://platform.ex/organizations/awesome-farm/certifications/]
+                    dfc-b:hasAddress: [https://platform.ex/organizations/awesome-farm/addresses/]
+                    dfc-b:supplies: [https://platform.ex/organizations/awesome-farm/supplied-products/]
+                    dfc-b:manages: [https://platform.ex/organizations/awesome-farm/catalogs/]
+                    dfc-b:orders: [https://platform.ex/organizations/awesome-farm/orders/]
+        '404':
+          description: organization not found
+
+  "/organizations/{organizationId}/catalogs":
+    get:
+      summary: Get Organization Catalogs Container
+      description: |
+        Returns the catalogs LDP container for an organization.
+        Catalogs contain catalog items, offers, and prices.
+      parameters:
+      - name: x-dfc-version
+        in: header
+        required: true
+        schema:
+          type: string
+          example: "2.0.0"
+      - name: organizationId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful
+          headers:
+            Link:
+              description: LDP BasicContainer link relation
+              schema:
+                type: string
+          content:
+            application/ld+json:
+              schema:
+                example:
+                  "@context": https://w3id.org/dfc/ontology/context/context_2.0.0.json
+                  "@graph":
+                  - "@id": https://platform.ex/organizations/awesome-farm/catalogs/
+                    "@type": [ldp:Container, ldp:BasicContainer]
+                    ldp:hasMemberRelation: ldp:contains
+                    ldp:member: [https://platform.ex/organizations/awesome-farm/catalogs/main-catalog/index]
+                    ldp:contains: [https://platform.ex/organizations/awesome-farm/catalogs/main-catalog/index]
+        '404':
+          description: organization not found
+
+  "/organizations/{organizationId}/certifications":
+    get:
+      summary: Get Organization Certifications Container
+      description: |
+        Returns the certifications LDP container for an organization.
+        Certifications represent organic, fair-trade, or other certifications held by the organization.
+        Each certification includes operatorId, certiferReference, and optional certificationScore.
+      parameters:
+      - name: x-dfc-version
+        in: header
+        required: true
+        schema:
+          type: string
+          example: "2.0.0"
+      - name: organizationId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful
+          headers:
+            Link:
+              description: LDP BasicContainer link relation
+              schema:
+                type: string
+          content:
+            application/ld+json:
+              schema:
+                example:
+                  "@context": https://w3id.org/dfc/ontology/context/context_2.0.0.json
+                  "@graph":
+                  - "@id": https://platform.ex/organizations/awesome-farm/certifications/
+                    "@type": [ldp:Container, ldp:BasicContainer]
+                    ldp:hasMemberRelation: ldp:contains
+                    ldp:member: [https://platform.ex/organizations/awesome-farm/certifications/organic-eu/index, https://platform.ex/organizations/awesome-farm/certifications/demeter/index]
+                    ldp:contains: [https://platform.ex/organizations/awesome-farm/certifications/organic-eu/index, https://platform.ex/organizations/awesome-farm/certifications/demeter/index]
+        '404':
+          description: organization not found
+
+  "/organizations/{organizationId}/certifications/{certificationId}/index":
+    get:
+      summary: Get Certification Index
+      description: |
+        Returns the certification index document containing certification details.
+        Includes operatorId (organic licence number), certiferReference (certifying body ID),
+        and optional certificationScore for applicable standards.
+      parameters:
+      - name: x-dfc-version
+        in: header
+        required: true
+        schema:
+          type: string
+          example: "2.0.0"
+      - name: organizationId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: certificationId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful
+          content:
+            application/ld+json:
+              schema:
+                example:
+                  "@context": https://w3id.org/dfc/ontology/context/context_2.0.0.json
+                  "@graph":
+                  - "@id": https://platform.ex/organizations/awesome-farm/certifications/organic-eu/index
+                    "@type": dfc-b:Certification
+                    dfc-b:name: EU Organic Certification
+                    dfc-b:isCertifiedBy: https://platform.ex/organizations/awesome-farm/index
+                    dfc-b:hasCertification: dfc-f:Organic-EU
+                    dfc-b:operatorId: "FR-BIO-01"
+                    dfc-b:certiferReference: "UK-ORG-05"
+                    dfc-b:certificationScore: ""
+                  - "@id": https://platform.ex/organizations/awesome-farm/certifications/demeter/index
+                    "@type": dfc-b:Certification
+                    dfc-b:name: Demeter Biodynamic Certification
+                    dfc-b:isCertifiedBy: https://platform.ex/organizations/awesome-farm/index
+                    dfc-b:hasCertification: dfc-f:Demeter
+                    dfc-b:operatorId: "FR-DEM-12345"
+                    dfc-b:certiferReference: "DEM-INT-001"
+                    dfc-b:certificationScore: "RegenScore-A"
+        '404':
+          description: certification not found
+
+  "/organizations/{organizationId}/catalogs/{catalogId}/index":
+    get:
+      summary: Get Catalog Index
+      description: |
+        Returns the catalog index document containing catalog items, offers, and prices.
+      parameters:
+      - name: x-dfc-version
+        in: header
+        required: true
+        schema:
+          type: string
+          example: "2.0.0"
+      - name: organizationId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: catalogId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful
+          content:
+            application/ld+json:
+              schema:
+                example:
+                  "@context": https://w3id.org/dfc/ontology/context/context_2.0.0.json
+                  "@graph":
+                  - "@id": https://platform.ex/organizations/awesome-farm/catalogs/main-catalog/index
+                    "@type": dfc-b:Catalog
+                    dfc-b:name: Main Catalog
+                    dfc-b:maintainedBy: https://platform.ex/organizations/awesome-farm/index
+                  - "@id": https://platform.ex/organizations/awesome-farm/catalogs/main-catalog/index#catalogItem1
+                    "@type": dfc-b:CatalogItem
+                    dfc-b:references: https://platform.ex/organizations/awesome-farm/supplied-products/tomato/index
+                    dfc-b:offeredThrough:
+                      "@id": https://platform.ex/organizations/awesome-farm/catalogs/main-catalog/index#offer1
+                      "@type": dfc-b:Offer
+                      dfc-b:hasPrice:
+                        "@id": https://platform.ex/organizations/awesome-farm/catalogs/main-catalog/index#price1
+                        "@type": dfc-b:Price
+                        dfc-b:hasUnit: EUR
+                        dfc-b:value: 2.4
+        '404':
+          description: catalog not found
+
+  "/organizations/{organizationId}/supplied-products":
+    get:
+      summary: Get Organization Supplied Products Container
+      description: |
+        Returns the supplied products LDP container for an organization.
+      parameters:
+      - name: x-dfc-version
+        in: header
+        required: true
+        schema:
+          type: string
+          example: "2.0.0"
+      - name: organizationId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful
+          headers:
+            Link:
+              description: LDP BasicContainer link relation
+              schema:
+                type: string
+          content:
+            application/ld+json:
+              schema:
+                example:
+                  "@context": https://w3id.org/dfc/ontology/context/context_2.0.0.json
+                  "@graph":
+                  - "@id": https://platform.ex/organizations/awesome-farm/supplied-products/
+                    "@type": [ldp:Container, ldp:BasicContainer]
+                    ldp:hasMemberRelation: ldp:contains
+                    ldp:member: [https://platform.ex/organizations/awesome-farm/supplied-products/tomato/index, https://platform.ex/organizations/awesome-farm/supplied-products/basil/index]
+                    ldp:contains: [https://platform.ex/organizations/awesome-farm/supplied-products/tomato/index, https://platform.ex/organizations/awesome-farm/supplied-products/basil/index]
+        '404':
+          description: organization not found
+
+  "/organizations/{organizationId}/supplied-products/{productId}/index":
+    get:
+      summary: Get Supplied Product Index
+      description: Returns the index document for a supplied product.
+      parameters:
+      - name: x-dfc-version
+        in: header
+        required: true
+        schema:
+          type: string
+          example: "2.0.0"
+      - name: organizationId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: productId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful
+          content:
+            application/ld+json:
+              schema:
+                example:
+                  "@context": https://w3id.org/dfc/ontology/context/context_2.0.0.json
+                  "@graph":
+                  - "@id": https://platform.ex/organizations/awesome-farm/supplied-products/tomato/index
+                    "@type": dfc-b:SuppliedProduct
+                    dfc-b:producedBy: https://platform.ex/organizations/awesome-farm/index
+                    dfc-b:name: Organic Tomatoes
+                    dfc-b:hasType: dfc-pt:tomato
+                    dfc-b:hasQuantity:
+                      "@type": dfc-b:QuantitativeValue
+                      dfc-b:hasUnit: dfc-m:Kilogram
+                      dfc-b:value: 1.0
+        '404':
+          description: product not found
+
+  "/organizations/{organizationId}/orders":
+    get:
+      summary: Get Organization Orders Container
+      description: Returns the orders LDP container for an organization.
+      parameters:
+      - name: x-dfc-version
+        in: header
+        required: true
+        schema:
+          type: string
+          example: "2.0.0"
+      - name: organizationId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful
+          headers:
+            Link:
+              description: LDP BasicContainer link relation
+              schema:
+                type: string
+          content:
+            application/ld+json:
+              schema:
+                example:
+                  "@context": https://w3id.org/dfc/ontology/context/context_2.0.0.json
+                  "@graph":
+                  - "@id": https://platform.ex/organizations/awesome-farm/orders/
+                    "@type": [ldp:Container, ldp:BasicContainer]
+                    ldp:hasMemberRelation: ldp:contains
+                    ldp:member: [https://platform.ex/organizations/awesome-farm/orders/order-001/index]
+                    ldp:contains: [https://platform.ex/organizations/awesome-farm/orders/order-001/index]
+        '404':
+          description: organization not found
+
+  "/organizations/{organizationId}/template-sale-sessions":
+    get:
+      summary: Get Organization Template Sale Sessions Container
+      description: |
+        Returns the template sale sessions LDP container for an organization.
+        TemplateSaleSessions hold distribution patterns including:
+        - Recurring schedules (using iCal rrule)
+        - GeoJSON features for pickup points and delivery areas
+      parameters:
+      - name: x-dfc-version
+        in: header
+        required: true
+        schema:
+          type: string
+          example: "2.0.0"
+      - name: organizationId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful
+          headers:
+            Link:
+              description: LDP BasicContainer link relation
+              schema:
+                type: string
+          content:
+            application/ld+json:
+              schema:
+                example:
+                  "@context": https://w3id.org/dfc/ontology/context/context_2.0.0.json
+                  "@graph":
+                  - "@id": https://platform.ex/organizations/awesome-farm/template-sale-sessions/
+                    "@type": [ldp:Container, ldp:BasicContainer]
+                    ldp:hasMemberRelation: ldp:contains
+                    ldp:member: [https://platform.ex/organizations/awesome-farm/template-sale-sessions/weekly-delivery/index]
+                    ldp:contains: [https://platform.ex/organizations/awesome-farm/template-sale-sessions/weekly-delivery/index]
+        '404':
+          description: organization not found
+
+  "/organizations/{organizationId}/template-sale-sessions/{sessionId}/index":
+    get:
+      summary: Get Template Sale Session Index
+      description: |
+        Returns the template sale session index document.
+        Contains scheduling information (iCal recurrence rules) and GeoJSON features
+        for pickup points (Point) and delivery areas (Polygon).
+      parameters:
+      - name: x-dfc-version
+        in: header
+        required: true
+        schema:
+          type: string
+          example: "2.0.0"
+      - name: organizationId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: sessionId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful
+          content:
+            application/ld+json:
+              schema:
+                example:
+                  "@context": https://w3id.org/dfc/ontology/context/context_2.0.0.json
+                  "@graph":
+                  - "@id": https://platform.ex/organizations/awesome-farm/template-sale-sessions/weekly-delivery/index
+                    "@type": dfc-b:TemplateSaleSession
+                    dfc-b:name: Weekly Delivery Route
+                    dfc-b:coordinatedBy: https://platform.ex/organizations/awesome-farm/index
+                    dfc-b:hasGeoJsonFeature: [https://platform.ex/organizations/awesome-farm/template-sale-sessions/weekly-delivery/index#deliveryArea]
+                    dfc-b:occursAt: [https://platform.ex/organizations/awesome-farm/template-sale-sessions/weekly-delivery/index#schedule]
+                  - "@id": https://platform.ex/organizations/awesome-farm/template-sale-sessions/weekly-delivery/index#schedule
+                    "@type": cal:Vevent
+                    cal:dtstart:
+                      "@type": xsd:dateTime
+                      "@value": "2026-01-07T00:00:00Z"
+                    cal:dtend:
+                      "@type": xsd:dateTime
+                      "@value": "2026-12-31T23:59:59Z"
+                    rdfcal:rrule:
+                      "@type": cal:Value_RECUR
+                      cal:freq: WEEKLY
+                      cal:byday: TU
+                    cal:interval: 1
+                  - "@id": https://platform.ex/organizations/awesome-farm/template-sale-sessions/weekly-delivery/index#deliveryArea
+                    "@type": geojson:Feature
+                    geojson:geometry:
+                      "@type": geojson:Polygon
+                      geojson:coordinates:
+                        - - - -2.5
+                          - 48.8
+                        - - -2.3
+                          - 48.8
+                        - - -2.3
+                          - 48.9
+                        - - -2.5
+                          - 48.9
+                        - - -2.5
+                          - 48.8
+                    geojson:properties:
+                      "@type": geojson:Properties
+                      name: Rennes Delivery Area
+                      description: Weekly delivery to Rennes area
+                  - "@id": https://platform.ex/organizations/awesome-farm/template-sale-sessions/weekly-delivery/index#pickupPoint1
+                    "@type": geojson:Feature
+                    geojson:geometry:
+                      "@type": geojson:Point
+                      geojson:coordinates:
+                        - -2.4
+                          - 48.85
+                    geojson:properties:
+                      "@type": geojson:Properties
+                      name: Farm Gate Pickup
+                      description: Collect from farm on Tuesdays 4-6pm
+        '404':
+          description: template sale session not found
+
+  "/organizations/{organizationId}/physical-places":
+    get:
+      summary: Get Organization Physical Places Container
+      description: |
+        Returns the physical places LDP container for an organization.
+        Physical places represent locations such as pickup points and delivery areas,
+        and contain GeoJSON features (Point or Polygon geometries).
+      parameters:
+      - name: x-dfc-version
+        in: header
+        required: true
+        schema:
+          type: string
+          example: "2.0.0"
+      - name: organizationId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful
+          headers:
+            Link:
+              description: LDP BasicContainer link relation
+              schema:
+                type: string
+          content:
+            application/ld+json:
+              schema:
+                example:
+                  "@context": https://w3id.org/dfc/ontology/context/context_2.0.0.json
+                  "@graph":
+                  - "@id": https://platform.ex/organizations/awesome-farm/physical-places/
+                    "@type": [ldp:Container, ldp:BasicContainer]
+                    ldp:hasMemberRelation: ldp:contains
+                    ldp:member: [https://platform.ex/organizations/awesome-farm/physical-places/farm-location/index, https://platform.ex/organizations/awesome-farm/physical-places/delivery-zone-north/index]
+                    ldp:contains: [https://platform.ex/organizations/awesome-farm/physical-places/farm-location/index, https://platform.ex/organizations/awesome-farm/physical-places/delivery-zone-north/index]
+        '404':
+          description: organization not found
+
+  "/organizations/{organizationId}/physical-places/{placeId}/index":
+    get:
+      summary: Get Physical Place Index
+      description: |
+        Returns the physical place index document containing GeoJSON features.
+        Physical places can be pickup locations (Point geometry) or delivery areas
+        (Polygon geometry).
+      parameters:
+      - name: x-dfc-version
+        in: header
+        required: true
+        schema:
+          type: string
+          example: "2.0.0"
+      - name: organizationId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: placeId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful
+          content:
+            application/ld+json:
+              schema:
+                example:
+                  "@context": https://w3id.org/dfc/ontology/context/context_2.0.0.json
+                  "@graph":
+                  - "@id": https://platform.ex/organizations/awesome-farm/physical-places/farm-location/index
+                    "@type": dfc-b:PhysicalPlace
+                    dfc-b:name: Main Farm Location
+                    dfc-b:hasAddress: https://platform.ex/organizations/awesome-farm/addresses/farm-address/index
+                    dfc-b:hasGeoJsonFeature: [https://platform.ex/organizations/awesome-farm/physical-places/farm-location/index#farmPoint]
+                  - "@id": https://platform.ex/organizations/awesome-farm/physical-places/farm-location/index#farmPoint
+                    "@type": geojson:Feature
+                    geojson:geometry:
+                      "@type": geojson:Point
+                      geojson:coordinates:
+                        - -2.35
+                          - 48.5
+                    geojson:properties:
+                      "@type": geojson:Properties
+                      name: Farm Entrance
+                      description: Main entrance for pickup
+        '404':
+          description: physical place not found
+
+  "/organizations/{organizationId}/routes":
+    get:
+      summary: Get Organization Routes Container
+      description: |
+        Returns the routes LDP container for an organization.
+        Routes represent delivery or pickup routes that connect physical places.
+      parameters:
+      - name: x-dfc-version
+        in: header
+        required: true
+        schema:
+          type: string
+          example: "2.0.0"
+      - name: organizationId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful
+          headers:
+            Link:
+              description: LDP BasicContainer link relation
+              schema:
+                type: string
+          content:
+            application/ld+json:
+              schema:
+                example:
+                  "@context": https://w3id.org/dfc/ontology/context/context_2.0.0.json
+                  "@graph":
+                  - "@id": https://platform.ex/organizations/awesome-farm/routes/
+                    "@type": [ldp:Container, ldp:BasicContainer]
+                    ldp:hasMemberRelation: ldp:contains
+                    ldp:member: [https://platform.ex/organizations/awesome-farm/routes/tuesday-delivery/index]
+                    ldp:contains: [https://platform.ex/organizations/awesome-farm/routes/tuesday-delivery/index]
+        '404':
+          description: organization not found
+
+  "/organizations/{organizationId}/routes/{routeId}/index":
+    get:
+      summary: Get Route Index
+      description: |
+        Returns the route index document containing steps and associated physical places.
+      parameters:
+      - name: x-dfc-version
+        in: header
+        required: true
+        schema:
+          type: string
+          example: "2.0.0"
+      - name: organizationId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: routeId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful
+          content:
+            application/ld+json:
+              schema:
+                example:
+                  "@context": https://w3id.org/dfc/ontology/context/context_2.0.0.json
+                  "@graph":
+                  - "@id": https://platform.ex/organizations/awesome-farm/routes/tuesday-delivery/index
+                    "@type": dfc-b:Route
+                    dfc-b:name: Tuesday Delivery Route
+                    dfc-b:usedInRoute: https://platform.ex/organizations/awesome-farm/template-sale-sessions/weekly-delivery/index
+                    dfc-b:hasStep: [https://platform.ex/organizations/awesome-farm/routes/tuesday-delivery/index#step1]
+                  - "@id": https://platform.ex/organizations/awesome-farm/routes/tuesday-delivery/index#step1
+                    "@type": dfc-b:PickUpStep
+                    dfc-b:sequence: 1
+                    dfc-b:locatedAt: https://platform.ex/organizations/awesome-farm/physical-places/farm-location/index
+                    dfc-b:startsAt:
+                      "@type": xsd:time
+                      "@value": "08:00:00"
+                  - "@id": https://platform.ex/organizations/awesome-farm/routes/tuesday-delivery/index#step2
+                    "@type": dfc-b:DeliveryStep
+                    dfc-b:sequence: 2
+                    dfc-b:locatedAt: https://platform.ex/organizations/awesome-farm/physical-places/delivery-zone-north/index
+                    dfc-b:startsAt:
+                      "@type": xsd:time
+                      "@value": "10:00:00"
+        '404':
+          description: route not found
+
+  "/organizations/{organizationId}/addresses":
+    get:
+      summary: Get Organization Addresses Container
+      description: |
+        Returns the addresses LDP container for an organization.
+        Addresses are linked to physical places for geographic context.
+      parameters:
+      - name: x-dfc-version
+        in: header
+        required: true
+        schema:
+          type: string
+          example: "2.0.0"
+      - name: organizationId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful
+          headers:
+            Link:
+              description: LDP BasicContainer link relation
+              schema:
+                type: string
+          content:
+            application/ld+json:
+              schema:
+                example:
+                  "@context": https://w3id.org/dfc/ontology/context/context_2.0.0.json
+                  "@graph":
+                  - "@id": https://platform.ex/organizations/awesome-farm/addresses/
+                    "@type": [ldp:Container, ldp:BasicContainer]
+                    ldp:hasMemberRelation: ldp:contains
+                    ldp:member: [https://platform.ex/organizations/awesome-farm/addresses/farm-address/index, https://platform.ex/organizations/awesome-farm/addresses/warehouse/index]
+                    ldp:contains: [https://platform.ex/organizations/awesome-farm/addresses/farm-address/index, https://platform.ex/organizations/awesome-farm/addresses/warehouse/index]
+        '404':
+          description: organization not found
+
+  "/organizations/{organizationId}/addresses/{addressId}/index":
+    get:
+      summary: Get Address Index
+      description: |
+        Returns the address index document containing address details.
+      parameters:
+      - name: x-dfc-version
+        in: header
+        required: true
+        schema:
+          type: string
+          example: "2.0.0"
+      - name: organizationId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: addressId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful
+          content:
+            application/ld+json:
+              schema:
+                example:
+                  "@context": https://w3id.org/dfc/ontology/context/context_2.0.0.json
+                  "@graph":
+                  - "@id": https://platform.ex/organizations/awesome-farm/addresses/farm-address/index
+                    "@type": dfc-b:Address
+                    dfc-b:street: "123 Farm Road"
+                    dfc-b:city: Rennes
+                    dfc-b:postcode: "35000"
+                    dfc-b:country: France
+                    dfc-b:hasCountryCode: FR
+                    dfc-b:latitude: 48.5
+                    dfc-b:longitude: -2.35
+                    dfc-b:basedAt: https://platform.ex/organizations/awesome-farm/physical-places/farm-location/index
+        '404':
+          description: address not found
+
+  "/organizations/{organizationId}/customer-categories":
+    get:
+      summary: Get Organization Customer Categories Container
+      description: |
+        Returns the customer categories LDP container for an organization.
+      parameters:
+      - name: x-dfc-version
+        in: header
+        required: true
+        schema:
+          type: string
+          example: "2.0.0"
+      - name: organizationId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful
+          headers:
+            Link:
+              description: LDP BasicContainer link relation
+              schema:
+                type: string
+          content:
+            application/ld+json:
+              schema:
+                example:
+                  "@context": https://w3id.org/dfc/ontology/context/context_2.0.0.json
+                  "@graph":
+                  - "@id": https://platform.ex/organizations/awesome-farm/customer-categories/
+                    "@type": [ldp:Container, ldp:BasicContainer]
+                    ldp:hasMemberRelation: ldp:contains
+                    ldp:member: [https://platform.ex/organizations/awesome-farm/customer-categories/retail/index]
+                    ldp:contains: [https://platform.ex/organizations/awesome-farm/customer-categories/retail/index]
+        '404':
+          description: organization not found
+
+  "/organizations/{organizationId}/customer-categories/{categoryId}/index":
+    get:
+      summary: Get Customer Category Index
+      description: Returns the customer category index document.
+      parameters:
+      - name: x-dfc-version
+        in: header
+        required: true
+        schema:
+          type: string
+          example: "2.0.0"
+      - name: organizationId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: categoryId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful
+          content:
+            application/ld+json:
+              schema:
+                example:
+                  "@context": https://w3id.org/dfc/ontology/context/context_2.0.0.json
+                  "@graph":
+                  - "@id": https://platform.ex/organizations/awesome-farm/customer-categories/retail/index
+                    "@type": dfc-b:CustomerCategory
+                    dfc-b:name: Retail Customers
+                    dfc-b:definedBy: https://platform.ex/organizations/awesome-farm/index
+        '404':
+          description: customer category not found
+
+  "/organizations/{organizationId}/affiliated-to":
+    get:
+      summary: Get Organization Affiliated To Container
+      description: Returns the affiliated-to LDP container for an organization.
+      parameters:
+      - name: x-dfc-version
+        in: header
+        required: true
+        schema:
+          type: string
+          example: "2.0.0"
+      - name: organizationId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful
+          content:
+            application/ld+json:
+              schema:
+                example:
+                  "@context": https://w3id.org/dfc/ontology/context/context_2.0.0.json
+                  "@graph":
+                  - "@id": https://platform.ex/organizations/awesome-farm/affiliated-to/
+                    "@type": [ldp:Container, ldp:BasicContainer]
+                    ldp:hasMemberRelation: ldp:contains
+                    ldp:member: [https://platform.ex/organizations/awesome-farm/affiliated-to/partner-org/index]
+                    ldp:contains: [https://platform.ex/organizations/awesome-farm/affiliated-to/partner-org/index]
+        '404':
+          description: organization not found
+
+  "/organizations/{organizationId}/affiliated-to/{id}/index":
+    get:
+      summary: Get Affiliated Organization Index
+      description: Returns the affiliated organization index document.
+      parameters:
+      - name: x-dfc-version
+        in: header
+        required: true
+        schema:
+          type: string
+          example: "2.0.0"
+      - name: organizationId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful
+          content:
+            application/ld+json:
+              schema:
+                example:
+                  "@context": https://w3id.org/dfc/ontology/context/context_2.0.0.json
+                  "@graph":
+                  - "@id": https://platform.ex/organizations/awesome-farm/affiliated-to/partner-org/index
+                    "@type": dfc-b:Organization
+                    dfc-b:name: Partner Organization
+        '404':
+          description: affiliated organization not found
+
+  "/organizations/{organizationId}/social-medias":
+    get:
+      summary: Get Organization Social Medias Container
+      description: Returns the social medias LDP container for an organization.
+      parameters:
+      - name: x-dfc-version
+        in: header
+        required: true
+        schema:
+          type: string
+          example: "2.0.0"
+      - name: organizationId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful
+          content:
+            application/ld+json:
+              schema:
+                example:
+                  "@context": https://w3id.org/dfc/ontology/context/context_2.0.0.json
+                  "@graph":
+                  - "@id": https://platform.ex/organizations/awesome-farm/social-medias/
+                    "@type": [ldp:Container, ldp:BasicContainer]
+                    ldp:hasMemberRelation: ldp:contains
+                    ldp:member: [https://platform.ex/organizations/awesome-farm/social-medias/facebook/index]
+                    ldp:contains: [https://platform.ex/organizations/awesome-farm/social-medias/facebook/index]
+        '404':
+          description: organization not found
+
+  "/organizations/{organizationId}/social-medias/{name}/index":
+    get:
+      summary: Get Social Media Index
+      description: Returns the social media index document.
+      parameters:
+      - name: x-dfc-version
+        in: header
+        required: true
+        schema:
+          type: string
+          example: "2.0.0"
+      - name: organizationId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: name
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful
+          content:
+            application/ld+json:
+              schema:
+                example:
+                  "@context": https://w3id.org/dfc/ontology/context/context_2.0.0.json
+                  "@graph":
+                  - "@id": https://platform.ex/organizations/awesome-farm/social-medias/facebook/index
+                    "@type": dfc-b:SocialMedia
+                    dfc-b:name: facebook
+                    dfc-b:addressOf: https://platform.ex/organizations/awesome-farm/index
+        '404':
+          description: social media not found
+
+  "/organizations/{organizationId}/orders/{orderId}/orderlines":
+    get:
+      summary: Get Order Order Lines Container
+      description: Returns the order lines LDP container for an order.
+      parameters:
+      - name: x-dfc-version
+        in: header
+        required: true
+        schema:
+          type: string
+          example: "2.0.0"
+      - name: organizationId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: orderId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful
+          content:
+            application/ld+json:
+              schema:
+                example:
+                  "@context": https://w3id.org/dfc/ontology/context/context_2.0.0.json
+                  "@graph":
+                  - "@id": https://platform.ex/organizations/awesome-farm/orders/order-001/orderlines/
+                    "@type": [ldp:Container, ldp:BasicContainer]
+                    ldp:hasMemberRelation: ldp:contains
+                    ldp:member: [https://platform.ex/organizations/awesome-farm/orders/order-001/orderlines/001/index]
+                    ldp:contains: [https://platform.ex/organizations/awesome-farm/orders/order-001/orderlines/001/index]
+        '404':
+          description: order not found
+
+  "/organizations/{organizationId}/orders/{orderId}/orderlines/{lineId}/index":
+    get:
+      summary: Get Order Line Index
+      description: Returns the order line index document.
+      parameters:
+      - name: x-dfc-version
+        in: header
+        required: true
+        schema:
+          type: string
+          example: "2.0.0"
+      - name: organizationId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: orderId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: lineId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful
+          content:
+            application/ld+json:
+              schema:
+                example:
+                  "@context": https://w3id.org/dfc/ontology/context/context_2.0.0.json
+                  "@graph":
+                  - "@id": https://platform.ex/organizations/awesome-farm/orders/order-001/orderlines/001/index
+                    "@type": dfc-b:OrderLine
+                    dfc-b:partOf: https://platform.ex/organizations/awesome-farm/orders/order-001/index
+                    dfc-b:concerns: https://platform.ex/organizations/awesome-farm/catalogs/main-catalog/index
+        '404':
+          description: order line not found
+
+  "/persons/{personId}/index":
+    get:
+      summary: Get Person Index
+      description: Returns the person index document.
+      parameters:
+      - name: x-dfc-version
+        in: header
+        required: true
+        schema:
+          type: string
+          example: "2.0.0"
+      - name: personId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful
+          content:
+            application/ld+json:
+              schema:
+                example:
+                  "@context": https://w3id.org/dfc/ontology/context/context_2.0.0.json
+                  "@graph":
+                  - "@id": https://platform.ex/persons/john/index
+                    "@type": dfc-b:Person
+                    dfc-b:firstName: John
+                    dfc-b:lastName: Doe
+        '404':
+          description: person not found
+
+  "/phone-numbers/{phoneNumberId}/index":
+    get:
+      summary: Get Phone Number Index
+      description: Returns the phone number index document.
+      parameters:
+      - name: x-dfc-version
+        in: header
+        required: true
+        schema:
+          type: string
+          example: "2.0.0"
+      - name: phoneNumberId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful
+          content:
+            application/ld+json:
+              schema:
+                example:
+                  "@context": https://w3id.org/dfc/ontology/context/context_2.0.0.json
+                  "@graph":
+                  - "@id": https://platform.ex/phone-numbers/12345/index
+                    "@type": dfc-b:PhoneNumber
+                    dfc-b:phoneNumber: "+33 1 23 45 67 89"
+        '404':
+          description: phone number not found
