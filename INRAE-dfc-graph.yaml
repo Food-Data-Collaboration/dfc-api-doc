@@ -194,8 +194,7 @@ paths:
                       "@type": dfc-b:Order ,
                       dfc-b:date: "2024-06-25" ,  # Order Date
                       dfc-b:soldBy: https://test.host/api/dfc/Organizations/10050 ,
-                      dfc-b:hasPart: https://test.host/api/dfc/Organizations/10000/Orders/10001/OrderLines/10001-01 ,
-                      dfc-b:hasPart: https://test.host/api/dfc/Organizations/10000/Orders/10001/OrderLines/10001-02
+                      dfc-b:hasPart: [https://test.host/api/dfc/Organizations/10000/Orders/10001/OrderLines/10001-01, https://test.host/api/dfc/Organizations/10000/Orders/10001/OrderLines/10001-02]
                     }
                     ]
         '404':
