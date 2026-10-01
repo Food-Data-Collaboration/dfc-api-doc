@@ -514,9 +514,7 @@ paths:
                       dfc-b:hasDescription: This is an awesome enterprise ,
                       dfc-b:VATnumber: 123 456 ,
                       dfc-b:manages: http://test.host/api/dfc/Organizations/10000/CatalogItems/10021 ,
-                      dfc-b:supplies: http://test.host/api/dfc/Organizations/10000/SuppliedProduct5/10001 ,
-                      dfc-b:supplies: http://test.host/api/dfc/Organizations/10000/SuppliedProducts/10002 ,
-                      dfc-b:supplies: http://test.host/api/dfc/Organizations/10000/SuppliedProducts/10005 ,
+                      dfc-b:supplies: [http://test.host/api/dfc/Organizations/10000/SuppliedProducts/10001, http://test.host/api/dfc/Organizations/10000/SuppliedProducts/10002, http://test.host/api/dfc/Organizations/10000/SuppliedProducts/10005] ,
                       dfc-b:hasMainContact: http://test.host/api/dfc/Persons/10000 ,
                       dfc-b:logo: http://test.host/active-storage/url/logo.png ,
                       dfc-b:affiliates: http://test.host/api/dfc/Organizations/60000 ,
@@ -973,8 +971,9 @@ paths:
                       dfc-b:lifetime: '12 months'
                       dfc-b:usageOrStorageCondition: ''
                       dfc-b:totalTheoreticalStock: 0.0
-                      dfc-b:hasVariant: http://test.host/api/dfc/Organizations/10000/SuppliedProducts/10002
-                      dfc-b:hasVariant: http://test.host/api/dfc/Organizations/10000/SuppliedProducts/10005
+                      dfc-b:hasVariant:
+                      - http://test.host/api/dfc/Organizations/10000/SuppliedProducts/10002
+                      - http://test.host/api/dfc/Organizations/10000/SuppliedProducts/10005
                       dfc-b:image: http://test.host/active-storage/url/logo-white.png
                     - "@id": http://test.host/api/dfc/Organizations/10000/SuppliedProducts/10001
                       "@type": dfc-b:SuppliedProduct
