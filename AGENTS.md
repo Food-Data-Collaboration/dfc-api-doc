@@ -1,17 +1,24 @@
 # AGENTS.md
 
-Four hand-maintained OpenAPI 3 documents describing the Data Food Consortium standard. No code, no build, no tests, no CI. Everything below was verified against the files on `v2.0.0` (= `origin/main`).
+Four hand-maintained OpenAPI 3 documents describing the Data Food Consortium standard. No code, no build, no tests. Everything below was verified against `main`.
 
 ## Files
 
-| File | `openapi` | Ops | Shape | Purpose |
-|---|---|---|---|---|
-| `dfc.yaml` | 3.0.1 | 36 | plain REST under `/api/dfc/...` | Primary DFC 2.0.0 API |
-| `dfc-ldp.yaml` | 3.0.1 | 32 | LDP/Solid discovery, `ldp:Container` | Discoverability endpoints. Consumers fetch this from `raw.githubusercontent.com/.../main/dfc-ldp.yaml` — breaking it breaks downstream tools |
-| `INRAE-dfc.yaml` | 3.0.0 | 1 | single nested-tree example | Research endpoint, nested shape |
-| `INRAE-dfc-graph.yaml` | 3.0.0 | 1 | same endpoint, flat `@graph` | Same endpoint as above in `@graph` form |
+| File | `openapi` | Paths | Ops | Shape | Purpose |
+|---|---|---|---|---|---|
+| `dfc.yaml` | 3.0.1 | 20 | 36 | plain REST under `/api/dfc/...` | Primary DFC 2.0.0 API. Write-capable (18 GET, 8 POST, 7 PUT, 3 DELETE) |
+| `dfc-ldp.yaml` | 3.0.1 | 33 | 74 | LDP/Solid, `ldp:Container` | Discoverability **and** write endpoints. 20 of 33 paths writable. Published to Scalar (see "Publishing") |
+| `INRAE-dfc.yaml` | 3.0.0 | 1 | 1 | single nested-tree example | Research endpoint, nested shape |
+| `INRAE-dfc-graph.yaml` | 3.0.0 | 1 | 1 | same endpoint, flat `@graph` | Same endpoint as above in `@graph` form |
+
+112 operations total. `dfc-ldp.yaml` is by far the largest at ~5,700 lines; the
+rest are small.
 
 `INRAE-dfc.yaml` and `INRAE-dfc-graph.yaml` are **alternatives**, not duplicates — both must stay in sync when the INRAE payload changes.
+
+Consumers fetch `dfc-ldp.yaml` from
+`raw.githubusercontent.com/.../main/dfc-ldp.yaml`, so breaking it breaks
+downstream tools.
 
 Not real: `.swagger-codegen/VERSION` (`3.0.58`) and `.swagger-codegen-ignore` are unmaintained swagger-codegen 2.x leftovers. There is no generator; edit YAML by hand.
 
@@ -27,8 +34,27 @@ spectral lint dfc.yaml --format stylish
 ```
 
 - `.spectral.yaml` extends `spectral:oas` + `spectral:asyncapi` + `spectral:arazzo`.
-- **Bar: zero errors.** The 179 warnings are the accepted baseline — mainly `operation-operationId`, `operation-description`, and `operation-tag-defined`. There is deliberately no global `tags:` section and the specs carry no `operationId`, so do not add them just to quiet Spectral.
-- `--fail-severity=error` is the right pre-commit gate: it still *prints* warnings but only errors affect the exit code. It currently passes.
+- **Bar: zero errors.** Warnings are the accepted baseline — mainly
+  `operation-operationId`, `operation-operationId`, `operation-tags` and
+  `operation-tag-defined`. There is deliberately no global `tags:` section and
+  the specs carry no `operationId`, so do not add them just to quiet Spectral.
+  Both counts scale with the operation count; compare like for like rather
+  than against a fixed number.
+- `--fail-severity=error` is the right pre-commit gate: it still *prints*
+  warnings but only errors affect the exit code. It currently passes.
+
+Spectral is **not** run in CI, so it is only as available as the person running
+it has it installed. CI validates `dfc-ldp.yaml` with Scalar's own validator
+instead — see "Publishing".
+
+Both serialisations must be kept in step. Every example appears twice, as
+`application/ld+json` and `text/turtle`, and they must agree:
+
+- JSON-LD writes a predicate as `dfc-b:term: value`
+- Turtle writes `dfc-b:term value ;` — **no colon**
+
+A rename applied to only one of the two leaves the file silently
+inconsistent. Check both.
 
 ### Multi-valued properties must be YAML sequences
 
@@ -59,6 +85,31 @@ Spectral does not check any of these.
    `https://login.fooddatacollaboration.org.uk/realms/dev/.well-known/openid-configuration` (issuer `.../realms/dev` — no `/auth`, Keycloak `realms` plural).
 9. **`INRAE-dfc-graph.yaml:105,112` say `dfc-b-supplies:`** (hyphen instead of colon), making those two supplied-product links untyped and invisible to the ontology.
 10. **Mixed schemes in examples**: `http://test.host` (dominant) vs `https://test.host`; `dfc-ldp.yaml` uses `https://platform.ex`. Example hosts are placeholders — keep them stable rather than tidying.
+11. **`dfc-b:Route` steps carry neither a location nor an ordering.**
+    `dfc-b:sequence` and `dfc-b:locatedAt` were removed: neither is declared in
+    any published ontology version, and the v2.0.0 `Route` / `Step` /
+    `PickUpStep` / `DeliveryStep` classes have **no restrictions at all**. A step
+    now carries only `dfc-b:startsAt`. Both properties were authored into the
+    examples by commit `02655c5` and never taken to the ontology working group;
+    they are being raised with its author. Do not reintroduce them.
+12. **`dfc-b:Certification` is not the ontology's spelling.** The ontology
+    declares the class as `dfc-b:Certfication` (missing the `i`); this file uses
+    the correct spelling and always has. The ontology is being corrected.
+    Note the contrast: `dfc-b:certiferReference` *is* the ontology's own
+    misspelling and is therefore correct as written here.
+13. **`dfc-b:image` is unverified.** Reported as a property of
+    `dfc-b:DefinedProduct` inherited by `SuppliedProduct`, but not found
+    declared in the business, technical or full-model ontologies. Left in place
+    pending confirmation.
+
+Checking a new term against the ontology is worth the effort — a scan of the
+examples for undeclared terms is what turned up items 11 to 13. Two useful
+facts: the ontology's `.owl` and `.rdf` serialisations are **not** equivalent
+(`.owl` carries no `owl:Restriction`, no cardinality axioms and no inverse
+pairs; `.rdf` carries 370 restrictions, 42 cardinality axioms, 68 inverse pairs
+and 104 ranges), and `dfc-b:totalTheoriticalStock` — the ontology's own
+misspelling, pinned to `cardinality 1` — appears in **neither** spelling in the
+published context, so no example can use it without a dangling term.
 
 ## Version coupling
 
@@ -102,7 +153,7 @@ Do not "correct" these in isolation — they are the published contract. Change 
 
 ## Git
 
-- **Branch model**: long-lived release branches named after the DFC spec version — `v1.16.0` (frozen at DFC 1.16.0), `v2.0.0` (DFC 2.0.0, identical content to `main`). `main` is the merge trunk; work lands via PR (`#7` swaggerhub→v1.16.0→main, `#8` v2.0.0→main). `swaggerhub`, `swaggerAPI`, `INRAE-date` are dead older branches. No git tags.
+- **Branch model**: long-lived release branches named after the DFC spec version — `v1.16.0` (frozen at DFC 1.16.0), `v2.0.0` (DFC 2.0.0, identical content to `main`). `main` is the merge trunk; work lands via PR (`#7` swaggerhub→v1.16.0→main, `#8` v2.0.0→main, `#9`–`#13`). `swaggerhub`, `swaggerAPI`, `INRAE-date` are dead older branches. No git tags.
 - The local `main` ref is often **stale** — `git fetch` before branching off it.
 - Commit to a working branch; if already on one, check whether to continue or branch fresh off the request subject.
 - **Only push when the user asks.**
@@ -116,11 +167,43 @@ premise lives in six places there, most visibly `README.md:5-9` ("Why the
 ontology, not `dfc-ldp.yaml`") and `src/spec_generator.py:161`, which writes the
 literal header `"The DFC LDP spec is read-only"` into its output.
 
-`dfc-ldp.yaml` is gaining write operations (POST/PUT/DELETE). Once those land,
-that tool synthesises a write contract *from the ontology* while a real one is
-published in the spec it reads. Treat its read-only reasoning as **out of date**,
-not authoritative. Don't edit that repo from here.
+`dfc-ldp.yaml` now has 20 writable paths, so that tool synthesises a write
+contract *from the ontology* while a real one is published in the spec it reads.
+Treat its read-only reasoning as **out of date**, not authoritative. It will not
+fail loudly — it will just emit output that contradicts its own input. Don't
+edit that repo from here; it's tracked there.
 
 ## Publishing
 
-GitHub is the source of truth; SwaggerHub syncs automatically. Nothing to do by hand after a merge. `README.md` links the published page.
+Two destinations, both downstream of GitHub. Nothing to do by hand after a merge.
+
+**SwaggerHub** — `food-data-collab/dfc-sample_api`, syncs automatically. Linked
+from `README.md`.
+
+**Scalar** — namespace and slug `@siol-data`, `dfc-ldp.yaml` only (the other
+three specs are stale or superseded). Published by
+`.github/workflows/publish-dfc-ldp-to-scalar.yml`, which fires on a push to
+`main` that changes `dfc-ldp.yaml`, plus `workflow_dispatch` for a manual
+re-publish.
+
+Things to know before editing that workflow:
+
+- `@scalar/cli` is pinned to **2.8.0** and needs **Node >=24** (`node-version: 24`
+  is set for this reason). The vendor docs use a bare `npx @scalar/cli`, which
+  would resolve to whatever is latest at run time.
+- The API key comes from the repo secret `SCALAR_API_KEY`, passed via `env:`
+  rather than `--token` so it stays out of argv.
+- Namespace and slug are both set at the top of the workflow to `@siol-data`, so
+  they cannot drift apart. Move them to repo variables if they ever need changing
+  without a code edit.
+- There is **no** post-publish verification step: the endpoint for fetching a
+  published document could not be confirmed, and a guessed URL would fail every
+  publish. The CLI's own exit code is the signal.
+- CI validates with Scalar's validator, **not** Spectral — see "Validation".
+
+Local equivalent, if you want to check before pushing:
+
+```bash
+export PATH="$HOME/.nodenv/versions/24.14.1/bin:$PATH"   # Scalar CLI needs Node >=24
+npx @scalar/cli@2.8.0 document validate dfc-ldp.yaml
+```
