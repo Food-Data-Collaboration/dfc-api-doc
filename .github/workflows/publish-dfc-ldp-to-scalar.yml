@@ -1,0 +1,71 @@
+# Publish dfc-ldp.yaml to the Scalar registry.
+#
+# Triggered by a merge to main that changes the spec. The Scalar API key is
+# read from the repository secret SCALAR_API_KEY and is passed to the CLI via
+# the environment rather than argv, so it never appears in the process list.
+#
+# The namespace and the slug are both "@siol-data" by design. They are set
+# together here so they cannot drift; move them to repository variables if
+# that ever needs to change without a code edit.
+
+name: Publish dfc-ldp.yaml to Scalar
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - dfc-ldp.yaml
+  # Manual run, for the case where a publish needs retrying.
+  workflow_dispatch:
+
+env:
+  SCALAR_NAMESPACE: "@siol-data"
+  SCALAR_SLUG: "@siol-data"
+  SPEC: dfc-ldp.yaml
+  # Pinned so the publish step cannot be changed by a future npm release.
+  SCALAR_CLI: "@scalar/cli@2.8.0"
+
+# Least privilege: the job only needs to read the repo.
+permissions:
+  contents: read
+
+# One publish at a time. Without this, two merges in quick succession can
+# race and publish out of order.
+concurrency:
+  group: scalar-publish
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Use Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24
+
+      - name: Validate spec
+        # Fails the job before anything is published, so a broken spec never
+        # reaches the registry.
+        run: npx "${SCALAR_CLI}" document validate "$SPEC"
+
+      - name: Log in to Scalar
+        env:
+          SCALAR_API_KEY: ${{ secrets.SCALAR_API_KEY }}
+        run: npx "${SCALAR_CLI}" auth login
+
+      - name: Publish to Scalar registry
+        # The publish command is the signal: a non-zero exit fails the job.
+        # There is deliberately no follow-up GET against the registry API --
+        # the endpoint for fetching a published document could not be
+        # confirmed, and a guessed URL would fail every publish. The CLI
+        # reports the published URL on success.
+        run: >-
+          npx "${SCALAR_CLI}" registry publish
+          --namespace "$SCALAR_NAMESPACE"
+          --slug "$SCALAR_SLUG"
+          "$SPEC"
