@@ -498,6 +498,12 @@ paths:
               description: LDP BasicContainer link relation
               schema:
                 type: string
+            ETag:
+              description: >-
+                Entity tag of the current representation. Supply it as If-Match on a
+                later write to avoid a lost update.
+              schema:
+                type: string
           content:
             application/ld+json:
               schema:
@@ -511,7 +517,94 @@ paths:
                     ldp:contains: [https://platform.ex/organizations/awesome-farm/catalogs/main-catalog/index]
         '404':
           description: organization not found
+    post:
+      summary: Create a Catalog in the Organization Container
+      description: |
+        Creates a catalog for the organization.
 
+        A catalog groups the items an organization offers, and is maintained by
+        exactly one organization -- dfc-b:maintainedBy carries cardinality 1 in
+        the ontology, so the owning organization is fixed by the catalog itself.
+      parameters:
+      - name: x-dfc-version
+        in: header
+        required: true
+        schema:
+          type: string
+          example: "2.0.0"
+      - name: organizationId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: Prefer
+        in: header
+        required: false
+        description: >-
+          Response preference. return=minimal omits the response body; the
+          status code and headers are unchanged.
+        schema:
+          type: string
+          example: return=representation
+      requestBody:
+        required: true
+        content:
+          application/ld+json:
+            schema:
+              example:
+                "@context": https://w3id.org/dfc/ontology/context/context_2.0.0.json
+                "@graph":
+                - "@id": "#"
+                  "@type": dfc-b:Catalog
+                  dfc-b:name: Main Catalog
+                  dfc-b:maintainedBy: https://platform.ex/organizations/awesome-farm/index
+                  dfc-b:lists: [https://platform.ex/organizations/awesome-farm/catalogs/main-catalog/items/TOM-001/index]
+          text/turtle:
+            schema:
+              example: |
+                  @prefix dfc-b:  <https://w3id.org/dfc/ontology/v2.0.0/src/DFC_BusinessOntology.owl#> .
+                  @prefix dfc-f:  <https://w3id.org/dfc/taxonomies/v2.0.0/facets.rdf#> .
+                  [] a dfc-b:Catalog ;
+                      dfc-b:name "Main Catalog" ;
+                      dfc-b:maintainedBy <https://platform.ex/organizations/awesome-farm/index> ;
+                      dfc-b:lists <https://platform.ex/organizations/awesome-farm/catalogs/main-catalog/items/TOM-001/index> .
+      responses:
+        '201':
+          description: >-
+            created. The response body is omitted when Prefer: return=minimal is
+            sent; the status code and headers are unchanged.
+          headers:
+            Location:
+              description: IRI of the created resource, assigned by the server
+              schema:
+                type: string
+                format: uri
+            Content-Location:
+              description: >-
+                IRI of the created resource. Identical to Location here; both are
+                returned so a client can rely on either.
+              schema:
+                type: string
+                format: uri
+            ETag:
+              description: >-
+                Entity tag of the current representation. Supply it as If-Match on a
+                later write to avoid a lost update.
+              schema:
+                type: string
+          content:
+            application/ld+json:
+              schema:
+                example:
+                  "@context": https://w3id.org/dfc/ontology/context/context_2.0.0.json
+                  "@graph":
+                  - "@id": https://platform.ex/organizations/awesome-farm/catalogs/main-catalog/index
+        '400':
+          description: bad request
+        '401':
+          description: unauthorized
+        '404':
+          description: organization not found
   "/organizations/{organizationId}/certifications":
     get:
       summary: Get Organization Certifications Container
@@ -539,6 +632,12 @@ paths:
               description: LDP BasicContainer link relation
               schema:
                 type: string
+            ETag:
+              description: >-
+                Entity tag of the current representation. Supply it as If-Match on a
+                later write to avoid a lost update.
+              schema:
+                type: string
           content:
             application/ld+json:
               schema:
@@ -552,7 +651,102 @@ paths:
                     ldp:contains: [https://platform.ex/organizations/awesome-farm/certifications/organic-eu/index, https://platform.ex/organizations/awesome-farm/certifications/demeter/index]
         '404':
           description: organization not found
+    post:
+      summary: Create a Certification in the Organization Container
+      description: |
+        Creates a certification held by the organization.
 
+        A certification records a scheme the organization is certified under, the
+        certifying body via dfc-b:isCertifiedBy, and the scheme's concept via
+        dfc-b:hasCertification. dfc-b:operatorId and dfc-b:certiferReference carry
+        the scheme operator's identifier and this organization's reference under
+        it; dfc-b:certificationScore is left empty when the scheme has no score.
+      parameters:
+      - name: x-dfc-version
+        in: header
+        required: true
+        schema:
+          type: string
+          example: "2.0.0"
+      - name: organizationId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: Prefer
+        in: header
+        required: false
+        description: >-
+          Response preference. return=minimal omits the response body; the
+          status code and headers are unchanged.
+        schema:
+          type: string
+          example: return=representation
+      requestBody:
+        required: true
+        content:
+          application/ld+json:
+            schema:
+              example:
+                "@context": https://w3id.org/dfc/ontology/context/context_2.0.0.json
+                "@graph":
+                - "@id": "#"
+                  "@type": dfc-b:Certification
+                  dfc-b:name: EU Organic Certification
+                  dfc-b:isCertifiedBy: https://platform.ex/organizations/awesome-farm/index
+                  dfc-b:hasCertification: dfc-f:Organic-EU
+                  dfc-b:operatorId: "FR-BIO-01"
+                  dfc-b:certiferReference: "UK-ORG-05"
+                  dfc-b:certificationScore: ""
+          text/turtle:
+            schema:
+              example: |
+                  @prefix dfc-b:  <https://w3id.org/dfc/ontology/v2.0.0/src/DFC_BusinessOntology.owl#> .
+                  @prefix dfc-f:  <https://w3id.org/dfc/taxonomies/v2.0.0/facets.rdf#> .
+                  [] a dfc-b:Certification ;
+                      dfc-b:name "EU Organic Certification" ;
+                      dfc-b:isCertifiedBy <https://platform.ex/organizations/awesome-farm/index> ;
+                      dfc-b:hasCertification dfc-f:Organic-EU ;
+                      dfc-b:operatorId "FR-BIO-01" ;
+                      dfc-b:certiferReference "UK-ORG-05" ;
+                      dfc-b:certificationScore "" .
+      responses:
+        '201':
+          description: >-
+            created. The response body is omitted when Prefer: return=minimal is
+            sent; the status code and headers are unchanged.
+          headers:
+            Location:
+              description: IRI of the created resource, assigned by the server
+              schema:
+                type: string
+                format: uri
+            Content-Location:
+              description: >-
+                IRI of the created resource. Identical to Location here; both are
+                returned so a client can rely on either.
+              schema:
+                type: string
+                format: uri
+            ETag:
+              description: >-
+                Entity tag of the current representation. Supply it as If-Match on a
+                later write to avoid a lost update.
+              schema:
+                type: string
+          content:
+            application/ld+json:
+              schema:
+                example:
+                  "@context": https://w3id.org/dfc/ontology/context/context_2.0.0.json
+                  "@graph":
+                  - "@id": https://platform.ex/organizations/awesome-farm/certifications/organic-eu/index
+        '400':
+          description: bad request
+        '401':
+          description: unauthorized
+        '404':
+          description: organization not found
   "/organizations/{organizationId}/certifications/{certificationId}/index":
     get:
       summary: Get Certification Index
@@ -580,6 +774,13 @@ paths:
       responses:
         '200':
           description: successful
+          headers:
+            ETag:
+              description: >-
+                Entity tag of the current representation. Supply it as If-Match on a
+                later write to avoid a lost update.
+              schema:
+                type: string
           content:
             application/ld+json:
               schema:
@@ -604,7 +805,272 @@ paths:
                     dfc-b:certificationScore: "RegenScore-A"
         '404':
           description: certification not found
+    put:
+      summary: Update a Certification
+      description: |
+        Replaces the certification at this IRI. Send If-Match with the ETag from a
+        prior read to make the write conditional, so a concurrent change fails with
+        412 rather than being silently overwritten.
+      parameters:
+      - name: x-dfc-version
+        in: header
+        required: true
+        schema:
+          type: string
+          example: "2.0.0"
+      - name: organizationId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: certificationId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: If-Match
+        in: header
+        required: false
+        description: >-
+          ETag of the current representation. The write fails with 412 if it no
+          longer matches, which prevents a lost update.
+        schema:
+          type: string
+      - name: Prefer
+        in: header
+        required: false
+        description: >-
+          Response preference. return=minimal omits the response body; the
+          status code and headers are unchanged.
+        schema:
+          type: string
+          example: return=representation
+      requestBody:
+        required: true
+        content:
+          application/ld+json:
+            schema:
+              example:
+                "@context": https://w3id.org/dfc/ontology/context/context_2.0.0.json
+                "@graph":
+                - "@id": "#"
+                  "@type": dfc-b:Certification
+                  dfc-b:name: EU Organic Certification
+                  dfc-b:isCertifiedBy: https://platform.ex/organizations/awesome-farm/index
+                  dfc-b:hasCertification: dfc-f:Organic-EU
+                  dfc-b:operatorId: "FR-BIO-01"
+                  dfc-b:certiferReference: "UK-ORG-05"
+                  dfc-b:certificationScore: ""
+          text/turtle:
+            schema:
+              example: |
+                  @prefix dfc-b:  <https://w3id.org/dfc/ontology/v2.0.0/src/DFC_BusinessOntology.owl#> .
+                  @prefix dfc-f:  <https://w3id.org/dfc/taxonomies/v2.0.0/facets.rdf#> .
+                  [] a dfc-b:Certification ;
+                      dfc-b:name "EU Organic Certification" ;
+                      dfc-b:isCertifiedBy <https://platform.ex/organizations/awesome-farm/index> ;
+                      dfc-b:hasCertification dfc-f:Organic-EU ;
+                      dfc-b:operatorId "FR-BIO-01" ;
+                      dfc-b:certiferReference "UK-ORG-05" ;
+                      dfc-b:certificationScore "" .
+      responses:
+        '200':
+          description: >-
+            updated, representation returned. The body is omitted when
+            Prefer: return=minimal is sent.
+          headers:
+            ETag:
+              description: >-
+                Entity tag of the current representation. Supply it as If-Match on a
+                later write to avoid a lost update.
+              schema:
+                type: string
+          content:
+            application/ld+json:
+              schema:
+                example:
+                  "@context": https://w3id.org/dfc/ontology/context/context_2.0.0.json
+                  "@graph":
+                  - "@id": https://platform.ex/organizations/awesome-farm/certifications/organic-eu/index
+        '201':
+          description: created, because no representation existed at this IRI
+          headers:
+            ETag:
+              description: >-
+                Entity tag of the current representation. Supply it as If-Match on a
+                later write to avoid a lost update.
+              schema:
+                type: string
+          content:
+            application/ld+json:
+              schema:
+                example:
+                  "@context": https://w3id.org/dfc/ontology/context/context_2.0.0.json
+                  "@graph":
+                  - "@id": https://platform.ex/organizations/awesome-farm/certifications/organic-eu/index
+        '204':
+          description: updated, no body returned
+          headers:
+            ETag:
+              description: >-
+                Entity tag of the current representation. Supply it as If-Match on a
+                later write to avoid a lost update.
+              schema:
+                type: string
+        '400':
+          description: bad request
+        '401':
+          description: unauthorized
+        '404':
+          description: resource not found
+        '409':
+          description: >-
+            conflict. The representation exists and the request asserted that it
+            must not.
+        '412':
+          description: >-
+            precondition failed. If-Match did not match the current
+            representation, or If-None-Match: * was sent and one exists.
+    patch:
+      summary: Partially Update a Certification
+      description: |
+        Applies a partial update to the certification at this IRI. Only the
+        properties present in the body are changed; absent properties are left as
+        they are, which is how a score is added to a certification that did not
+        have one.
+      parameters:
+      - name: x-dfc-version
+        in: header
+        required: true
+        schema:
+          type: string
+          example: "2.0.0"
+      - name: organizationId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: certificationId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: If-Match
+        in: header
+        required: false
+        description: >-
+          ETag of the current representation. The write fails with 412 if it no
+          longer matches, which prevents a lost update.
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/ld+json:
+            schema:
+              example:
+                "@context": https://w3id.org/dfc/ontology/context/context_2.0.0.json
+                "@graph":
+                - "@id": "#"
+                  "@type": dfc-b:Certification
+                  dfc-b:name: EU Organic Certification
+                  dfc-b:isCertifiedBy: https://platform.ex/organizations/awesome-farm/index
+                  dfc-b:hasCertification: dfc-f:Organic-EU
+                  dfc-b:operatorId: "FR-BIO-01"
+                  dfc-b:certiferReference: "UK-ORG-05"
+                  dfc-b:certificationScore: ""
+          text/turtle:
+            schema:
+              example: |
+                  @prefix dfc-b:  <https://w3id.org/dfc/ontology/v2.0.0/src/DFC_BusinessOntology.owl#> .
+                  @prefix dfc-f:  <https://w3id.org/dfc/taxonomies/v2.0.0/facets.rdf#> .
+                  [] a dfc-b:Certification ;
+                      dfc-b:name "EU Organic Certification" ;
+                      dfc-b:isCertifiedBy <https://platform.ex/organizations/awesome-farm/index> ;
+                      dfc-b:hasCertification dfc-f:Organic-EU ;
+                      dfc-b:operatorId "FR-BIO-01" ;
+                      dfc-b:certiferReference "UK-ORG-05" ;
+                      dfc-b:certificationScore "" .
+      responses:
+        '200':
+          description: updated, with the full resulting representation
+          headers:
+            ETag:
+              description: >-
+                Entity tag of the current representation. Supply it as If-Match on a
+                later write to avoid a lost update.
+              schema:
+                type: string
+          content:
+            application/ld+json:
+              schema:
+                example:
+                  "@context": https://w3id.org/dfc/ontology/context/context_2.0.0.json
+                  "@graph":
+                  - "@id": https://platform.ex/organizations/awesome-farm/certifications/organic-eu/index
+            text/turtle:
+              schema:
+                example: |
+                  @prefix dfc-b:  <https://w3id.org/dfc/ontology/v2.0.0/src/DFC_BusinessOntology.owl#> .
+                  @prefix dfc-f:  <https://w3id.org/dfc/taxonomies/v2.0.0/facets.rdf#> .
+                  <> a dfc-b:Resource .
+        '400':
+          description: bad request
+        '401':
+          description: unauthorized
+        '404':
+          description: resource not found
+        '412':
+          description: >-
+            precondition failed. If-Match did not match the current
+            representation.
+    delete:
+      summary: Delete Resource
+      description: |
+        Deletes the certification and removes it from the organization's
+        certifications container.
 
+        Products that referenced this certification are not modified; the reference
+        simply stops resolving. The container's ldp:contains and ldp:member lists
+        are updated to no longer reference the removed certification.
+      parameters:
+      - name: x-dfc-version
+        in: header
+        required: true
+        schema:
+          type: string
+          example: "2.0.0"
+      - name: organizationId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: certificationId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: If-Match
+        in: header
+        required: false
+        description: >-
+          ETag of the current representation. The write fails with 412 if it no
+          longer matches, which prevents a lost update.
+        schema:
+          type: string
+      responses:
+        '204':
+          description: deleted
+        '400':
+          description: bad request
+        '401':
+          description: unauthorized
+        '404':
+          description: resource not found
+        '412':
+          description: >-
+            precondition failed. If-Match did not match the current
+            representation.
   "/organizations/{organizationId}/catalogs/{catalogId}/index":
     get:
       summary: Get Catalog Index
@@ -630,6 +1096,13 @@ paths:
       responses:
         '200':
           description: successful
+          headers:
+            ETag:
+              description: >-
+                Entity tag of the current representation. Supply it as If-Match on a
+                later write to avoid a lost update.
+              schema:
+                type: string
           content:
             application/ld+json:
               schema:
@@ -653,7 +1126,263 @@ paths:
                         dfc-b:value: 2.4
         '404':
           description: catalog not found
+    put:
+      summary: Update a Catalog
+      description: |
+        Replaces the catalog at this IRI.
 
+        dfc-b:maintainedBy is fixed at cardinality 1, so the owning organization
+        cannot change through this write. Adding or removing the items a catalog
+        lists is a matter of writing the catalog items' own dfc-b:listedIn, not of
+        editing this list. Send If-Match with the ETag from a prior read to make the
+        write conditional.
+      parameters:
+      - name: x-dfc-version
+        in: header
+        required: true
+        schema:
+          type: string
+          example: "2.0.0"
+      - name: organizationId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: catalogId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: If-Match
+        in: header
+        required: false
+        description: >-
+          ETag of the current representation. The write fails with 412 if it no
+          longer matches, which prevents a lost update.
+        schema:
+          type: string
+      - name: Prefer
+        in: header
+        required: false
+        description: >-
+          Response preference. return=minimal omits the response body; the
+          status code and headers are unchanged.
+        schema:
+          type: string
+          example: return=representation
+      requestBody:
+        required: true
+        content:
+          application/ld+json:
+            schema:
+              example:
+                "@context": https://w3id.org/dfc/ontology/context/context_2.0.0.json
+                "@graph":
+                - "@id": "#"
+                  "@type": dfc-b:Catalog
+                  dfc-b:name: Main Catalog
+                  dfc-b:maintainedBy: https://platform.ex/organizations/awesome-farm/index
+                  dfc-b:lists: [https://platform.ex/organizations/awesome-farm/catalogs/main-catalog/items/TOM-001/index]
+          text/turtle:
+            schema:
+              example: |
+                  @prefix dfc-b:  <https://w3id.org/dfc/ontology/v2.0.0/src/DFC_BusinessOntology.owl#> .
+                  @prefix dfc-f:  <https://w3id.org/dfc/taxonomies/v2.0.0/facets.rdf#> .
+                  [] a dfc-b:Catalog ;
+                      dfc-b:name "Main Catalog" ;
+                      dfc-b:maintainedBy <https://platform.ex/organizations/awesome-farm/index> ;
+                      dfc-b:lists <https://platform.ex/organizations/awesome-farm/catalogs/main-catalog/items/TOM-001/index> .
+      responses:
+        '200':
+          description: >-
+            updated, representation returned. The body is omitted when
+            Prefer: return=minimal is sent.
+          headers:
+            ETag:
+              description: >-
+                Entity tag of the current representation. Supply it as If-Match on a
+                later write to avoid a lost update.
+              schema:
+                type: string
+          content:
+            application/ld+json:
+              schema:
+                example:
+                  "@context": https://w3id.org/dfc/ontology/context/context_2.0.0.json
+                  "@graph":
+                  - "@id": https://platform.ex/organizations/awesome-farm/catalogs/main-catalog/index
+        '201':
+          description: created, because no representation existed at this IRI
+          headers:
+            ETag:
+              description: >-
+                Entity tag of the current representation. Supply it as If-Match on a
+                later write to avoid a lost update.
+              schema:
+                type: string
+          content:
+            application/ld+json:
+              schema:
+                example:
+                  "@context": https://w3id.org/dfc/ontology/context/context_2.0.0.json
+                  "@graph":
+                  - "@id": https://platform.ex/organizations/awesome-farm/catalogs/main-catalog/index
+        '204':
+          description: updated, no body returned
+          headers:
+            ETag:
+              description: >-
+                Entity tag of the current representation. Supply it as If-Match on a
+                later write to avoid a lost update.
+              schema:
+                type: string
+        '400':
+          description: bad request
+        '401':
+          description: unauthorized
+        '404':
+          description: resource not found
+        '409':
+          description: >-
+            conflict. The representation exists and the request asserted that it
+            must not.
+        '412':
+          description: >-
+            precondition failed. If-Match did not match the current
+            representation, or If-None-Match: * was sent and one exists.
+    patch:
+      summary: Partially Update a Catalog
+      description: |
+        Applies a partial update to the catalog at this IRI. Only the properties
+        present in the body are changed; absent properties are left as they are.
+      parameters:
+      - name: x-dfc-version
+        in: header
+        required: true
+        schema:
+          type: string
+          example: "2.0.0"
+      - name: organizationId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: catalogId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: If-Match
+        in: header
+        required: false
+        description: >-
+          ETag of the current representation. The write fails with 412 if it no
+          longer matches, which prevents a lost update.
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/ld+json:
+            schema:
+              example:
+                "@context": https://w3id.org/dfc/ontology/context/context_2.0.0.json
+                "@graph":
+                - "@id": "#"
+                  "@type": dfc-b:Catalog
+                  dfc-b:name: Main Catalog
+                  dfc-b:maintainedBy: https://platform.ex/organizations/awesome-farm/index
+                  dfc-b:lists: [https://platform.ex/organizations/awesome-farm/catalogs/main-catalog/items/TOM-001/index]
+          text/turtle:
+            schema:
+              example: |
+                  @prefix dfc-b:  <https://w3id.org/dfc/ontology/v2.0.0/src/DFC_BusinessOntology.owl#> .
+                  @prefix dfc-f:  <https://w3id.org/dfc/taxonomies/v2.0.0/facets.rdf#> .
+                  [] a dfc-b:Catalog ;
+                      dfc-b:name "Main Catalog" ;
+                      dfc-b:maintainedBy <https://platform.ex/organizations/awesome-farm/index> ;
+                      dfc-b:lists <https://platform.ex/organizations/awesome-farm/catalogs/main-catalog/items/TOM-001/index> .
+      responses:
+        '200':
+          description: updated, with the full resulting representation
+          headers:
+            ETag:
+              description: >-
+                Entity tag of the current representation. Supply it as If-Match on a
+                later write to avoid a lost update.
+              schema:
+                type: string
+          content:
+            application/ld+json:
+              schema:
+                example:
+                  "@context": https://w3id.org/dfc/ontology/context/context_2.0.0.json
+                  "@graph":
+                  - "@id": https://platform.ex/organizations/awesome-farm/catalogs/main-catalog/index
+            text/turtle:
+              schema:
+                example: |
+                  @prefix dfc-b:  <https://w3id.org/dfc/ontology/v2.0.0/src/DFC_BusinessOntology.owl#> .
+                  @prefix dfc-f:  <https://w3id.org/dfc/taxonomies/v2.0.0/facets.rdf#> .
+                  <> a dfc-b:Resource .
+        '400':
+          description: bad request
+        '401':
+          description: unauthorized
+        '404':
+          description: resource not found
+        '412':
+          description: >-
+            precondition failed. If-Match did not match the current
+            representation.
+    delete:
+      summary: Delete Resource
+      description: |
+        Deletes the catalog and removes it from the organization's catalogs
+        container.
+
+        The catalog's items are not deleted. Each catalog item is an independent
+        resource that names its catalog with dfc-b:listedIn, and stays in place with
+        that reference no longer resolving. The container's ldp:contains and
+        ldp:member lists are updated to no longer reference the removed catalog.
+      parameters:
+      - name: x-dfc-version
+        in: header
+        required: true
+        schema:
+          type: string
+          example: "2.0.0"
+      - name: organizationId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: catalogId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: If-Match
+        in: header
+        required: false
+        description: >-
+          ETag of the current representation. The write fails with 412 if it no
+          longer matches, which prevents a lost update.
+        schema:
+          type: string
+      responses:
+        '204':
+          description: deleted
+        '400':
+          description: bad request
+        '401':
+          description: unauthorized
+        '404':
+          description: resource not found
+        '412':
+          description: >-
+            precondition failed. If-Match did not match the current
+            representation.
   "/organizations/{organizationId}/supplied-products":
     get:
       summary: Get Organization Supplied Products Container
@@ -2595,6 +3324,12 @@ paths:
               description: LDP BasicContainer link relation
               schema:
                 type: string
+            ETag:
+              description: >-
+                Entity tag of the current representation. Supply it as If-Match on a
+                later write to avoid a lost update.
+              schema:
+                type: string
           content:
             application/ld+json:
               schema:
@@ -2608,7 +3343,108 @@ paths:
                     ldp:contains: [https://platform.ex/organizations/awesome-farm/routes/tuesday-delivery/index]
         '404':
           description: organization not found
+    post:
+      summary: Create a Route in the Organization Container
+      description: |
+        Creates a delivery route for the organization.
 
+        A route is an ordered sequence of steps, each located at a physical place
+        and typed as a pickup or a delivery. dfc-b:hasStep carries no cardinality
+        axiom in the ontology, so a route may hold any number of steps; the order
+        comes from dfc-b:sequence on each step rather than from the list position.
+      parameters:
+      - name: x-dfc-version
+        in: header
+        required: true
+        schema:
+          type: string
+          example: "2.0.0"
+      - name: organizationId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: Prefer
+        in: header
+        required: false
+        description: >-
+          Response preference. return=minimal omits the response body; the
+          status code and headers are unchanged.
+        schema:
+          type: string
+          example: return=representation
+      requestBody:
+        required: true
+        content:
+          application/ld+json:
+            schema:
+              example:
+                "@context": https://w3id.org/dfc/ontology/context/context_2.0.0.json
+                "@graph":
+                - "@id": "#"
+                  "@type": dfc-b:Route
+                  dfc-b:name: Tuesday Delivery Route
+                  dfc-b:usedInRoute: https://platform.ex/organizations/awesome-farm/template-sale-sessions/weekly-delivery/index
+                  dfc-b:hasStep: ["#step1", "#step2"]
+                - "@id": "#step1"
+                  "@type": dfc-b:PickUpStep
+                  dfc-b:sequence: 1
+                  dfc-b:locatedAt: https://platform.ex/organizations/awesome-farm/physical-places/farm-location/index
+                - "@id": "#step2"
+                  "@type": dfc-b:DeliveryStep
+                  dfc-b:sequence: 2
+                  dfc-b:locatedAt: https://platform.ex/organizations/awesome-farm/physical-places/delivery-zone-north/index
+          text/turtle:
+            schema:
+              example: |
+                  @prefix dfc-b:  <https://w3id.org/dfc/ontology/v2.0.0/src/DFC_BusinessOntology.owl#> .
+                  @prefix dfc-f:  <https://w3id.org/dfc/taxonomies/v2.0.0/facets.rdf#> .
+                  [] a dfc-b:Route ;
+                      dfc-b:name "Tuesday Delivery Route" ;
+                      dfc-b:usedInRoute <https://platform.ex/organizations/awesome-farm/template-sale-sessions/weekly-delivery/index> ;
+                      dfc-b:hasStep [ a dfc-b:PickUpStep ;
+                                     dfc-b:sequence 1 ;
+                                     dfc-b:locatedAt <https://platform.ex/organizations/awesome-farm/physical-places/farm-location/index> ],
+                                   [ a dfc-b:DeliveryStep ;
+                                     dfc-b:sequence 2 ;
+                                     dfc-b:locatedAt <https://platform.ex/organizations/awesome-farm/physical-places/delivery-zone-north/index> ] .
+      responses:
+        '201':
+          description: >-
+            created. The response body is omitted when Prefer: return=minimal is
+            sent; the status code and headers are unchanged.
+          headers:
+            Location:
+              description: IRI of the created resource, assigned by the server
+              schema:
+                type: string
+                format: uri
+            Content-Location:
+              description: >-
+                IRI of the created resource. Identical to Location here; both are
+                returned so a client can rely on either.
+              schema:
+                type: string
+                format: uri
+            ETag:
+              description: >-
+                Entity tag of the current representation. Supply it as If-Match on a
+                later write to avoid a lost update.
+              schema:
+                type: string
+          content:
+            application/ld+json:
+              schema:
+                example:
+                  "@context": https://w3id.org/dfc/ontology/context/context_2.0.0.json
+                  "@graph":
+                  - "@id": https://platform.ex/organizations/awesome-farm/routes/tuesday-delivery/index
+        '400':
+          description: bad request
+        '401':
+          description: unauthorized
+        '404':
+          description: organization not found
   "/organizations/{organizationId}/routes/{routeId}/index":
     get:
       summary: Get Route Index
@@ -2634,6 +3470,13 @@ paths:
       responses:
         '200':
           description: successful
+          headers:
+            ETag:
+              description: >-
+                Entity tag of the current representation. Supply it as If-Match on a
+                later write to avoid a lost update.
+              schema:
+                type: string
           content:
             application/ld+json:
               schema:
@@ -2661,7 +3504,287 @@ paths:
                       "@value": "10:00:00"
         '404':
           description: route not found
+    put:
+      summary: Update a Route
+      description: |
+        Replaces the route at this IRI, steps included.
 
+        A route is a whole: its steps belong to it and are not addressable
+        separately, so replacing the route replaces its steps with it. Send
+        If-Match with the ETag from a prior read to make the write conditional.
+      parameters:
+      - name: x-dfc-version
+        in: header
+        required: true
+        schema:
+          type: string
+          example: "2.0.0"
+      - name: organizationId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: routeId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: If-Match
+        in: header
+        required: false
+        description: >-
+          ETag of the current representation. The write fails with 412 if it no
+          longer matches, which prevents a lost update.
+        schema:
+          type: string
+      - name: Prefer
+        in: header
+        required: false
+        description: >-
+          Response preference. return=minimal omits the response body; the
+          status code and headers are unchanged.
+        schema:
+          type: string
+          example: return=representation
+      requestBody:
+        required: true
+        content:
+          application/ld+json:
+            schema:
+              example:
+                "@context": https://w3id.org/dfc/ontology/context/context_2.0.0.json
+                "@graph":
+                - "@id": "#"
+                  "@type": dfc-b:Route
+                  dfc-b:name: Tuesday Delivery Route
+                  dfc-b:usedInRoute: https://platform.ex/organizations/awesome-farm/template-sale-sessions/weekly-delivery/index
+                  dfc-b:hasStep: ["#step1", "#step2"]
+                - "@id": "#step1"
+                  "@type": dfc-b:PickUpStep
+                  dfc-b:sequence: 1
+                  dfc-b:locatedAt: https://platform.ex/organizations/awesome-farm/physical-places/farm-location/index
+                - "@id": "#step2"
+                  "@type": dfc-b:DeliveryStep
+                  dfc-b:sequence: 2
+                  dfc-b:locatedAt: https://platform.ex/organizations/awesome-farm/physical-places/delivery-zone-north/index
+          text/turtle:
+            schema:
+              example: |
+                  @prefix dfc-b:  <https://w3id.org/dfc/ontology/v2.0.0/src/DFC_BusinessOntology.owl#> .
+                  @prefix dfc-f:  <https://w3id.org/dfc/taxonomies/v2.0.0/facets.rdf#> .
+                  [] a dfc-b:Route ;
+                      dfc-b:name "Tuesday Delivery Route" ;
+                      dfc-b:usedInRoute <https://platform.ex/organizations/awesome-farm/template-sale-sessions/weekly-delivery/index> ;
+                      dfc-b:hasStep [ a dfc-b:PickUpStep ;
+                                     dfc-b:sequence 1 ;
+                                     dfc-b:locatedAt <https://platform.ex/organizations/awesome-farm/physical-places/farm-location/index> ],
+                                   [ a dfc-b:DeliveryStep ;
+                                     dfc-b:sequence 2 ;
+                                     dfc-b:locatedAt <https://platform.ex/organizations/awesome-farm/physical-places/delivery-zone-north/index> ] .
+      responses:
+        '200':
+          description: >-
+            updated, representation returned. The body is omitted when
+            Prefer: return=minimal is sent.
+          headers:
+            ETag:
+              description: >-
+                Entity tag of the current representation. Supply it as If-Match on a
+                later write to avoid a lost update.
+              schema:
+                type: string
+          content:
+            application/ld+json:
+              schema:
+                example:
+                  "@context": https://w3id.org/dfc/ontology/context/context_2.0.0.json
+                  "@graph":
+                  - "@id": https://platform.ex/organizations/awesome-farm/routes/tuesday-delivery/index
+        '201':
+          description: created, because no representation existed at this IRI
+          headers:
+            ETag:
+              description: >-
+                Entity tag of the current representation. Supply it as If-Match on a
+                later write to avoid a lost update.
+              schema:
+                type: string
+          content:
+            application/ld+json:
+              schema:
+                example:
+                  "@context": https://w3id.org/dfc/ontology/context/context_2.0.0.json
+                  "@graph":
+                  - "@id": https://platform.ex/organizations/awesome-farm/routes/tuesday-delivery/index
+        '204':
+          description: updated, no body returned
+          headers:
+            ETag:
+              description: >-
+                Entity tag of the current representation. Supply it as If-Match on a
+                later write to avoid a lost update.
+              schema:
+                type: string
+        '400':
+          description: bad request
+        '401':
+          description: unauthorized
+        '404':
+          description: resource not found
+        '409':
+          description: >-
+            conflict. The representation exists and the request asserted that it
+            must not.
+        '412':
+          description: >-
+            precondition failed. If-Match did not match the current
+            representation, or If-None-Match: * was sent and one exists.
+    patch:
+      summary: Partially Update a Route
+      description: |
+        Applies a partial update to the route at this IRI. Only the properties
+        present in the body are changed; absent properties are left as they are.
+        Steps are held inline in dfc-b:hasStep rather than as separate resources,
+        so a step is changed by rewriting the whole list.
+      parameters:
+      - name: x-dfc-version
+        in: header
+        required: true
+        schema:
+          type: string
+          example: "2.0.0"
+      - name: organizationId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: routeId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: If-Match
+        in: header
+        required: false
+        description: >-
+          ETag of the current representation. The write fails with 412 if it no
+          longer matches, which prevents a lost update.
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/ld+json:
+            schema:
+              example:
+                "@context": https://w3id.org/dfc/ontology/context/context_2.0.0.json
+                "@graph":
+                - "@id": "#"
+                  "@type": dfc-b:Route
+                  dfc-b:name: Tuesday Delivery Route
+                  dfc-b:usedInRoute: https://platform.ex/organizations/awesome-farm/template-sale-sessions/weekly-delivery/index
+                  dfc-b:hasStep: ["#step1", "#step2"]
+                - "@id": "#step1"
+                  "@type": dfc-b:PickUpStep
+                  dfc-b:sequence: 1
+                  dfc-b:locatedAt: https://platform.ex/organizations/awesome-farm/physical-places/farm-location/index
+                - "@id": "#step2"
+                  "@type": dfc-b:DeliveryStep
+                  dfc-b:sequence: 2
+                  dfc-b:locatedAt: https://platform.ex/organizations/awesome-farm/physical-places/delivery-zone-north/index
+          text/turtle:
+            schema:
+              example: |
+                  @prefix dfc-b:  <https://w3id.org/dfc/ontology/v2.0.0/src/DFC_BusinessOntology.owl#> .
+                  @prefix dfc-f:  <https://w3id.org/dfc/taxonomies/v2.0.0/facets.rdf#> .
+                  [] a dfc-b:Route ;
+                      dfc-b:name "Tuesday Delivery Route" ;
+                      dfc-b:usedInRoute <https://platform.ex/organizations/awesome-farm/template-sale-sessions/weekly-delivery/index> ;
+                      dfc-b:hasStep [ a dfc-b:PickUpStep ;
+                                     dfc-b:sequence 1 ;
+                                     dfc-b:locatedAt <https://platform.ex/organizations/awesome-farm/physical-places/farm-location/index> ],
+                                   [ a dfc-b:DeliveryStep ;
+                                     dfc-b:sequence 2 ;
+                                     dfc-b:locatedAt <https://platform.ex/organizations/awesome-farm/physical-places/delivery-zone-north/index> ] .
+      responses:
+        '200':
+          description: updated, with the full resulting representation
+          headers:
+            ETag:
+              description: >-
+                Entity tag of the current representation. Supply it as If-Match on a
+                later write to avoid a lost update.
+              schema:
+                type: string
+          content:
+            application/ld+json:
+              schema:
+                example:
+                  "@context": https://w3id.org/dfc/ontology/context/context_2.0.0.json
+                  "@graph":
+                  - "@id": https://platform.ex/organizations/awesome-farm/routes/tuesday-delivery/index
+            text/turtle:
+              schema:
+                example: |
+                  @prefix dfc-b:  <https://w3id.org/dfc/ontology/v2.0.0/src/DFC_BusinessOntology.owl#> .
+                  @prefix dfc-f:  <https://w3id.org/dfc/taxonomies/v2.0.0/facets.rdf#> .
+                  <> a dfc-b:Resource .
+        '400':
+          description: bad request
+        '401':
+          description: unauthorized
+        '404':
+          description: resource not found
+        '412':
+          description: >-
+            precondition failed. If-Match did not match the current
+            representation.
+    delete:
+      summary: Delete Resource
+      description: |
+        Deletes the route and removes it from the organization's routes container.
+
+        Any sale session that named this route with dfc-b:usedInRoute keeps that
+        reference, which then stops resolving. The container's ldp:contains and
+        ldp:member lists are updated to no longer reference the removed route.
+      parameters:
+      - name: x-dfc-version
+        in: header
+        required: true
+        schema:
+          type: string
+          example: "2.0.0"
+      - name: organizationId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: routeId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: If-Match
+        in: header
+        required: false
+        description: >-
+          ETag of the current representation. The write fails with 412 if it no
+          longer matches, which prevents a lost update.
+        schema:
+          type: string
+      responses:
+        '204':
+          description: deleted
+        '400':
+          description: bad request
+        '401':
+          description: unauthorized
+        '404':
+          description: resource not found
+        '412':
+          description: >-
+            precondition failed. If-Match did not match the current
+            representation.
   "/organizations/{organizationId}/addresses":
     get:
       summary: Get Organization Addresses Container
@@ -4243,6 +5366,13 @@ paths:
       responses:
         '200':
           description: successful
+          headers:
+            ETag:
+              description: >-
+                Entity tag of the current representation. Supply it as If-Match on a
+                later write to avoid a lost update.
+              schema:
+                type: string
           content:
             application/ld+json:
               schema:
@@ -4255,7 +5385,258 @@ paths:
                     dfc-b:lastName: Doe
         '404':
           description: person not found
+    put:
+      summary: Update a Person
+      description: |
+        Replaces the person at this IRI.
 
+        Persons sit outside any organization: they are addressed from the platform
+        root rather than from an organization's tree, because one person may be
+        affiliated with several organizations through dfc-b:affiliates. A person is
+        created through whatever process issues a person's identity, not through
+        this API, so there is no POST; a PUT here cannot create one. Send If-Match
+        with the ETag from a prior read to make the write conditional.
+      parameters:
+      - name: x-dfc-version
+        in: header
+        required: true
+        schema:
+          type: string
+          example: "2.0.0"
+      - name: personId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: If-Match
+        in: header
+        required: false
+        description: >-
+          ETag of the current representation. The write fails with 412 if it no
+          longer matches, which prevents a lost update.
+        schema:
+          type: string
+      - name: Prefer
+        in: header
+        required: false
+        description: >-
+          Response preference. return=minimal omits the response body; the
+          status code and headers are unchanged.
+        schema:
+          type: string
+          example: return=representation
+      requestBody:
+        required: true
+        content:
+          application/ld+json:
+            schema:
+              example:
+                "@context": https://w3id.org/dfc/ontology/context/context_2.0.0.json
+                "@graph":
+                - "@id": "#"
+                  "@type": dfc-b:Person
+                  dfc-b:firstName: John
+                  dfc-b:lastName: Doe
+                  dfc-b:affiliates: https://platform.ex/organizations/awesome-farm/index
+                  dfc-b:hasAddress: https://platform.ex/organizations/awesome-farm/addresses/farm-address/index
+                  dfc-b:hasPhoneNumber: https://platform.ex/phone-numbers/441234567890/index
+          text/turtle:
+            schema:
+              example: |
+                  @prefix dfc-b:  <https://w3id.org/dfc/ontology/v2.0.0/src/DFC_BusinessOntology.owl#> .
+                  @prefix dfc-f:  <https://w3id.org/dfc/taxonomies/v2.0.0/facets.rdf#> .
+                  [] a dfc-b:Person ;
+                      dfc-b:firstName "John" ;
+                      dfc-b:lastName "Doe" ;
+                      dfc-b:affiliates <https://platform.ex/organizations/awesome-farm/index> ;
+                      dfc-b:hasAddress <https://platform.ex/organizations/awesome-farm/addresses/farm-address/index> ;
+                      dfc-b:hasPhoneNumber <https://platform.ex/phone-numbers/441234567890/index> .
+      responses:
+        '200':
+          description: >-
+            updated, representation returned. The body is omitted when
+            Prefer: return=minimal is sent.
+          headers:
+            ETag:
+              description: >-
+                Entity tag of the current representation. Supply it as If-Match on a
+                later write to avoid a lost update.
+              schema:
+                type: string
+          content:
+            application/ld+json:
+              schema:
+                example:
+                  "@context": https://w3id.org/dfc/ontology/context/context_2.0.0.json
+                  "@graph":
+                  - "@id": https://platform.ex/persons/john/index
+        '201':
+          description: created, because no representation existed at this IRI
+          headers:
+            ETag:
+              description: >-
+                Entity tag of the current representation. Supply it as If-Match on a
+                later write to avoid a lost update.
+              schema:
+                type: string
+          content:
+            application/ld+json:
+              schema:
+                example:
+                  "@context": https://w3id.org/dfc/ontology/context/context_2.0.0.json
+                  "@graph":
+                  - "@id": https://platform.ex/persons/john/index
+        '204':
+          description: updated, no body returned
+          headers:
+            ETag:
+              description: >-
+                Entity tag of the current representation. Supply it as If-Match on a
+                later write to avoid a lost update.
+              schema:
+                type: string
+        '400':
+          description: bad request
+        '401':
+          description: unauthorized
+        '404':
+          description: resource not found
+        '409':
+          description: >-
+            conflict. The representation exists and the request asserted that it
+            must not.
+        '412':
+          description: >-
+            precondition failed. If-Match did not match the current
+            representation, or If-None-Match: * was sent and one exists.
+    patch:
+      summary: Partially Update a Person
+      description: |
+        Applies a partial update to the person at this IRI. Only the properties
+        present in the body are changed; absent properties are left as they are,
+        which is how a person gains or loses an affiliation without rewriting
+        their contact details.
+      parameters:
+      - name: x-dfc-version
+        in: header
+        required: true
+        schema:
+          type: string
+          example: "2.0.0"
+      - name: personId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: If-Match
+        in: header
+        required: false
+        description: >-
+          ETag of the current representation. The write fails with 412 if it no
+          longer matches, which prevents a lost update.
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/ld+json:
+            schema:
+              example:
+                "@context": https://w3id.org/dfc/ontology/context/context_2.0.0.json
+                "@graph":
+                - "@id": "#"
+                  "@type": dfc-b:Person
+                  dfc-b:firstName: John
+                  dfc-b:lastName: Doe
+                  dfc-b:affiliates: https://platform.ex/organizations/awesome-farm/index
+                  dfc-b:hasAddress: https://platform.ex/organizations/awesome-farm/addresses/farm-address/index
+                  dfc-b:hasPhoneNumber: https://platform.ex/phone-numbers/441234567890/index
+          text/turtle:
+            schema:
+              example: |
+                  @prefix dfc-b:  <https://w3id.org/dfc/ontology/v2.0.0/src/DFC_BusinessOntology.owl#> .
+                  @prefix dfc-f:  <https://w3id.org/dfc/taxonomies/v2.0.0/facets.rdf#> .
+                  [] a dfc-b:Person ;
+                      dfc-b:firstName "John" ;
+                      dfc-b:lastName "Doe" ;
+                      dfc-b:affiliates <https://platform.ex/organizations/awesome-farm/index> ;
+                      dfc-b:hasAddress <https://platform.ex/organizations/awesome-farm/addresses/farm-address/index> ;
+                      dfc-b:hasPhoneNumber <https://platform.ex/phone-numbers/441234567890/index> .
+      responses:
+        '200':
+          description: updated, with the full resulting representation
+          headers:
+            ETag:
+              description: >-
+                Entity tag of the current representation. Supply it as If-Match on a
+                later write to avoid a lost update.
+              schema:
+                type: string
+          content:
+            application/ld+json:
+              schema:
+                example:
+                  "@context": https://w3id.org/dfc/ontology/context/context_2.0.0.json
+                  "@graph":
+                  - "@id": https://platform.ex/persons/john/index
+            text/turtle:
+              schema:
+                example: |
+                  @prefix dfc-b:  <https://w3id.org/dfc/ontology/v2.0.0/src/DFC_BusinessOntology.owl#> .
+                  @prefix dfc-f:  <https://w3id.org/dfc/taxonomies/v2.0.0/facets.rdf#> .
+                  <> a dfc-b:Resource .
+        '400':
+          description: bad request
+        '401':
+          description: unauthorized
+        '404':
+          description: resource not found
+        '412':
+          description: >-
+            precondition failed. If-Match did not match the current
+            representation.
+    delete:
+      summary: Delete Resource
+      description: |
+        Deletes the person at this IRI.
+
+        Affiliations are not deleted: the organizations that named this person with
+        dfc-b:hasMainContact, or whose orders carry dfc-b:orderedBy pointing here,
+        keep those references. The person's address and phone number resources are
+        left in place.
+      parameters:
+      - name: x-dfc-version
+        in: header
+        required: true
+        schema:
+          type: string
+          example: "2.0.0"
+      - name: personId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: If-Match
+        in: header
+        required: false
+        description: >-
+          ETag of the current representation. The write fails with 412 if it no
+          longer matches, which prevents a lost update.
+        schema:
+          type: string
+      responses:
+        '204':
+          description: deleted
+        '400':
+          description: bad request
+        '401':
+          description: unauthorized
+        '404':
+          description: resource not found
+        '412':
+          description: >-
+            precondition failed. If-Match did not match the current
+            representation.
   "/phone-numbers/{phoneNumberId}/index":
     get:
       summary: Get Phone Number Index
