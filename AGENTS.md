@@ -1,6 +1,6 @@
 # AGENTS.md
 
-Four hand-maintained OpenAPI 3 documents describing the Data Food Consortium standard. No code, no build, no tests. Everything below was verified against `main`.
+Four hand-maintained OpenAPI 3 documents describing the Data Food Consortium standard. No build, no test suite, no `package.json`. Everything below was verified against `main`.
 
 ## Files
 
@@ -20,7 +20,22 @@ Consumers fetch `dfc-ldp.yaml` from
 `raw.githubusercontent.com/.../main/dfc-ldp.yaml`, so breaking it breaks
 downstream tools.
 
-Not real: `.swagger-codegen/VERSION` (`3.0.58`) and `.swagger-codegen-ignore` are unmaintained swagger-codegen 2.x leftovers. There is no generator; edit YAML by hand.
+Not real: `.swagger-codegen/VERSION` (`3.0.58`) and `.swagger-codegen-ignore` are unmaintained swagger-codegen 2.x leftovers.
+
+## Scripts
+
+`scripts/` holds three one-shot helpers. None is run by CI and none is a build
+step; the YAML they emit is meant to be hand-edited afterwards.
+
+| Script | Does |
+|---|---|
+| `gen_schemas.py` | Regenerates the marked `components/schemas` block in `dfc-ldp.yaml` from the ontology + LinkML |
+| `wire_schemas.py` | Points every `application/ld+json` body at a schema |
+| `validate_examples.py` | Validates every example against its schema; the gate to run before committing a spec change |
+
+`gen_schemas.py` and `wire_schemas.py` fetch the ontology and the LinkML schema
+over HTTPS and cache them under `/tmp/opencode/dfc-card/`. Nothing else in the
+repo has a network dependency, so do not make anything else depend on that path.
 
 ## Validation
 
@@ -46,6 +61,69 @@ spectral lint dfc.yaml --format stylish
 Spectral is **not** run in CI, so it is only as available as the person running
 it has it installed. CI validates `dfc-ldp.yaml` with Scalar's own validator
 instead — see "Publishing".
+
+### Example validation
+
+Spectral never looks at an example, so an example can contradict its own
+schema and nothing notices. `scripts/validate_examples.py` does that check: it
+walks every `application/ld+json` example and validates each `@graph` entry
+against its schema.
+
+```bash
+python3 scripts/validate_examples.py     # exit 1 on any failure
+```
+
+Needs PyYAML only — no npm — so unlike Spectral it *could* run in CI unchanged.
+It is not wired up yet; see "Publishing".
+
+### Typed schemas
+
+`dfc-ldp.yaml` has a real `components/schemas`. The block is **generated** and
+sits between two marker comments; anything you hand-edit inside it will be lost
+the next time the generator runs.
+
+```bash
+python3 scripts/gen_schemas.py     # regenerate components/schemas
+python3 scripts/wire_schemas.py    # point every ld+json body at a schema
+```
+
+Both are idempotent, and both are one-shot: the output is ordinary YAML that
+you are expected to hand-edit afterwards. Edit the script, not the block, if a
+rule itself is wrong.
+
+The generator derives multiplicity from `DFC_BusinessOntology.rdf` directly,
+and takes ranges from DFC-LinkML. It does **not** use LinkML's `multivalued`
+flag — see item 14. Rules, in precedence order:
+
+1. **Literal range → scalar.** A JSON-LD literal is one value whatever the
+   cardinality says. Getting this wrong makes every `dfc-b:name` an array.
+2. **`owl:cardinality 1` on the class or an ancestor → scalar**, and `required`
+   on a request body.
+3. **An example already writes an array → array.**
+4. **An example writes an inline node → scalar `$ref`** to that node's schema.
+   Only this case is a `$ref`: a link property holds an IRI even when its range
+   is a class, so reading `$ref` off the range types
+   `Organization.hasMainContact` as a `Person` object when the examples hold a
+   `Person` IRI.
+5. **Otherwise the ontology says nothing → `oneOf: [IRI, array of IRI]`**,
+   with a description saying so. Absence of an OWL restriction is *unspecified*,
+   not "many", and asserting either would invent a constraint.
+
+Seven properties land in case 5: `Address.basedAt`, `Person.affiliates`,
+`Person.hasAddress`, `TemplateSaleSession.coordinatedBy`, `hasOption`,
+`hostedAt`, `objectOf`.
+
+Responses get a `<Class>Response` twin — same properties, no `required`, nested
+refs repointed at the Response variants — because a representation may be
+partial: a container lists items without repeating each one's obligatory links,
+and a `Prefer: return=minimal` reply carries no body at all.
+
+Two cardinality-1 properties are deliberately **not** `required`, because they
+are the link back to the parent that embeds the node and writing them would make
+a child point at a parent that already contains it:
+
+- `OrderLine.partOf` — inverse of `Order.hasPart`
+- `Offer.offers` — inverse of `CatalogItem.offeredThrough`
 
 Both serialisations must be kept in step. Every example appears twice, as
 `application/ld+json` and `text/turtle`, and they must agree:
@@ -100,10 +178,37 @@ Spectral does not check any of these.
 13. **`dfc-b:image` is unverified.** Reported as a property of
     `dfc-b:DefinedProduct` inherited by `SuppliedProduct`, but not found
     declared in the business, technical or full-model ontologies. Left in place
-    pending confirmation.
+    pending confirmation. Schema-wise it is a free-form string with that caveat
+    recorded in its `description`.
+14. **`dfc-b:occursAt` is not in the business ontology either.** Same situation
+    as `image`, and stronger: searching the class declarations finds no
+    `occursAt` at all. In the examples it is spelled in the iCalendar namespace
+    and carries a fragment IRI (`.../weekly-delivery/index#schedule`). There is
+    an open issue with the ontology working group; do not "fix" the spelling.
+15. **`dfc-b:startsAt` is a JSON-LD value object, not a timestamp string.** The
+    ontology declares it an `ObjectProperty` with no range, but every example
+    writes `{"@type": "...#time", "@value": "08:00:00"}`. It is typed against a
+    generated `XsdTimeValue` schema. The same property name means different
+    things on different classes, so type from the examples, not the range.
+16. **DFC-LinkML's `multivalued` is not cardinality.** It is derived from
+    `owl:inverseOf`, and it flags 42 slots of which **39 are properties the
+    ontology does not constrain at all**, while the 42 `owl:cardinality 1`
+    axioms in `DFC_BusinessOntology.rdf` overlap with it in only **three** —
+    `Organization.hasMainContact`, `PhysicalPlace.hasAddress`,
+    `CatalogItem.listedIn` — all three of which it wrongly marks multi-valued.
+    It also carries **no `required:` flags**, and
+    `tests/test_model_reference.py::test_no_unmodelled_cardinality_is_claimed`
+    actively fails if anything claims cardinality the schema does not carry. So
+    it cannot drive array-vs-scalar or `required`; its `range` data is sound and
+    is used. Prefer it not at all for multiplicity.
+17. **`dfc-b:totalTheoriticalStock` is pinned but unusable.** `owl:cardinality
+    1` on `SuppliedProduct`, yet the term appears in neither spelling in the
+    published context, so no example can use it without a dangling term. The
+    schema declares it optional, with the reason in its `description`. Making it
+    `required` would invalidate every `SuppliedProduct` example.
 
 Checking a new term against the ontology is worth the effort — a scan of the
-examples for undeclared terms is what turned up items 11 to 13. Two useful
+examples for undeclared terms is what turned up items 11 to 15. Two useful
 facts: the ontology's `.owl` and `.rdf` serialisations are **not** equivalent
 (`.owl` carries no `owl:Restriction`, no cardinality axioms and no inverse
 pairs; `.rdf` carries 370 restrictions, 42 cardinality axioms, 68 inverse pairs
@@ -200,6 +305,9 @@ Things to know before editing that workflow:
   published document could not be confirmed, and a guessed URL would fail every
   publish. The CLI's own exit code is the signal.
 - CI validates with Scalar's validator, **not** Spectral — see "Validation".
+  `scripts/validate_examples.py` is the obvious candidate to add to that
+  workflow: it needs only PyYAML, so it would sidestep the Spectral-is-a-global-
+  binary problem entirely. Not done yet.
 
 Local equivalent, if you want to check before pushing:
 
