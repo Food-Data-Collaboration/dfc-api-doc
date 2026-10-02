@@ -256,6 +256,13 @@ paths:
       responses:
         '200':
           description: successful
+          headers:
+            ETag:
+              description: >-
+                Entity tag of the current representation. Supply it as If-Match on a
+                later write to avoid a lost update.
+              schema:
+                type: string
           content:
             application/ld+json:
               schema:
@@ -273,7 +280,198 @@ paths:
                     dfc-b:orders: [https://platform.ex/organizations/awesome-farm/orders/]
         '404':
           description: organization not found
+    put:
+      summary: Update the Organization
+      description: |
+        Replaces the organization at this IRI.
 
+        An organization is created during onboarding rather than through this API, so this
+        cannot create one: the resource always exists. Use PATCH to change only
+        some properties. Send If-Match with the ETag from a prior read to make the write
+        conditional, so a concurrent change fails with 412 rather than being silently
+        overwritten.
+      parameters:
+      - name: x-dfc-version
+        in: header
+        required: true
+        schema:
+          type: string
+          example: "2.0.0"
+      - name: organizationId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: If-Match
+        in: header
+        required: false
+        description: >-
+          ETag of the current representation. The write fails with 412 if it no
+          longer matches, which prevents a lost update.
+        schema:
+          type: string
+      - name: Prefer
+        in: header
+        required: false
+        description: >-
+          Response preference. return=minimal omits the response body; the
+          status code and headers are unchanged.
+        schema:
+          type: string
+          example: return=representation
+      requestBody:
+        required: true
+        content:
+          application/ld+json:
+            schema:
+              example:
+                "@context": https://w3id.org/dfc/ontology/context/context_2.0.0.json
+                "@graph":
+                - "@id": "#"
+                  "@type": dfc-b:Organization
+                  dfc-b:name: John's Farm
+                  dfc-b:hasDescription: Family farm growing vegetables and herbs
+                  dfc-b:hasMainContact: https://platform.ex/persons/fred-farm/index
+                  dfc-b:hasAddress: [https://platform.ex/organizations/awesome-farm/addresses/farm-address/index]
+                  dfc-b:websitePage: https://platform.ex/
+          text/turtle:
+            schema:
+              example: |
+                  @prefix dfc-b:  <https://w3id.org/dfc/ontology/v2.0.0/src/DFC_BusinessOntology.owl#> .
+                  @prefix dfc-pt: <https://w3id.org/dfc/taxonomies/v2.0.0/productTypes.rdf#> .
+                  @prefix dfc-m:  <https://w3id.org/dfc/taxonomies/v2.0.0/measures.rdf#> .
+                  <> a dfc-b:Organization ;
+                      dfc-b:name "John's Farm" ;
+                      dfc-b:hasDescription "Family farm growing vegetables and herbs" ;
+                      dfc-b:hasMainContact <https://platform.ex/persons/fred-farm/index> ;
+                      dfc-b:hasAddress <https://platform.ex/organizations/awesome-farm/addresses/farm-address/index> ;
+                      dfc-b:websitePage <https://platform.ex/> .
+      responses:
+        '200':
+          description: >-
+            updated, representation returned. The body is omitted when
+            Prefer: return=minimal is sent.
+          headers:
+            ETag:
+              description: >-
+                Entity tag of the current representation. Supply it as If-Match on a
+                later write to avoid a lost update.
+              schema:
+                type: string
+          content:
+            application/ld+json:
+              schema:
+                example:
+                  "@context": https://w3id.org/dfc/ontology/context/context_2.0.0.json
+                  "@graph":
+                  - "@id": https://platform.ex/organizations/awesome-farm/index
+        '204':
+          description: updated, no body returned
+          headers:
+            ETag:
+              description: >-
+                Entity tag of the current representation. Supply it as If-Match on a
+                later write to avoid a lost update.
+              schema:
+                type: string
+        '400':
+          description: bad request
+        '401':
+          description: unauthorized
+        '404':
+          description: organization not found
+        '412':
+          description: >-
+            precondition failed. If-Match did not match the current
+            representation.
+    patch:
+      summary: Partially Update the Organization
+      description: |
+        Applies a partial update to the organization at this IRI. Only the properties
+        present in the body are changed; absent properties are left as they are. A PUT
+        replaces the whole representation, which is the better fit when the client holds a
+        complete copy and PATCH when it does not.
+      parameters:
+      - name: x-dfc-version
+        in: header
+        required: true
+        schema:
+          type: string
+          example: "2.0.0"
+      - name: organizationId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: If-Match
+        in: header
+        required: false
+        description: >-
+          ETag of the current representation. The write fails with 412 if it no
+          longer matches, which prevents a lost update.
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/ld+json:
+            schema:
+              example:
+                "@context": https://w3id.org/dfc/ontology/context/context_2.0.0.json
+                "@graph":
+                - "@id": "#"
+                  "@type": dfc-b:Organization
+                  dfc-b:name: John's Farm
+                  dfc-b:hasDescription: Family farm growing vegetables and herbs
+                  dfc-b:hasMainContact: https://platform.ex/persons/fred-farm/index
+                  dfc-b:hasAddress: [https://platform.ex/organizations/awesome-farm/addresses/farm-address/index]
+                  dfc-b:websitePage: https://platform.ex/
+          text/turtle:
+            schema:
+              example: |
+                  @prefix dfc-b:  <https://w3id.org/dfc/ontology/v2.0.0/src/DFC_BusinessOntology.owl#> .
+                  @prefix dfc-pt: <https://w3id.org/dfc/taxonomies/v2.0.0/productTypes.rdf#> .
+                  @prefix dfc-m:  <https://w3id.org/dfc/taxonomies/v2.0.0/measures.rdf#> .
+                  <> a dfc-b:Organization ;
+                      dfc-b:name "John's Farm" ;
+                      dfc-b:hasDescription "Family farm growing vegetables and herbs" ;
+                      dfc-b:hasMainContact <https://platform.ex/persons/fred-farm/index> ;
+                      dfc-b:hasAddress <https://platform.ex/organizations/awesome-farm/addresses/farm-address/index> ;
+                      dfc-b:websitePage <https://platform.ex/> .
+      responses:
+        '200':
+          description: updated, with the full resulting representation
+          headers:
+            ETag:
+              description: >-
+                Entity tag of the current representation. Supply it as If-Match on a
+                later write to avoid a lost update.
+              schema:
+                type: string
+          content:
+            application/ld+json:
+              schema:
+                example:
+                  "@context": https://w3id.org/dfc/ontology/context/context_2.0.0.json
+                  "@graph":
+                  - "@id": https://platform.ex/organizations/awesome-farm/index
+            text/turtle:
+              schema:
+                example: |
+                  @prefix dfc-b:  <https://w3id.org/dfc/ontology/v2.0.0/src/DFC_BusinessOntology.owl#> .
+                  @prefix dfc-pt: <https://w3id.org/dfc/taxonomies/v2.0.0/productTypes.rdf#> .
+                  @prefix dfc-m:  <https://w3id.org/dfc/taxonomies/v2.0.0/measures.rdf#> .
+                  <> a dfc-b:Resource .
+        '400':
+          description: bad request
+        '401':
+          description: unauthorized
+        '404':
+          description: organization not found
+        '412':
+          description: >-
+            precondition failed. If-Match did not match the current
+            representation.
   "/organizations/{organizationId}/catalogs":
     get:
       summary: Get Organization Catalogs Container
@@ -1106,6 +1304,12 @@ paths:
               description: LDP BasicContainer link relation
               schema:
                 type: string
+            ETag:
+              description: >-
+                Entity tag of the current representation. Supply it as If-Match on a
+                later write to avoid a lost update.
+              schema:
+                type: string
           content:
             application/ld+json:
               schema:
@@ -1119,7 +1323,135 @@ paths:
                     ldp:contains: [https://platform.ex/organizations/awesome-farm/orders/order-001/index]
         '404':
           description: organization not found
+    post:
+      summary: Create an Order in the Organization Container
+      description: |
+        Creates an order as a member of the organization's orders container, together with
+        its order lines.
 
+        dfc-b:Order is a relation, not an entity, so this differs from the other containers:
+        an order is placed against a sale session and its lines are what the order is
+        for. The body may therefore carry OrderLine members alongside the Order, as
+        blank nodes referenced from dfc-b:hasPart. The server assigns an IRI to the
+        order and to each line, and creates them atomically: either the whole order
+        exists afterwards or none of it does.
+
+        To add a further line to an existing order, POST to the order's orderlines container
+        instead. The four properties dfc-b:Order carries on its own behalf -- dfc-b:belongsTo,
+        dfc-b:orderedBy, dfc-b:selects and dfc-b:uses -- are each cardinality 1 in the
+        ontology and belong to the order, not to any line.
+      parameters:
+      - name: x-dfc-version
+        in: header
+        required: true
+        schema:
+          type: string
+          example: "2.0.0"
+      - name: organizationId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: Prefer
+        in: header
+        required: false
+        description: >-
+          Response preference. return=minimal omits the response body; the
+          status code and headers are unchanged.
+        schema:
+          type: string
+          example: return=representation
+      requestBody:
+        required: true
+        content:
+          application/ld+json:
+            schema:
+              example:
+                "@context": https://w3id.org/dfc/ontology/context/context_2.0.0.json
+                "@graph":
+                - "@id": "#order"
+                  "@type": dfc-b:Order
+                  dfc-b:belongsTo: https://platform.ex/organizations/awesome-farm/sale-sessions/saturday-market/index
+                  dfc-b:orderedBy: https://platform.ex/persons/jane-shopper/index
+                  dfc-b:selects: https://platform.ex/organizations/awesome-farm/customer-categories/basil/offers/standard-delivery
+                  dfc-b:uses:
+                    "@type": dfc-b:PaymentMethod
+                    dfc-b:paymentMethodType: CreditCard
+                  dfc-b:hasPart: ["#line-1", "#line-2"]
+                - "@id": "#line-1"
+                  "@type": dfc-b:OrderLine
+                  dfc-b:concerns: https://platform.ex/organizations/awesome-farm/customer-categories/basil/offers/offer-001
+                  dfc-b:hasQuantity:
+                    "@type": dfc-b:QuantitativeValue
+                    dfc-b:hasUnit: dfc-m:Kilogram
+                    dfc-b:value: 1.5
+                - "@id": "#line-2"
+                  "@type": dfc-b:OrderLine
+                  dfc-b:concerns: https://platform.ex/organizations/awesome-farm/customer-categories/veg/offers/offer-002
+                  dfc-b:hasQuantity:
+                    "@type": dfc-b:QuantitativeValue
+                    dfc-b:hasUnit: dfc-m:Kilogram
+                    dfc-b:value: 2.0
+          text/turtle:
+            schema:
+              example: |
+                  @prefix dfc-b:  <https://w3id.org/dfc/ontology/v2.0.0/src/DFC_BusinessOntology.owl#> .
+                  @prefix dfc-pt: <https://w3id.org/dfc/taxonomies/v2.0.0/productTypes.rdf#> .
+                  @prefix dfc-m:  <https://w3id.org/dfc/taxonomies/v2.0.0/measures.rdf#> .
+                  [] a dfc-b:Order ;
+                      dfc-b:belongsTo <https://platform.ex/organizations/awesome-farm/sale-sessions/saturday-market/index> ;
+                      dfc-b:orderedBy <https://platform.ex/persons/jane-shopper/index> ;
+                      dfc-b:selects <https://platform.ex/organizations/awesome-farm/customer-categories/basil/offers/standard-delivery> ;
+                      dfc-b:uses [ a dfc-b:PaymentMethod ;
+                                  dfc-b:paymentMethodType "CreditCard" ] ;
+                      dfc-b:hasPart [ a dfc-b:OrderLine ;
+                                     dfc-b:concerns <https://platform.ex/organizations/awesome-farm/customer-categories/basil/offers/offer-001> ;
+                                     dfc-b:hasQuantity [ a dfc-b:QuantitativeValue ;
+                                                         dfc-b:hasUnit dfc-m:Kilogram ;
+                                                         dfc-b:value 1.5 ] ],
+                                    [ a dfc-b:OrderLine ;
+                                     dfc-b:concerns <https://platform.ex/organizations/awesome-farm/customer-categories/veg/offers/offer-002> ;
+                                     dfc-b:hasQuantity [ a dfc-b:QuantitativeValue ;
+                                                         dfc-b:hasUnit dfc-m:Kilogram ;
+                                                         dfc-b:value 2.0 ] ] .
+      responses:
+        '201':
+          description: >-
+            created, with the order and all of its lines. The response body is
+            omitted when Prefer: return=minimal is sent; the status code and
+            headers are unchanged.
+          headers:
+            Location:
+              description: IRI of the created resource, assigned by the server
+              schema:
+                type: string
+                format: uri
+            Content-Location:
+              description: >-
+                IRI of the created resource. Identical to Location here; both are
+                returned so a client can rely on either.
+              schema:
+                type: string
+                format: uri
+            ETag:
+              description: >-
+                Entity tag of the current representation. Supply it as If-Match on a
+                later write to avoid a lost update.
+              schema:
+                type: string
+          content:
+            application/ld+json:
+              schema:
+                example:
+                  "@context": https://w3id.org/dfc/ontology/context/context_2.0.0.json
+                  "@graph":
+                  - "@id": https://platform.ex/organizations/awesome-farm/orders/order-001/index
+        '400':
+          description: bad request
+        '401':
+          description: unauthorized
+        '404':
+          description: organization not found
   "/organizations/{organizationId}/template-sale-sessions":
     get:
       summary: Get Organization Template Sale Sessions Container
@@ -3021,6 +3353,398 @@ paths:
         '404':
           description: social media not found
 
+  "/organizations/{organizationId}/orders/{orderId}/index":
+    get:
+      summary: Get Order Index
+      description: |
+        Returns the index document for an order: the relation-level properties the order
+        carries in its own right, and references to its order lines.
+
+        dfc-b:Order is a relation rather than an entity, but it is still addressed by its
+        own IRI. Four properties are pinned to cardinality 1 in the ontology -- dfc-b:belongsTo,
+        dfc-b:orderedBy, dfc-b:selects and dfc-b:uses -- and none of them can live on an
+        order line, so they need an identity of their own to be updated
+        conditionally.
+      parameters:
+      - name: x-dfc-version
+        in: header
+        required: true
+        schema:
+          type: string
+          example: "2.0.0"
+      - name: organizationId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: orderId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful
+          headers:
+            ETag:
+              description: >-
+                Entity tag of the current representation. Supply it as If-Match on a
+                later write to avoid a lost update.
+              schema:
+                type: string
+          content:
+            application/ld+json:
+              schema:
+                example:
+                  "@context": https://w3id.org/dfc/ontology/context/context_2.0.0.json
+                  "@graph":
+                  - "@id": https://platform.ex/organizations/awesome-farm/orders/order-001/index
+                    "@type": dfc-b:Order
+                    dfc-b:belongsTo: https://platform.ex/organizations/awesome-farm/sale-sessions/saturday-market/index
+                    dfc-b:orderedBy: https://platform.ex/persons/jane-shopper/index
+                    dfc-b:selects: https://platform.ex/organizations/awesome-farm/customer-categories/basil/offers/standard-delivery
+                    dfc-b:uses:
+                      "@type": dfc-b:PaymentMethod
+                      dfc-b:paymentMethodType: CreditCard
+                    dfc-b:hasPart: [https://platform.ex/organizations/awesome-farm/orders/order-001/orderlines/001/index, https://platform.ex/organizations/awesome-farm/orders/order-001/orderlines/002/index]
+            text/turtle:
+              schema:
+                example: |
+                  @prefix dfc-b:  <https://w3id.org/dfc/ontology/v2.0.0/src/DFC_BusinessOntology.owl#> .
+                  @prefix dfc-pt: <https://w3id.org/dfc/taxonomies/v2.0.0/productTypes.rdf#> .
+                  @prefix dfc-m:  <https://w3id.org/dfc/taxonomies/v2.0.0/measures.rdf#> .
+                  <> a dfc-b:Order ;
+                      dfc-b:belongsTo <https://platform.ex/organizations/awesome-farm/sale-sessions/saturday-market/index> ;
+                      dfc-b:orderedBy <https://platform.ex/persons/jane-shopper/index> ;
+                      dfc-b:selects <https://platform.ex/organizations/awesome-farm/customer-categories/basil/offers/standard-delivery> ;
+                      dfc-b:uses [ a dfc-b:PaymentMethod ;
+                                  dfc-b:paymentMethodType "CreditCard" ] ;
+                      dfc-b:hasPart <https://platform.ex/organizations/awesome-farm/orders/order-001/orderlines/001/index>,
+                                    <https://platform.ex/organizations/awesome-farm/orders/order-001/orderlines/002/index> .
+        '404':
+          description: order not found
+    put:
+      summary: Update an Order
+      description: |
+        Replaces the order at this IRI.
+
+        If a representation already exists this is an update. If none exists the resource is
+        created and 201 is returned. This replaces the order's own properties; it does not
+        add or remove order lines, which are addressed through the order's orderlines
+        container. Send If-Match with the ETag from a prior read to make the write
+        conditional.
+      parameters:
+      - name: x-dfc-version
+        in: header
+        required: true
+        schema:
+          type: string
+          example: "2.0.0"
+      - name: organizationId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: orderId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: If-Match
+        in: header
+        required: false
+        description: >-
+          ETag of the current representation. The write fails with 412 if it no
+          longer matches, which prevents a lost update.
+        schema:
+          type: string
+      - name: Prefer
+        in: header
+        required: false
+        description: >-
+          Response preference. return=minimal omits the response body; the
+          status code and headers are unchanged.
+        schema:
+          type: string
+          example: return=representation
+      requestBody:
+        required: true
+        content:
+          application/ld+json:
+            schema:
+              example:
+                "@context": https://w3id.org/dfc/ontology/context/context_2.0.0.json
+                "@graph":
+                - "@id": "#order"
+                  "@type": dfc-b:Order
+                  dfc-b:belongsTo: https://platform.ex/organizations/awesome-farm/sale-sessions/saturday-market/index
+                  dfc-b:orderedBy: https://platform.ex/persons/jane-shopper/index
+                  dfc-b:selects: https://platform.ex/organizations/awesome-farm/customer-categories/basil/offers/standard-delivery
+                  dfc-b:uses:
+                    "@type": dfc-b:PaymentMethod
+                    dfc-b:paymentMethodType: CreditCard
+                  dfc-b:hasPart: ["#line-1", "#line-2"]
+                - "@id": "#line-1"
+                  "@type": dfc-b:OrderLine
+                  dfc-b:concerns: https://platform.ex/organizations/awesome-farm/customer-categories/basil/offers/offer-001
+                  dfc-b:hasQuantity:
+                    "@type": dfc-b:QuantitativeValue
+                    dfc-b:hasUnit: dfc-m:Kilogram
+                    dfc-b:value: 1.5
+                - "@id": "#line-2"
+                  "@type": dfc-b:OrderLine
+                  dfc-b:concerns: https://platform.ex/organizations/awesome-farm/customer-categories/veg/offers/offer-002
+                  dfc-b:hasQuantity:
+                    "@type": dfc-b:QuantitativeValue
+                    dfc-b:hasUnit: dfc-m:Kilogram
+                    dfc-b:value: 2.0
+          text/turtle:
+            schema:
+              example: |
+                  @prefix dfc-b:  <https://w3id.org/dfc/ontology/v2.0.0/src/DFC_BusinessOntology.owl#> .
+                  @prefix dfc-pt: <https://w3id.org/dfc/taxonomies/v2.0.0/productTypes.rdf#> .
+                  @prefix dfc-m:  <https://w3id.org/dfc/taxonomies/v2.0.0/measures.rdf#> .
+                  [] a dfc-b:Order ;
+                      dfc-b:belongsTo <https://platform.ex/organizations/awesome-farm/sale-sessions/saturday-market/index> ;
+                      dfc-b:orderedBy <https://platform.ex/persons/jane-shopper/index> ;
+                      dfc-b:selects <https://platform.ex/organizations/awesome-farm/customer-categories/basil/offers/standard-delivery> ;
+                      dfc-b:uses [ a dfc-b:PaymentMethod ;
+                                  dfc-b:paymentMethodType "CreditCard" ] ;
+                      dfc-b:hasPart [ a dfc-b:OrderLine ;
+                                     dfc-b:concerns <https://platform.ex/organizations/awesome-farm/customer-categories/basil/offers/offer-001> ;
+                                     dfc-b:hasQuantity [ a dfc-b:QuantitativeValue ;
+                                                         dfc-b:hasUnit dfc-m:Kilogram ;
+                                                         dfc-b:value 1.5 ] ],
+                                    [ a dfc-b:OrderLine ;
+                                     dfc-b:concerns <https://platform.ex/organizations/awesome-farm/customer-categories/veg/offers/offer-002> ;
+                                     dfc-b:hasQuantity [ a dfc-b:QuantitativeValue ;
+                                                         dfc-b:hasUnit dfc-m:Kilogram ;
+                                                         dfc-b:value 2.0 ] ] .
+      responses:
+        '200':
+          description: >-
+            updated, representation returned. The body is omitted when
+            Prefer: return=minimal is sent.
+          headers:
+            ETag:
+              description: >-
+                Entity tag of the current representation. Supply it as If-Match on a
+                later write to avoid a lost update.
+              schema:
+                type: string
+          content:
+            application/ld+json:
+              schema:
+                example:
+                  "@context": https://w3id.org/dfc/ontology/context/context_2.0.0.json
+                  "@graph":
+                  - "@id": https://platform.ex/organizations/awesome-farm/orders/order-001/index
+        '201':
+          description: created, because no representation existed at this IRI
+          headers:
+            ETag:
+              description: >-
+                Entity tag of the current representation. Supply it as If-Match on a
+                later write to avoid a lost update.
+              schema:
+                type: string
+          content:
+            application/ld+json:
+              schema:
+                example:
+                  "@context": https://w3id.org/dfc/ontology/context/context_2.0.0.json
+                  "@graph":
+                  - "@id": https://platform.ex/organizations/awesome-farm/orders/order-001/index
+        '204':
+          description: updated, no body returned
+          headers:
+            ETag:
+              description: >-
+                Entity tag of the current representation. Supply it as If-Match on a
+                later write to avoid a lost update.
+              schema:
+                type: string
+        '400':
+          description: bad request
+        '401':
+          description: unauthorized
+        '404':
+          description: order not found
+        '409':
+          description: >-
+            conflict. The representation exists and the request asserted that it
+            must not.
+        '412':
+          description: >-
+            precondition failed. If-Match did not match the current
+            representation, or If-None-Match: * was sent and one exists.
+    patch:
+      summary: Partially Update an Order
+      description: |
+        Applies a partial update to the order at this IRI. Only the properties present in the
+        body are changed; absent properties are left as they are.
+
+        This is the operation that makes the order's own IRI worth having: changing a
+        shipping option or payment method does not require rewriting the order lines.
+      parameters:
+      - name: x-dfc-version
+        in: header
+        required: true
+        schema:
+          type: string
+          example: "2.0.0"
+      - name: organizationId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: orderId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: If-Match
+        in: header
+        required: false
+        description: >-
+          ETag of the current representation. The write fails with 412 if it no
+          longer matches, which prevents a lost update.
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/ld+json:
+            schema:
+              example:
+                "@context": https://w3id.org/dfc/ontology/context/context_2.0.0.json
+                "@graph":
+                - "@id": "#order"
+                  "@type": dfc-b:Order
+                  dfc-b:belongsTo: https://platform.ex/organizations/awesome-farm/sale-sessions/saturday-market/index
+                  dfc-b:orderedBy: https://platform.ex/persons/jane-shopper/index
+                  dfc-b:selects: https://platform.ex/organizations/awesome-farm/customer-categories/basil/offers/standard-delivery
+                  dfc-b:uses:
+                    "@type": dfc-b:PaymentMethod
+                    dfc-b:paymentMethodType: CreditCard
+                  dfc-b:hasPart: ["#line-1", "#line-2"]
+                - "@id": "#line-1"
+                  "@type": dfc-b:OrderLine
+                  dfc-b:concerns: https://platform.ex/organizations/awesome-farm/customer-categories/basil/offers/offer-001
+                  dfc-b:hasQuantity:
+                    "@type": dfc-b:QuantitativeValue
+                    dfc-b:hasUnit: dfc-m:Kilogram
+                    dfc-b:value: 1.5
+                - "@id": "#line-2"
+                  "@type": dfc-b:OrderLine
+                  dfc-b:concerns: https://platform.ex/organizations/awesome-farm/customer-categories/veg/offers/offer-002
+                  dfc-b:hasQuantity:
+                    "@type": dfc-b:QuantitativeValue
+                    dfc-b:hasUnit: dfc-m:Kilogram
+                    dfc-b:value: 2.0
+          text/turtle:
+            schema:
+              example: |
+                  @prefix dfc-b:  <https://w3id.org/dfc/ontology/v2.0.0/src/DFC_BusinessOntology.owl#> .
+                  @prefix dfc-pt: <https://w3id.org/dfc/taxonomies/v2.0.0/productTypes.rdf#> .
+                  @prefix dfc-m:  <https://w3id.org/dfc/taxonomies/v2.0.0/measures.rdf#> .
+                  [] a dfc-b:Order ;
+                      dfc-b:belongsTo <https://platform.ex/organizations/awesome-farm/sale-sessions/saturday-market/index> ;
+                      dfc-b:orderedBy <https://platform.ex/persons/jane-shopper/index> ;
+                      dfc-b:selects <https://platform.ex/organizations/awesome-farm/customer-categories/basil/offers/standard-delivery> ;
+                      dfc-b:uses [ a dfc-b:PaymentMethod ;
+                                  dfc-b:paymentMethodType "CreditCard" ] ;
+                      dfc-b:hasPart [ a dfc-b:OrderLine ;
+                                     dfc-b:concerns <https://platform.ex/organizations/awesome-farm/customer-categories/basil/offers/offer-001> ;
+                                     dfc-b:hasQuantity [ a dfc-b:QuantitativeValue ;
+                                                         dfc-b:hasUnit dfc-m:Kilogram ;
+                                                         dfc-b:value 1.5 ] ],
+                                    [ a dfc-b:OrderLine ;
+                                     dfc-b:concerns <https://platform.ex/organizations/awesome-farm/customer-categories/veg/offers/offer-002> ;
+                                     dfc-b:hasQuantity [ a dfc-b:QuantitativeValue ;
+                                                         dfc-b:hasUnit dfc-m:Kilogram ;
+                                                         dfc-b:value 2.0 ] ] .
+      responses:
+        '200':
+          description: updated, with the full resulting representation
+          headers:
+            ETag:
+              description: >-
+                Entity tag of the current representation. Supply it as If-Match on a
+                later write to avoid a lost update.
+              schema:
+                type: string
+          content:
+            application/ld+json:
+              schema:
+                example:
+                  "@context": https://w3id.org/dfc/ontology/context/context_2.0.0.json
+                  "@graph":
+                  - "@id": https://platform.ex/organizations/awesome-farm/orders/order-001/index
+            text/turtle:
+              schema:
+                example: |
+                  @prefix dfc-b:  <https://w3id.org/dfc/ontology/v2.0.0/src/DFC_BusinessOntology.owl#> .
+                  @prefix dfc-pt: <https://w3id.org/dfc/taxonomies/v2.0.0/productTypes.rdf#> .
+                  @prefix dfc-m:  <https://w3id.org/dfc/taxonomies/v2.0.0/measures.rdf#> .
+                  <> a dfc-b:Resource .
+        '400':
+          description: bad request
+        '401':
+          description: unauthorized
+        '404':
+          description: order not found
+        '412':
+          description: >-
+            precondition failed. If-Match did not match the current
+            representation.
+    delete:
+      summary: Delete an Order
+      description: |
+        Deletes the order at this IRI and removes it from the organization's orders container.
+
+        The order's order lines are deleted with it. Each order line is reachable from
+        the order and from no other order, so no other resource is left with a dangling
+        reference. The container's ldp:contains and ldp:member lists are updated to no longer
+        reference the removed order.
+      parameters:
+      - name: x-dfc-version
+        in: header
+        required: true
+        schema:
+          type: string
+          example: "2.0.0"
+      - name: organizationId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: orderId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: If-Match
+        in: header
+        required: false
+        description: >-
+          ETag of the current representation. The write fails with 412 if it no
+          longer matches, which prevents a lost update.
+        schema:
+          type: string
+      responses:
+        '204':
+          description: deleted
+        '400':
+          description: bad request
+        '401':
+          description: unauthorized
+        '404':
+          description: order not found
+        '412':
+          description: >-
+            precondition failed. If-Match did not match the current
+            representation.
   "/organizations/{organizationId}/orders/{orderId}/orderlines":
     get:
       summary: Get Order Order Lines Container
@@ -3045,6 +3769,13 @@ paths:
       responses:
         '200':
           description: successful
+          headers:
+            ETag:
+              description: >-
+                Entity tag of the current representation. Supply it as If-Match on a
+                later write to avoid a lost update.
+              schema:
+                type: string
           content:
             application/ld+json:
               schema:
@@ -3058,7 +3789,103 @@ paths:
                     ldp:contains: [https://platform.ex/organizations/awesome-farm/orders/order-001/orderlines/001/index]
         '404':
           description: order not found
+    post:
+      summary: Add an Order Line to an Order
+      description: |
+        Adds a single order line to an existing order.
 
+        An order is normally created complete, with its lines, by POSTing to the organization's
+        orders container. This operation covers adding a line afterwards; it does not replace
+        the order's own properties, which are addressed at the order's index.
+      parameters:
+      - name: x-dfc-version
+        in: header
+        required: true
+        schema:
+          type: string
+          example: "2.0.0"
+      - name: organizationId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: orderId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: Prefer
+        in: header
+        required: false
+        description: >-
+          Response preference. return=minimal omits the response body; the
+          status code and headers are unchanged.
+        schema:
+          type: string
+          example: return=representation
+      requestBody:
+        required: true
+        content:
+          application/ld+json:
+            schema:
+              example:
+                "@context": https://w3id.org/dfc/ontology/context/context_2.0.0.json
+                "@graph":
+                - "@id": "#"
+                  "@type": dfc-b:OrderLine
+                  dfc-b:concerns: https://platform.ex/organizations/awesome-farm/customer-categories/veg/offers/offer-002
+                  dfc-b:hasQuantity:
+                    "@type": dfc-b:QuantitativeValue
+                    dfc-b:hasUnit: dfc-m:Kilogram
+                    dfc-b:value: 2.0
+          text/turtle:
+            schema:
+              example: |
+                  @prefix dfc-b:  <https://w3id.org/dfc/ontology/v2.0.0/src/DFC_BusinessOntology.owl#> .
+                  @prefix dfc-pt: <https://w3id.org/dfc/taxonomies/v2.0.0/productTypes.rdf#> .
+                  @prefix dfc-m:  <https://w3id.org/dfc/taxonomies/v2.0.0/measures.rdf#> .
+                  <> a dfc-b:OrderLine ;
+                      dfc-b:concerns <https://platform.ex/organizations/awesome-farm/customer-categories/veg/offers/offer-002> ;
+                      dfc-b:hasQuantity [ a dfc-b:QuantitativeValue ;
+                                          dfc-b:hasUnit dfc-m:Kilogram ;
+                                          dfc-b:value 2.0 ] .
+      responses:
+        '201':
+          description: >-
+            created. The response body is omitted when Prefer: return=minimal is
+            sent; the status code and headers are unchanged.
+          headers:
+            Location:
+              description: IRI of the created resource, assigned by the server
+              schema:
+                type: string
+                format: uri
+            Content-Location:
+              description: >-
+                IRI of the created resource. Identical to Location here; both are
+                returned so a client can rely on either.
+              schema:
+                type: string
+                format: uri
+            ETag:
+              description: >-
+                Entity tag of the current representation. Supply it as If-Match on a
+                later write to avoid a lost update.
+              schema:
+                type: string
+          content:
+            application/ld+json:
+              schema:
+                example:
+                  "@context": https://w3id.org/dfc/ontology/context/context_2.0.0.json
+                  "@graph":
+                  - "@id": https://platform.ex/organizations/awesome-farm/orders/order-001/orderlines/002/index
+        '400':
+          description: bad request
+        '401':
+          description: unauthorized
+        '404':
+          description: order not found
   "/organizations/{organizationId}/orders/{orderId}/orderlines/{lineId}/index":
     get:
       summary: Get Order Line Index
@@ -3088,6 +3915,13 @@ paths:
       responses:
         '200':
           description: successful
+          headers:
+            ETag:
+              description: >-
+                Entity tag of the current representation. Supply it as If-Match on a
+                later write to avoid a lost update.
+              schema:
+                type: string
           content:
             application/ld+json:
               schema:
@@ -3100,7 +3934,296 @@ paths:
                     dfc-b:concerns: https://platform.ex/organizations/awesome-farm/catalogs/main-catalog/index
         '404':
           description: order line not found
+    put:
+      summary: Update an Order Line
+      description: |
+        Replaces the order line at this IRI.
 
+        If a representation already exists this is an update. If none exists the resource is
+        created and 201 is returned. The order's own properties are not affected; they live at
+        the order's index. Send If-Match with the ETag from a prior read to make the write
+        conditional, so a concurrent change fails with 412 rather than being silently
+        overwritten.
+      parameters:
+      - name: x-dfc-version
+        in: header
+        required: true
+        schema:
+          type: string
+          example: "2.0.0"
+      - name: organizationId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: orderId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: lineId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: If-Match
+        in: header
+        required: false
+        description: >-
+          ETag of the current representation. The write fails with 412 if it no
+          longer matches, which prevents a lost update.
+        schema:
+          type: string
+      - name: Prefer
+        in: header
+        required: false
+        description: >-
+          Response preference. return=minimal omits the response body; the
+          status code and headers are unchanged.
+        schema:
+          type: string
+          example: return=representation
+      requestBody:
+        required: true
+        content:
+          application/ld+json:
+            schema:
+              example:
+                "@context": https://w3id.org/dfc/ontology/context/context_2.0.0.json
+                "@graph":
+                - "@id": "#"
+                  "@type": dfc-b:OrderLine
+                  dfc-b:concerns: https://platform.ex/organizations/awesome-farm/customer-categories/veg/offers/offer-002
+                  dfc-b:hasQuantity:
+                    "@type": dfc-b:QuantitativeValue
+                    dfc-b:hasUnit: dfc-m:Kilogram
+                    dfc-b:value: 2.0
+          text/turtle:
+            schema:
+              example: |
+                  @prefix dfc-b:  <https://w3id.org/dfc/ontology/v2.0.0/src/DFC_BusinessOntology.owl#> .
+                  @prefix dfc-pt: <https://w3id.org/dfc/taxonomies/v2.0.0/productTypes.rdf#> .
+                  @prefix dfc-m:  <https://w3id.org/dfc/taxonomies/v2.0.0/measures.rdf#> .
+                  <> a dfc-b:OrderLine ;
+                      dfc-b:concerns <https://platform.ex/organizations/awesome-farm/customer-categories/veg/offers/offer-002> ;
+                      dfc-b:hasQuantity [ a dfc-b:QuantitativeValue ;
+                                          dfc-b:hasUnit dfc-m:Kilogram ;
+                                          dfc-b:value 2.0 ] .
+      responses:
+        '200':
+          description: >-
+            updated, representation returned. The body is omitted when
+            Prefer: return=minimal is sent.
+          headers:
+            ETag:
+              description: >-
+                Entity tag of the current representation. Supply it as If-Match on a
+                later write to avoid a lost update.
+              schema:
+                type: string
+          content:
+            application/ld+json:
+              schema:
+                example:
+                  "@context": https://w3id.org/dfc/ontology/context/context_2.0.0.json
+                  "@graph":
+                  - "@id": https://platform.ex/organizations/awesome-farm/orders/order-001/orderlines/002/index
+        '201':
+          description: created, because no representation existed at this IRI
+          headers:
+            ETag:
+              description: >-
+                Entity tag of the current representation. Supply it as If-Match on a
+                later write to avoid a lost update.
+              schema:
+                type: string
+          content:
+            application/ld+json:
+              schema:
+                example:
+                  "@context": https://w3id.org/dfc/ontology/context/context_2.0.0.json
+                  "@graph":
+                  - "@id": https://platform.ex/organizations/awesome-farm/orders/order-001/orderlines/002/index
+        '204':
+          description: updated, no body returned
+          headers:
+            ETag:
+              description: >-
+                Entity tag of the current representation. Supply it as If-Match on a
+                later write to avoid a lost update.
+              schema:
+                type: string
+        '400':
+          description: bad request
+        '401':
+          description: unauthorized
+        '404':
+          description: order line not found
+        '412':
+          description: >-
+            precondition failed. If-Match did not match the current
+            representation.
+        '409':
+          description: >-
+            conflict. The representation exists and the request asserted that it
+            must not.
+    patch:
+      summary: Partially Update an Order Line
+      description: |
+        Applies a partial update to the order line at this IRI. Only the properties present in
+        the body are changed; absent properties are left as they are. A PUT replaces the whole
+        representation, which is the better fit when the client holds a complete copy and
+        PATCH when it does not.
+      parameters:
+      - name: x-dfc-version
+        in: header
+        required: true
+        schema:
+          type: string
+          example: "2.0.0"
+      - name: organizationId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: orderId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: lineId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: If-Match
+        in: header
+        required: false
+        description: >-
+          ETag of the current representation. The write fails with 412 if it no
+          longer matches, which prevents a lost update.
+        schema:
+          type: string
+      - name: Prefer
+        in: header
+        required: false
+        description: >-
+          Response preference. return=minimal omits the response body; the
+          status code and headers are unchanged.
+        schema:
+          type: string
+          example: return=representation
+      requestBody:
+        required: true
+        content:
+          application/ld+json:
+            schema:
+              example:
+                "@context": https://w3id.org/dfc/ontology/context/context_2.0.0.json
+                "@graph":
+                - "@id": "#"
+                  "@type": dfc-b:OrderLine
+                  dfc-b:concerns: https://platform.ex/organizations/awesome-farm/customer-categories/veg/offers/offer-002
+                  dfc-b:hasQuantity:
+                    "@type": dfc-b:QuantitativeValue
+                    dfc-b:hasUnit: dfc-m:Kilogram
+                    dfc-b:value: 2.0
+          text/turtle:
+            schema:
+              example: |
+                  @prefix dfc-b:  <https://w3id.org/dfc/ontology/v2.0.0/src/DFC_BusinessOntology.owl#> .
+                  @prefix dfc-pt: <https://w3id.org/dfc/taxonomies/v2.0.0/productTypes.rdf#> .
+                  @prefix dfc-m:  <https://w3id.org/dfc/taxonomies/v2.0.0/measures.rdf#> .
+                  <> a dfc-b:OrderLine ;
+                      dfc-b:concerns <https://platform.ex/organizations/awesome-farm/customer-categories/veg/offers/offer-002> ;
+                      dfc-b:hasQuantity [ a dfc-b:QuantitativeValue ;
+                                          dfc-b:hasUnit dfc-m:Kilogram ;
+                                          dfc-b:value 2.0 ] .
+      responses:
+        '200':
+          description: updated, with the full resulting representation
+          headers:
+            ETag:
+              description: >-
+                Entity tag of the current representation. Supply it as If-Match on a
+                later write to avoid a lost update.
+              schema:
+                type: string
+          content:
+            application/ld+json:
+              schema:
+                example:
+                  "@context": https://w3id.org/dfc/ontology/context/context_2.0.0.json
+                  "@graph":
+                  - "@id": https://platform.ex/organizations/awesome-farm/orders/order-001/orderlines/002/index
+            text/turtle:
+              schema:
+                example: |
+                  @prefix dfc-b:  <https://w3id.org/dfc/ontology/v2.0.0/src/DFC_BusinessOntology.owl#> .
+                  @prefix dfc-pt: <https://w3id.org/dfc/taxonomies/v2.0.0/productTypes.rdf#> .
+                  @prefix dfc-m:  <https://w3id.org/dfc/taxonomies/v2.0.0/measures.rdf#> .
+                  <> a dfc-b:Resource .
+        '400':
+          description: bad request
+        '401':
+          description: unauthorized
+        '404':
+          description: order line not found
+        '412':
+          description: >-
+            precondition failed. If-Match did not match the current
+            representation.
+    delete:
+      summary: Delete an Order Line
+      description: |
+        Deletes the order line at this IRI.
+
+        The order's dfc-b:hasPart no longer references the removed line. The order
+        itself is left in place. The orderlines container's ldp:contains and ldp:member
+        lists are updated to no longer reference the removed line.
+      parameters:
+      - name: x-dfc-version
+        in: header
+        required: true
+        schema:
+          type: string
+          example: "2.0.0"
+      - name: organizationId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: orderId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: lineId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: If-Match
+        in: header
+        required: false
+        description: >-
+          ETag of the current representation. The write fails with 412 if it no
+          longer matches, which prevents a lost update.
+        schema:
+          type: string
+      responses:
+        '204':
+          description: deleted
+        '400':
+          description: bad request
+        '401':
+          description: unauthorized
+        '404':
+          description: order line not found
+        '412':
+          description: >-
+            precondition failed. If-Match did not match the current
+            representation.
   "/persons/{personId}/index":
     get:
       summary: Get Person Index
