@@ -330,7 +330,7 @@ paths:
                 - "@id": "#"
                   "@type": dfc-b:Organization
                   dfc-b:name: John's Farm
-                  dfc-b:hasDescription: Family farm growing vegetables and herbs
+                  dfc-b:description: Family farm growing vegetables and herbs
                   dfc-b:hasMainContact: https://platform.ex/persons/fred-farm/index
                   dfc-b:hasAddress: [https://platform.ex/organizations/awesome-farm/addresses/farm-address/index]
                   dfc-b:websitePage: https://platform.ex/
@@ -342,7 +342,7 @@ paths:
                   @prefix dfc-m:  <https://w3id.org/dfc/taxonomies/v2.0.0/measures.rdf#> .
                   <> a dfc-b:Organization ;
                       dfc-b:name "John's Farm" ;
-                      dfc-b:hasDescription "Family farm growing vegetables and herbs" ;
+                      dfc-b:description "Family farm growing vegetables and herbs" ;
                       dfc-b:hasMainContact <https://platform.ex/persons/fred-farm/index> ;
                       dfc-b:hasAddress <https://platform.ex/organizations/awesome-farm/addresses/farm-address/index> ;
                       dfc-b:websitePage <https://platform.ex/> .
@@ -422,7 +422,7 @@ paths:
                 - "@id": "#"
                   "@type": dfc-b:Organization
                   dfc-b:name: John's Farm
-                  dfc-b:hasDescription: Family farm growing vegetables and herbs
+                  dfc-b:description: Family farm growing vegetables and herbs
                   dfc-b:hasMainContact: https://platform.ex/persons/fred-farm/index
                   dfc-b:hasAddress: [https://platform.ex/organizations/awesome-farm/addresses/farm-address/index]
                   dfc-b:websitePage: https://platform.ex/
@@ -434,7 +434,7 @@ paths:
                   @prefix dfc-m:  <https://w3id.org/dfc/taxonomies/v2.0.0/measures.rdf#> .
                   <> a dfc-b:Organization ;
                       dfc-b:name "John's Farm" ;
-                      dfc-b:hasDescription "Family farm growing vegetables and herbs" ;
+                      dfc-b:description "Family farm growing vegetables and herbs" ;
                       dfc-b:hasMainContact <https://platform.ex/persons/fred-farm/index> ;
                       dfc-b:hasAddress <https://platform.ex/organizations/awesome-farm/addresses/farm-address/index> ;
                       dfc-b:websitePage <https://platform.ex/> .
@@ -1468,7 +1468,7 @@ paths:
                   dfc-b:suppliedBy: https://platform.ex/organizations/awesome-farm/index
                   dfc-b:producedBy: https://platform.ex/organizations/awesome-farm/production-flows/tomato-beds/index
                   dfc-b:name: Organic Tomatoes
-                  dfc-b:hasDescription: Vine-ripened tomatoes, picked the same morning
+                  dfc-b:description: Vine-ripened tomatoes, picked the same morning
                   dfc-b:hasType: dfc-pt:tomato
                   dfc-b:lifetime: 7 days
                   dfc-b:image: https://platform.ex/media/tomatoes.jpg
@@ -1509,7 +1509,7 @@ paths:
                       dfc-b:suppliedBy <https://platform.ex/organizations/awesome-farm/index> ;
                       dfc-b:producedBy <https://platform.ex/organizations/awesome-farm/production-flows/tomato-beds/index> ;
                       dfc-b:name "Organic Tomatoes" ;
-                      dfc-b:hasDescription "Vine-ripened tomatoes, picked the same morning" ;
+                      dfc-b:description "Vine-ripened tomatoes, picked the same morning" ;
                       dfc-b:hasType dfc-pt:tomato ;
                       dfc-b:lifetime "7 days" ;
                       dfc-b:image <https://platform.ex/media/tomatoes.jpg> ;
@@ -1682,7 +1682,7 @@ paths:
                   dfc-b:suppliedBy: https://platform.ex/organizations/awesome-farm/index
                   dfc-b:producedBy: https://platform.ex/organizations/awesome-farm/production-flows/tomato-beds/index
                   dfc-b:name: Organic Tomatoes
-                  dfc-b:hasDescription: Vine-ripened tomatoes, picked the same morning
+                  dfc-b:description: Vine-ripened tomatoes, picked the same morning
                   dfc-b:hasType: dfc-pt:tomato
                   dfc-b:lifetime: 7 days
                   dfc-b:image: https://platform.ex/media/tomatoes.jpg
@@ -1723,7 +1723,7 @@ paths:
                       dfc-b:suppliedBy <https://platform.ex/organizations/awesome-farm/index> ;
                       dfc-b:producedBy <https://platform.ex/organizations/awesome-farm/production-flows/tomato-beds/index> ;
                       dfc-b:name "Organic Tomatoes" ;
-                      dfc-b:hasDescription "Vine-ripened tomatoes, picked the same morning" ;
+                      dfc-b:description "Vine-ripened tomatoes, picked the same morning" ;
                       dfc-b:hasType dfc-pt:tomato ;
                       dfc-b:lifetime "7 days" ;
                       dfc-b:image <https://platform.ex/media/tomatoes.jpg> ;
@@ -1858,7 +1858,7 @@ paths:
                   dfc-b:suppliedBy: https://platform.ex/organizations/awesome-farm/index
                   dfc-b:producedBy: https://platform.ex/organizations/awesome-farm/production-flows/tomato-beds/index
                   dfc-b:name: Organic Tomatoes
-                  dfc-b:hasDescription: Vine-ripened tomatoes, picked the same morning
+                  dfc-b:description: Vine-ripened tomatoes, picked the same morning
                   dfc-b:hasType: dfc-pt:tomato
                   dfc-b:lifetime: 7 days
                   dfc-b:image: https://platform.ex/media/tomatoes.jpg
@@ -1899,7 +1899,7 @@ paths:
                       dfc-b:suppliedBy <https://platform.ex/organizations/awesome-farm/index> ;
                       dfc-b:producedBy <https://platform.ex/organizations/awesome-farm/production-flows/tomato-beds/index> ;
                       dfc-b:name "Organic Tomatoes" ;
-                      dfc-b:hasDescription "Vine-ripened tomatoes, picked the same morning" ;
+                      dfc-b:description "Vine-ripened tomatoes, picked the same morning" ;
                       dfc-b:hasType dfc-pt:tomato ;
                       dfc-b:lifetime "7 days" ;
                       dfc-b:image <https://platform.ex/media/tomatoes.jpg> ;
@@ -2286,17 +2286,17 @@ paths:
                   dfc-b:name: John's Farm Webshop
                   dfc-b:URL: https://shop.johns-farm.example/
                 - "@id": "#schedule"
-                  "@type": cal:Vevent
-                  cal:dtstart:
-                    "@type": xsd:dateTime
+                  "@type": "http://www.w3.org/2002/12/cal/icaltzd#Vevent"
+                  "http://www.w3.org/2002/12/cal/icaltzd#dtstart":
+                    "@type": "http://www.w3.org/2001/XMLSchema#dateTime"
                     "@value": "2026-01-05T00:00:00Z"
-                  cal:dtend:
-                    "@type": xsd:dateTime
+                  "http://www.w3.org/2002/12/cal/icaltzd#dtend":
+                    "@type": "http://www.w3.org/2001/XMLSchema#dateTime"
                     "@value": "2026-12-31T23:59:59Z"
-                  rdfcal:rrule:
-                    "@type": cal:Value_RECUR
-                    cal:freq: DAILY
-                    cal:interval: 1
+                  "http://www.w3.org/2002/12/cal/icaltzd#rrule":
+                    "@type": "http://www.w3.org/2002/12/cal/icaltzd#Value_RECUR"
+                    "http://www.w3.org/2002/12/cal/icaltzd#freq": DAILY
+                    "http://www.w3.org/2002/12/cal/icaltzd#interval": 1
                 - "@id": "#shipping"
                   "@type": dfc-b:ShippingOption
                   dfc-b:name: Courier, next working day
@@ -2307,6 +2307,8 @@ paths:
           text/turtle:
             schema:
               example: |
+                  @prefix cal:  <http://www.w3.org/2002/12/cal/icaltzd#> .
+                  @prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
                   @prefix dfc-b:  <https://w3id.org/dfc/ontology/v2.0.0/src/DFC_BusinessOntology.owl#> .
                   @prefix dfc-pt: <https://w3id.org/dfc/taxonomies/v2.0.0/productTypes.rdf#> .
                   @prefix dfc-m:  <https://w3id.org/dfc/taxonomies/v2.0.0/measures.rdf#> .
@@ -2319,7 +2321,7 @@ paths:
                       dfc-b:occursAt [ a cal:Vevent ;
                                       cal:dtstart "2026-01-05T00:00:00Z"^^xsd:dateTime ;
                                       cal:dtend "2026-12-31T23:59:59Z"^^xsd:dateTime ;
-                                      rdfcal:rrule [ a cal:Value_RECUR ;
+                                      cal:rrule [ a cal:Value_RECUR ;
                                                     cal:freq "DAILY" ;
                                                     cal:interval 1 ] ] ;
                       dfc-b:hasOption [ a dfc-b:ShippingOption ;
@@ -2411,18 +2413,18 @@ paths:
                     dfc-b:hasGeoJsonFeature: [https://platform.ex/organizations/awesome-farm/template-sale-sessions/weekly-delivery/index#deliveryArea]
                     dfc-b:occursAt: [https://platform.ex/organizations/awesome-farm/template-sale-sessions/weekly-delivery/index#schedule]
                   - "@id": https://platform.ex/organizations/awesome-farm/template-sale-sessions/weekly-delivery/index#schedule
-                    "@type": cal:Vevent
-                    cal:dtstart:
-                      "@type": xsd:dateTime
+                    "@type": "http://www.w3.org/2002/12/cal/icaltzd#Vevent"
+                    "http://www.w3.org/2002/12/cal/icaltzd#dtstart":
+                      "@type": "http://www.w3.org/2001/XMLSchema#dateTime"
                       "@value": "2026-01-07T00:00:00Z"
-                    cal:dtend:
-                      "@type": xsd:dateTime
+                    "http://www.w3.org/2002/12/cal/icaltzd#dtend":
+                      "@type": "http://www.w3.org/2001/XMLSchema#dateTime"
                       "@value": "2026-12-31T23:59:59Z"
-                    rdfcal:rrule:
-                      "@type": cal:Value_RECUR
-                      cal:freq: WEEKLY
-                      cal:byday: TU
-                    cal:interval: 1
+                    "http://www.w3.org/2002/12/cal/icaltzd#rrule":
+                      "@type": "http://www.w3.org/2002/12/cal/icaltzd#Value_RECUR"
+                      "http://www.w3.org/2002/12/cal/icaltzd#freq": WEEKLY
+                      "http://www.w3.org/2002/12/cal/icaltzd#byday": TU
+                    "http://www.w3.org/2002/12/cal/icaltzd#interval": 1
                   - "@id": https://platform.ex/organizations/awesome-farm/template-sale-sessions/weekly-delivery/index#deliveryArea
                     "@type": geojson:Feature
                     geojson:geometry:
@@ -2531,18 +2533,18 @@ paths:
                   dfc-b:name: John's Farm OFN Store
                   dfc-b:URL: https://openfoodnetwork.example/ofn/johns-farm
                 - "@id": "#schedule"
-                  "@type": cal:Vevent
-                  cal:dtstart:
-                    "@type": xsd:dateTime
+                  "@type": "http://www.w3.org/2002/12/cal/icaltzd#Vevent"
+                  "http://www.w3.org/2002/12/cal/icaltzd#dtstart":
+                    "@type": "http://www.w3.org/2001/XMLSchema#dateTime"
                     "@value": "2026-01-06T09:00:00Z"
-                  cal:dtend:
-                    "@type": xsd:dateTime
+                  "http://www.w3.org/2002/12/cal/icaltzd#dtend":
+                    "@type": "http://www.w3.org/2001/XMLSchema#dateTime"
                     "@value": "2026-01-06T18:00:00Z"
-                  rdfcal:rrule:
-                    "@type": cal:Value_RECUR
-                    cal:freq: WEEKLY
-                    cal:byday: TU
-                    cal:interval: 1
+                  "http://www.w3.org/2002/12/cal/icaltzd#rrule":
+                    "@type": "http://www.w3.org/2002/12/cal/icaltzd#Value_RECUR"
+                    "http://www.w3.org/2002/12/cal/icaltzd#freq": WEEKLY
+                    "http://www.w3.org/2002/12/cal/icaltzd#byday": TU
+                    "http://www.w3.org/2002/12/cal/icaltzd#interval": 1
                 - "@id": "#shipping"
                   "@type": dfc-b:ShippingOption
                   dfc-b:name: Collect from the farm gate
@@ -2553,6 +2555,8 @@ paths:
           text/turtle:
             schema:
               example: |
+                  @prefix cal:  <http://www.w3.org/2002/12/cal/icaltzd#> .
+                  @prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
                   @prefix dfc-b:  <https://w3id.org/dfc/ontology/v2.0.0/src/DFC_BusinessOntology.owl#> .
                   @prefix dfc-pt: <https://w3id.org/dfc/taxonomies/v2.0.0/productTypes.rdf#> .
                   @prefix dfc-m:  <https://w3id.org/dfc/taxonomies/v2.0.0/measures.rdf#> .
@@ -2565,7 +2569,7 @@ paths:
                       dfc-b:occursAt [ a cal:Vevent ;
                                       cal:dtstart "2026-01-06T09:00:00Z"^^xsd:dateTime ;
                                       cal:dtend "2026-01-06T18:00:00Z"^^xsd:dateTime ;
-                                      rdfcal:rrule [ a cal:Value_RECUR ;
+                                      cal:rrule [ a cal:Value_RECUR ;
                                                     cal:freq "WEEKLY" ;
                                                     cal:byday "TU" ;
                                                     cal:interval 1 ] ] ;
@@ -2693,18 +2697,18 @@ paths:
                   dfc-b:name: John's Farm OFN Store
                   dfc-b:URL: https://openfoodnetwork.example/ofn/johns-farm
                 - "@id": "#schedule"
-                  "@type": cal:Vevent
-                  cal:dtstart:
-                    "@type": xsd:dateTime
+                  "@type": "http://www.w3.org/2002/12/cal/icaltzd#Vevent"
+                  "http://www.w3.org/2002/12/cal/icaltzd#dtstart":
+                    "@type": "http://www.w3.org/2001/XMLSchema#dateTime"
                     "@value": "2026-01-06T09:00:00Z"
-                  cal:dtend:
-                    "@type": xsd:dateTime
+                  "http://www.w3.org/2002/12/cal/icaltzd#dtend":
+                    "@type": "http://www.w3.org/2001/XMLSchema#dateTime"
                     "@value": "2026-01-06T18:00:00Z"
-                  rdfcal:rrule:
-                    "@type": cal:Value_RECUR
-                    cal:freq: WEEKLY
-                    cal:byday: TU
-                    cal:interval: 1
+                  "http://www.w3.org/2002/12/cal/icaltzd#rrule":
+                    "@type": "http://www.w3.org/2002/12/cal/icaltzd#Value_RECUR"
+                    "http://www.w3.org/2002/12/cal/icaltzd#freq": WEEKLY
+                    "http://www.w3.org/2002/12/cal/icaltzd#byday": TU
+                    "http://www.w3.org/2002/12/cal/icaltzd#interval": 1
                 - "@id": "#shipping"
                   "@type": dfc-b:ShippingOption
                   dfc-b:name: Collect from the farm gate
@@ -2715,6 +2719,8 @@ paths:
           text/turtle:
             schema:
               example: |
+                  @prefix cal:  <http://www.w3.org/2002/12/cal/icaltzd#> .
+                  @prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
                   @prefix dfc-b:  <https://w3id.org/dfc/ontology/v2.0.0/src/DFC_BusinessOntology.owl#> .
                   @prefix dfc-pt: <https://w3id.org/dfc/taxonomies/v2.0.0/productTypes.rdf#> .
                   @prefix dfc-m:  <https://w3id.org/dfc/taxonomies/v2.0.0/measures.rdf#> .
@@ -2727,7 +2733,7 @@ paths:
                       dfc-b:occursAt [ a cal:Vevent ;
                                       cal:dtstart "2026-01-06T09:00:00Z"^^xsd:dateTime ;
                                       cal:dtend "2026-01-06T18:00:00Z"^^xsd:dateTime ;
-                                      rdfcal:rrule [ a cal:Value_RECUR ;
+                                      cal:rrule [ a cal:Value_RECUR ;
                                                     cal:freq "WEEKLY" ;
                                                     cal:byday "TU" ;
                                                     cal:interval 1 ] ] ;
@@ -3348,10 +3354,6 @@ paths:
       description: |
         Creates a delivery route for the organization.
 
-        A route is an ordered sequence of steps, each located at a physical place
-        and typed as a pickup or a delivery. dfc-b:hasStep carries no cardinality
-        axiom in the ontology, so a route may hold any number of steps; the order
-        comes from dfc-b:sequence on each step rather than from the list position.
       parameters:
       - name: x-dfc-version
         in: header
@@ -3388,26 +3390,27 @@ paths:
                   dfc-b:hasStep: ["#step1", "#step2"]
                 - "@id": "#step1"
                   "@type": dfc-b:PickUpStep
-                  dfc-b:sequence: 1
-                  dfc-b:locatedAt: https://platform.ex/organizations/awesome-farm/physical-places/farm-location/index
+                  dfc-b:startsAt:
+                    "@type": "http://www.w3.org/2001/XMLSchema#time"
+                    "@value": "08:00:00"
                 - "@id": "#step2"
                   "@type": dfc-b:DeliveryStep
-                  dfc-b:sequence: 2
-                  dfc-b:locatedAt: https://platform.ex/organizations/awesome-farm/physical-places/delivery-zone-north/index
+                  dfc-b:startsAt:
+                    "@type": "http://www.w3.org/2001/XMLSchema#time"
+                    "@value": "11:30:00"
           text/turtle:
             schema:
               example: |
+                  @prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
                   @prefix dfc-b:  <https://w3id.org/dfc/ontology/v2.0.0/src/DFC_BusinessOntology.owl#> .
                   @prefix dfc-f:  <https://w3id.org/dfc/taxonomies/v2.0.0/facets.rdf#> .
                   [] a dfc-b:Route ;
                       dfc-b:name "Tuesday Delivery Route" ;
                       dfc-b:usedInRoute <https://platform.ex/organizations/awesome-farm/template-sale-sessions/weekly-delivery/index> ;
                       dfc-b:hasStep [ a dfc-b:PickUpStep ;
-                                     dfc-b:sequence 1 ;
-                                     dfc-b:locatedAt <https://platform.ex/organizations/awesome-farm/physical-places/farm-location/index> ],
+                                     dfc-b:startsAt "08:00:00"^^xsd:time ],
                                    [ a dfc-b:DeliveryStep ;
-                                     dfc-b:sequence 2 ;
-                                     dfc-b:locatedAt <https://platform.ex/organizations/awesome-farm/physical-places/delivery-zone-north/index> ] .
+                                     dfc-b:startsAt "11:30:00"^^xsd:time ] .
       responses:
         '201':
           description: >-
@@ -3490,17 +3493,13 @@ paths:
                     dfc-b:hasStep: [https://platform.ex/organizations/awesome-farm/routes/tuesday-delivery/index#step1]
                   - "@id": https://platform.ex/organizations/awesome-farm/routes/tuesday-delivery/index#step1
                     "@type": dfc-b:PickUpStep
-                    dfc-b:sequence: 1
-                    dfc-b:locatedAt: https://platform.ex/organizations/awesome-farm/physical-places/farm-location/index
                     dfc-b:startsAt:
-                      "@type": xsd:time
+                      "@type": "http://www.w3.org/2001/XMLSchema#time"
                       "@value": "08:00:00"
                   - "@id": https://platform.ex/organizations/awesome-farm/routes/tuesday-delivery/index#step2
                     "@type": dfc-b:DeliveryStep
-                    dfc-b:sequence: 2
-                    dfc-b:locatedAt: https://platform.ex/organizations/awesome-farm/physical-places/delivery-zone-north/index
                     dfc-b:startsAt:
-                      "@type": xsd:time
+                      "@type": "http://www.w3.org/2001/XMLSchema#time"
                       "@value": "10:00:00"
         '404':
           description: route not found
@@ -3561,26 +3560,27 @@ paths:
                   dfc-b:hasStep: ["#step1", "#step2"]
                 - "@id": "#step1"
                   "@type": dfc-b:PickUpStep
-                  dfc-b:sequence: 1
-                  dfc-b:locatedAt: https://platform.ex/organizations/awesome-farm/physical-places/farm-location/index
+                  dfc-b:startsAt:
+                    "@type": "http://www.w3.org/2001/XMLSchema#time"
+                    "@value": "08:00:00"
                 - "@id": "#step2"
                   "@type": dfc-b:DeliveryStep
-                  dfc-b:sequence: 2
-                  dfc-b:locatedAt: https://platform.ex/organizations/awesome-farm/physical-places/delivery-zone-north/index
+                  dfc-b:startsAt:
+                    "@type": "http://www.w3.org/2001/XMLSchema#time"
+                    "@value": "11:30:00"
           text/turtle:
             schema:
               example: |
+                  @prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
                   @prefix dfc-b:  <https://w3id.org/dfc/ontology/v2.0.0/src/DFC_BusinessOntology.owl#> .
                   @prefix dfc-f:  <https://w3id.org/dfc/taxonomies/v2.0.0/facets.rdf#> .
                   [] a dfc-b:Route ;
                       dfc-b:name "Tuesday Delivery Route" ;
                       dfc-b:usedInRoute <https://platform.ex/organizations/awesome-farm/template-sale-sessions/weekly-delivery/index> ;
                       dfc-b:hasStep [ a dfc-b:PickUpStep ;
-                                     dfc-b:sequence 1 ;
-                                     dfc-b:locatedAt <https://platform.ex/organizations/awesome-farm/physical-places/farm-location/index> ],
+                                     dfc-b:startsAt "08:00:00"^^xsd:time ],
                                    [ a dfc-b:DeliveryStep ;
-                                     dfc-b:sequence 2 ;
-                                     dfc-b:locatedAt <https://platform.ex/organizations/awesome-farm/physical-places/delivery-zone-north/index> ] .
+                                     dfc-b:startsAt "11:30:00"^^xsd:time ] .
       responses:
         '200':
           description: >-
@@ -3686,26 +3686,27 @@ paths:
                   dfc-b:hasStep: ["#step1", "#step2"]
                 - "@id": "#step1"
                   "@type": dfc-b:PickUpStep
-                  dfc-b:sequence: 1
-                  dfc-b:locatedAt: https://platform.ex/organizations/awesome-farm/physical-places/farm-location/index
+                  dfc-b:startsAt:
+                    "@type": "http://www.w3.org/2001/XMLSchema#time"
+                    "@value": "08:00:00"
                 - "@id": "#step2"
                   "@type": dfc-b:DeliveryStep
-                  dfc-b:sequence: 2
-                  dfc-b:locatedAt: https://platform.ex/organizations/awesome-farm/physical-places/delivery-zone-north/index
+                  dfc-b:startsAt:
+                    "@type": "http://www.w3.org/2001/XMLSchema#time"
+                    "@value": "11:30:00"
           text/turtle:
             schema:
               example: |
+                  @prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
                   @prefix dfc-b:  <https://w3id.org/dfc/ontology/v2.0.0/src/DFC_BusinessOntology.owl#> .
                   @prefix dfc-f:  <https://w3id.org/dfc/taxonomies/v2.0.0/facets.rdf#> .
                   [] a dfc-b:Route ;
                       dfc-b:name "Tuesday Delivery Route" ;
                       dfc-b:usedInRoute <https://platform.ex/organizations/awesome-farm/template-sale-sessions/weekly-delivery/index> ;
                       dfc-b:hasStep [ a dfc-b:PickUpStep ;
-                                     dfc-b:sequence 1 ;
-                                     dfc-b:locatedAt <https://platform.ex/organizations/awesome-farm/physical-places/farm-location/index> ],
+                                     dfc-b:startsAt "08:00:00"^^xsd:time ],
                                    [ a dfc-b:DeliveryStep ;
-                                     dfc-b:sequence 2 ;
-                                     dfc-b:locatedAt <https://platform.ex/organizations/awesome-farm/physical-places/delivery-zone-north/index> ] .
+                                     dfc-b:startsAt "11:30:00"^^xsd:time ] .
       responses:
         '200':
           description: updated, with the full resulting representation
@@ -5382,7 +5383,7 @@ paths:
                   - "@id": https://platform.ex/persons/john/index
                     "@type": dfc-b:Person
                     dfc-b:firstName: John
-                    dfc-b:lastName: Doe
+                    dfc-b:familyName: Doe
         '404':
           description: person not found
     put:
@@ -5436,7 +5437,7 @@ paths:
                 - "@id": "#"
                   "@type": dfc-b:Person
                   dfc-b:firstName: John
-                  dfc-b:lastName: Doe
+                  dfc-b:familyName: Doe
                   dfc-b:affiliates: https://platform.ex/organizations/awesome-farm/index
                   dfc-b:hasAddress: https://platform.ex/organizations/awesome-farm/addresses/farm-address/index
                   dfc-b:hasPhoneNumber: https://platform.ex/phone-numbers/441234567890/index
@@ -5447,7 +5448,7 @@ paths:
                   @prefix dfc-f:  <https://w3id.org/dfc/taxonomies/v2.0.0/facets.rdf#> .
                   [] a dfc-b:Person ;
                       dfc-b:firstName "John" ;
-                      dfc-b:lastName "Doe" ;
+                      dfc-b:familyName "Doe" ;
                       dfc-b:affiliates <https://platform.ex/organizations/awesome-farm/index> ;
                       dfc-b:hasAddress <https://platform.ex/organizations/awesome-farm/addresses/farm-address/index> ;
                       dfc-b:hasPhoneNumber <https://platform.ex/phone-numbers/441234567890/index> .
@@ -5547,7 +5548,7 @@ paths:
                 - "@id": "#"
                   "@type": dfc-b:Person
                   dfc-b:firstName: John
-                  dfc-b:lastName: Doe
+                  dfc-b:familyName: Doe
                   dfc-b:affiliates: https://platform.ex/organizations/awesome-farm/index
                   dfc-b:hasAddress: https://platform.ex/organizations/awesome-farm/addresses/farm-address/index
                   dfc-b:hasPhoneNumber: https://platform.ex/phone-numbers/441234567890/index
@@ -5558,7 +5559,7 @@ paths:
                   @prefix dfc-f:  <https://w3id.org/dfc/taxonomies/v2.0.0/facets.rdf#> .
                   [] a dfc-b:Person ;
                       dfc-b:firstName "John" ;
-                      dfc-b:lastName "Doe" ;
+                      dfc-b:familyName "Doe" ;
                       dfc-b:affiliates <https://platform.ex/organizations/awesome-farm/index> ;
                       dfc-b:hasAddress <https://platform.ex/organizations/awesome-farm/addresses/farm-address/index> ;
                       dfc-b:hasPhoneNumber <https://platform.ex/phone-numbers/441234567890/index> .
